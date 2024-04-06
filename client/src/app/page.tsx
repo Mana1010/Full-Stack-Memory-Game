@@ -3,35 +3,39 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
-
+import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 export default function Home() {
   const router = useRouter();
+  const { isSignedIn } = useUser();
   return (
     <main className="h-screen w-full flex items-center justify-center bg-[#fffffe] sm:py-7 py-0">
       <div
         id="bg"
-        className={`h-full items-center justify-center flex-col space-y-3 flex bg-[#094067] sm:w-[350px] w-full px-3 relative sm:rounded-md`}
+        className={`h-full sm:w-[350px] w-full relative sm:rounded-md`}
       >
-        <Image src={logo} alt="logo" width={700} priority />
-        <button
-          onClick={() => {
-            const myObj = localStorage.getItem("info");
-            if (myObj) {
-              router.push("/levels");
-            } else {
-              router.push("/yourname");
-            }
-          }}
-          className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md"
+        <header className="w-full flex justify-end items-center py-6 px-2 absolute top-0 right-0 left-0">
+          {isSignedIn && <UserButton afterSignOutUrl="/login" />}
+        </header>
+        <div
+          className={`h-full items-center justify-center flex-col space-y-2 flex w-full px-3`}
         >
-          PLAY
-        </button>
-        <button className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md">
-          ABOUT
-        </button>
-        <button className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md">
-          RESET GAME
-        </button>
+          <Image src={logo} alt="logo" width={700} priority />
+          <button
+            onClick={() => {
+              router.push(isSignedIn ? "/levels" : "/login");
+            }}
+            className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md"
+          >
+            PLAY
+          </button>
+          <button className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md">
+            ABOUT
+          </button>
+          <button className="bg-[#3da9fc] text-white sm:w-[200px] w-full py-2 text-lg font-bold rounded-md">
+            RESET GAME
+          </button>
+        </div>
         <footer className="absolute bottom-3 left-0 right-0">
           <p className="text-center text-white text-[1rem]">
             Made by: TRISTAN VIC CLARITO
