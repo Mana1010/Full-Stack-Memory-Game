@@ -64,6 +64,7 @@ function Yourname() {
       return () => window.removeEventListener("beforeunload", load);
     }
   }, [hasChange]);
+
   return (
     <main className="h-screen w-full flex items-center justify-center bg-[#fffffe] sm:py-7 py-0">
       <div
