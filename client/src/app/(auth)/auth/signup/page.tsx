@@ -5,15 +5,15 @@ import icon from "../../../../components/images/logo.png";
 import { FaStar } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { string, z } from "zod";
-const obj = z.object({
-  username: string(),
-  password: string().min(7, "Password must be at least 7 characters long."),
-  ["confirm-password"]: string().refine((formField, ctx) => {
-    const password = ctx.parent.password;
-    return formField !== password;
-  }, "Password do not match"),
-});
-type Form = z.infer<obj>;
+// const obj = z.object({
+//   username: string(),
+//   password: string().min(7, "Password must be at least 7 characters long."),
+//   ["confirm-password"]: string().refine((formField, ctx) => {
+//     const password = ctx.parent.password;
+//     return formField !== password;
+//   }, "Password do not match"),
+// });
+// type Form = z.infer<obj>;
 function Signup() {
   const { formState, register } = useForm();
   return (
