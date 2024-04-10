@@ -34,3 +34,6 @@
   backface-visibility: hidden;
   border-radius: 4px;
 }
+#form-design {
+  box-shadow: 0 0 10px #ffe30a;
+}

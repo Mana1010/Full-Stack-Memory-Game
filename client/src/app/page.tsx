@@ -3,29 +3,27 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
-import { UserButton } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
 import icon from "../components/images/icon.png";
+
 export default function Home() {
-  const router = useRouter();
-  const { isSignedIn } = useUser();
   return (
     <main
       id="bg"
       className="h-screen w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center bg-[#fffffe]"
     >
       <div className={`h-full w-full relative sm:rounded-md`}>
-        {/* <header className="w-full flex justify-end items-center py-6 px-2 absolute top-0 right-0 left-0">
-          {isSignedIn && <UserButton afterSignOutUrl="/login" />}
-        </header> */}
+        <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0">
+          <button className="bg-[#FF4A6B] py-2 px-3 text-white rounded-md">
+            LOGIN
+          </button>
+        </header>
+
         <div
           className={`h-full items-center justify-center flex-col space-y-2 flex w-full px-5`}
         >
           <Image src={logo} alt="logo" width={616} priority />
           <button
-            onClick={() => {
-              router.push(isSignedIn ? "/levels" : "/login");
-            }}
+            onClick={() => {}}
             className="bg-[#293133] text-white w-full py-2.5 text-lg font-bold rounded-md"
           >
             PLAY
