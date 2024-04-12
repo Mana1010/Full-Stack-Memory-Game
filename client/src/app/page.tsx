@@ -4,16 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
-
 export default function Home() {
+  const router = useRouter();
   return (
-    <main
-      id="bg"
-      className="h-screen w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center bg-[#fffffe]"
-    >
+    <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
       <div className={`h-full w-full relative sm:rounded-md`}>
         <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0">
-          <button className="bg-[#FF4A6B] py-2 px-3 text-white rounded-md">
+          <button
+            onClick={() => router.push("/auth/login")}
+            className="bg-[#FF4A6B] py-2 px-3 text-white rounded-md"
+          >
             LOGIN
           </button>
         </header>

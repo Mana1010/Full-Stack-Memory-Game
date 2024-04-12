@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #bg {
-  background: url("../components//images/bg.png");
+  background: url("../components/images/bg.png");
 }
 .card {
   height: 120px;
