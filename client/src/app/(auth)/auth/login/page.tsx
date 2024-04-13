@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import icon from "../../../../components/images/logo.png";
 import { FaStar } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { string, z } from "zod";
@@ -9,20 +7,28 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
-import Provider from "@/app/Provider";
-// const obj = z.object({
-//   username: string(),
-//   password: string().min(7, "Password must be at least 7 characters long."),
-//   ["confirm-password"]: string().refine((formField, ctx) => {
-//     const password = ctx.parent.password;
-//     return formField !== password;
-//   }, "Password do not match"),
-// });
-// type Form = z.infer<obj>;
+import { zodResolver } from "@hookform/resolvers/zod";
+const schema = z.object({
+  username: string().min(1, "This field is required"),
+  password: string().min(1, "This field is required"),
+});
+type LoginForm = z.infer<typeof schema>;
 function Login() {
-  const { formState, register } = useForm();
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+    reset,
+  } = useForm<LoginForm>({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+    resolver: zodResolver(schema),
+  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
+
   // useEffect(() => {
   //   function load(e: BeforeUnloadEvent) {
   //     e.preventDefault();
@@ -31,6 +37,9 @@ function Login() {
   //   window.addEventListener("beforeunload", load);
   //   return () => window.removeEventListener("beforeunload", load);
   // }, []);
+  function submitLoginForm(data: LoginForm) {
+    reset();
+  }
   return (
     <motion.main
       initial={{ x: -700, opacity: 0 }}
@@ -39,9 +48,10 @@ function Login() {
       className="h-full w-full px-4 flex items-center justify-center"
     >
       <form
+        onSubmit={handleSubmit(submitLoginForm)}
         autoComplete="false"
         id="form"
-        className="px-4 py-3.5 w-full sm:w-[430px] h-[350px] backdrop-blur-sm rounded-sm mx-auto relative"
+        className="px-4 py-3.5 w-full sm:w-[430px] h-[420px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
         {/* TOP AND LEFT */}
         <div
@@ -95,8 +105,18 @@ function Login() {
               {...register("username")}
               name="username"
               id="username"
-              className="w-full p-2.5 space-x-2 rounded-sm bg-primary text-white outline-[#EBD30C] border-none outline-dashed outline-1"
+              className="w-full p-2.5 space-x-2 rounded-sm bg-primary text-white outline-[#EBD30C] border-none outline-dashed outline-1 bg-transparent"
             />
+            {errors.username?.message && (
+              <motion.small
+                initial={{ y: -5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, textShadow: "0 0 10px #EBD30C" }}
+                transition={{ duration: 0.1, ease: "easeIn" }}
+                className="text-[0.85rem] text-[#EBD30C]"
+              >
+                {errors.username.message}
+              </motion.small>
+            )}
           </div>
           <div className="space-y-1 flex flex-col">
             <label htmlFor="password" className="text-[#FFE30A] text-[0.7rem]">
@@ -119,6 +139,16 @@ function Login() {
                 {showPassword ? <VscEyeClosed /> : <VscEye />}
               </button>
             </div>
+            {errors.password?.message && (
+              <motion.small
+                initial={{ y: -5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, textShadow: "0 0 10px #EBD30C" }}
+                transition={{ duration: 0.1, ease: "easeIn" }}
+                className="text-[0.85rem] text-[#EBD30C]"
+              >
+                {errors.password.message}
+              </motion.small>
+            )}
           </div>
           <div className="pt-2 w-full flex justify-center flex-col items-center space-y-2">
             <button

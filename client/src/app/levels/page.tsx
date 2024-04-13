@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import Image from "next/image";
-import level_title from "../../components/images/level_title.png";
 import { useRouter } from "next/navigation";
 import { IoIosLock } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
@@ -43,7 +42,6 @@ function Levels() {
           </button>
         </header>
         <div className="w-full flex flex-col items-center justify-center">
-          <Image src={level_title} alt="title" priority />
           <div className="py-2 space-y-3 w-full h-[300px] flex flex-col justify-center items-center">
             {levels.map((level, index) => (
               <div key={level.difficulty} className="relative">
