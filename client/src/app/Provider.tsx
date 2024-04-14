@@ -1,24 +1,15 @@
 "use client";
 import React from "react";
-import { AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { Suspense } from "react";
 function Provider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
+  const queryClient = new QueryClient();
   return (
-    <AnimatePresence mode="sync">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeIn" }}
-        exit={{ opacity: 0 }}
-        key={pathname}
-        className="w-full h-full"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <div>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<h1>Loading...</h1>}>{children}</Suspense>
+      </QueryClientProvider>
+    </div>
   );
 }
 

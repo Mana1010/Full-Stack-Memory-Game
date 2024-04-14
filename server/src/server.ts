@@ -3,18 +3,26 @@ import express from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import cors from "cors";
-import { Clerk } from "@clerk/clerk-sdk-node";
 import cookieParser from "cookie-parser";
-
-const clerkClient = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
-
+import { router as authRouter } from "./routes/auth.route";
+import { router as userRouter } from "./routes/user.route";
+import { errorHandle } from "./middleware/error.handling";
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
+
+app.use(errorHandle);
 async function connectDb() {
   try {
     await mongoose.connect(process.env.MONGO_URI as string);

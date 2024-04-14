@@ -18,10 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div id="bg" className="w-full h-screen overflow-hidden">
-          {<Header />}
-          {children}
-        </div>
+        <Provider>
+          <div id="bg" className="w-full h-screen overflow-hidden">
+            {<Header />}
+            {children}
+          </div>
+        </Provider>
       </body>
     </html>
   );

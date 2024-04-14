@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import icon from "../../../../components/images/logo.png";
-import { FaStar } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { string, z } from "zod";
 import Link from "next/link";
@@ -12,13 +11,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import Provider from "@/app/Provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DevTool } from "@hookform/devtools";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { useMutation } from "react-query";
+import axios from "axios";
 
 interface ShowPassword {
   password: boolean;
@@ -58,7 +52,28 @@ function Signup() {
     ["confirm-password"]: false,
   });
   const router = useRouter();
-  const [touchedField, setTouchedField] = useState<string>("password");
+  const signUpMutation = useMutation({
+    mutationFn: async (data: DataSignUp) => {
+      const response = await axios.post(
+        `http://localhost:8080/auth/signup`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data.message;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      reset();
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
   // useEffect(() => {
   //   function load(e: BeforeUnloadEvent) {
   //     e.preventDefault();
@@ -68,7 +83,7 @@ function Signup() {
   //   return () => window.removeEventListener("beforeunload", load);
   // }, []);
   function submitForm(data: DataSignUp) {
-    reset();
+    signUpMutation.mutate(data);
   }
   // function handleInputMonitor(e: React.ChangeEvent<HTMLInputElement>) {
   //   const { name } = e.target;
