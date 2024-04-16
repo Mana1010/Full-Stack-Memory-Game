@@ -7,7 +7,7 @@ import { string, z } from "zod";
 import Link from "next/link";
 import memoryBg from "../../../../components/images/icon.png";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import Provider from "@/app/Provider";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,16 +64,41 @@ function Signup() {
           withCredentials: true,
         }
       );
-      return response.data.message;
+      return response.data;
     },
     onSuccess: (data) => {
-      console.log(data);
+      console.log(data.token);
+      localStorage.setItem("token", data.token);
       reset();
     },
-    onError: (err) => {
-      console.log(err);
+    onError: (err: Error) => {
+      console.log(err.message);
     },
   });
+  const formSideDesignWidthVariants = {
+    visible: {
+      boxShadow: signUpMutation.isLoading
+        ? "0 0 25px #FFE30A"
+        : "0 0 10px #FFE30A",
+      width: signUpMutation.isLoading ? "100%" : "100px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+  const formSideDesignHeightVariants = {
+    visible: {
+      boxShadow: signUpMutation.isLoading
+        ? "0 0 25px #FFE30A"
+        : "0 0 10px #FFE30A",
+      height: signUpMutation.isLoading ? "100%" : "100px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
   // useEffect(() => {
   //   function load(e: BeforeUnloadEvent) {
   //     e.preventDefault();
@@ -105,41 +130,57 @@ function Signup() {
         className="px-4 py-3.5 w-full sm:w-[430px] h-[500px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
         {/* TOP AND LEFT */}
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A] h-[100px] top-0 left-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] top-0 left-0"
-        ></div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignHeightVariants}
+          animate="visible"
+          className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
+        ></motion.div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignWidthVariants}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
+        ></motion.div>
         {/* BOTTOM AND RIGHT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] bottom-0 right-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] bottom-0 right-0"
-        ></div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignWidthVariants}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
+        ></motion.div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignHeightVariants}
+          animate="visible"
+          className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
+        ></motion.div>
         {/* TOP AND RIGHT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] top-0 right-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] top-0 right-0"
-        ></div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignWidthVariants}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
+        ></motion.div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignHeightVariants}
+          animate="visible"
+          className="absolute  w-[1px] bg-[#FFE30A]  top-0 right-0"
+        ></motion.div>
         {/* BOTTOM AND LEFT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] bottom-0 left-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] bottom-0 left-0"
-        ></div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignWidthVariants}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
+        ></motion.div>
+        <motion.div
+          initial={false}
+          variants={formSideDesignHeightVariants}
+          animate="visible"
+          className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
+        ></motion.div>
         <header>
           <h1 className="text-white text-xl">REGISTER</h1>
         </header>
@@ -171,7 +212,7 @@ function Signup() {
             <label htmlFor="password" className="text-[#FFE30A] text-[0.7rem]">
               PASSWORD
             </label>
-            <div className="w-full p-2.5 space-x-2 rounded-sm bg-primary outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
+            <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
                 type={showPassword.password ? "text" : "password"}
                 {...register("password")}
@@ -212,7 +253,7 @@ function Signup() {
             >
               CONFIRM PASSWORD
             </label>
-            <div className="w-full p-2.5 space-x-2 rounded-sm bg-primary outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
+            <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
                 type={showPassword["confirm-password"] ? "text" : "password"}
                 {...register("confirm")}

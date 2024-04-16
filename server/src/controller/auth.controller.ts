@@ -27,9 +27,20 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
   try {
     await bcrpyt.hash(password, 10);
     const createUser = await User.create({ username, password });
-    refreshToken(createUser.id.toString());
-    accessToken(createUser.id.toString());
-    res.status(201).json({ message: "Condragulation, you're a winner baby" });
+    const refresh_token = refreshToken(createUser._id.toString());
+    const access_token = accessToken(createUser._id.toString());
+    res
+      .status(201)
+      .cookie("refresh_token", refresh_token, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        secure: true,
+      })
+      .json({
+        message: "Condragulation, you're a winner baby",
+        token: access_token,
+      });
   } catch (err: any) {
     console.log(err.message);
     res.status(400).json({ message: "Sashay Away, you're a winner baby" });
