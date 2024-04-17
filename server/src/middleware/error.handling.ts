@@ -9,7 +9,7 @@ export const errorHandle = (
   const statusCode = res.statusCode || 500;
 
   res.status(statusCode).json({
-    messsage: err.message,
+    message: err.message,
     stack: err.stack,
   });
 };

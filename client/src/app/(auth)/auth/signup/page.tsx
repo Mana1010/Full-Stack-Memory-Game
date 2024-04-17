@@ -13,7 +13,8 @@ import Provider from "@/app/Provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
 import axios from "axios";
-
+import { baseUrl } from "@/utils/baseUrl";
+import { toast } from "sonner";
 interface ShowPassword {
   password: boolean;
   ["confirm-password"]: boolean;
@@ -54,25 +55,22 @@ function Signup() {
   const router = useRouter();
   const signUpMutation = useMutation({
     mutationFn: async (data: DataSignUp) => {
-      const response = await axios.post(
-        `http://localhost:8080/auth/signup`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${baseUrl}/auth/signup`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data.token);
+      toast.success(data.message);
       localStorage.setItem("token", data.token);
       reset();
+      router.push("/levels");
     },
-    onError: (err: Error) => {
-      console.log(err.message);
+    onError: (data: any) => {
+      toast.error(data.response.data.message);
     },
   });
   const formSideDesignWidthVariants = {
@@ -82,7 +80,7 @@ function Signup() {
         : "0 0 10px #FFE30A",
       width: signUpMutation.isLoading ? "100%" : "100px",
       transition: {
-        duration: 0.7,
+        duration: 0.5,
         ease: "easeOut",
       },
     },
@@ -94,7 +92,7 @@ function Signup() {
         : "0 0 10px #FFE30A",
       height: signUpMutation.isLoading ? "100%" : "100px",
       transition: {
-        duration: 0.7,
+        duration: 0.5,
         ease: "easeOut",
       },
     },

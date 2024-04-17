@@ -8,6 +8,10 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "react-query";
+import axios from "axios";
+import { baseUrl } from "@/utils/baseUrl";
+import { toast } from "sonner";
 const schema = z.object({
   username: string().min(1, "This field is required"),
   password: string().min(1, "This field is required"),
@@ -28,6 +32,49 @@ function Login() {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginForm) => {
+      const response = await axios.post(`${baseUrl}/auth/login`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      localStorage.setItem("token", data.token);
+      reset();
+    },
+    onError: (data: any) => {
+      toast.error(data.response.data.message);
+    },
+  });
+  const formSideDesignWidthVariants = {
+    visible: {
+      boxShadow: loginMutation.isLoading
+        ? "0 0 25px #FFE30A"
+        : "0 0 10px #FFE30A",
+      width: loginMutation.isLoading ? "100%" : "100px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+  const formSideDesignHeightVariants = {
+    visible: {
+      boxShadow: loginMutation.isLoading
+        ? "0 0 25px #FFE30A"
+        : "0 0 10px #FFE30A",
+      height: loginMutation.isLoading ? "100%" : "100px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
 
   // useEffect(() => {
   //   function load(e: BeforeUnloadEvent) {
@@ -37,9 +84,7 @@ function Login() {
   //   window.addEventListener("beforeunload", load);
   //   return () => window.removeEventListener("beforeunload", load);
   // }, []);
-  function submitLoginForm(data: LoginForm) {
-    reset();
-  }
+
   return (
     <motion.main
       initial={{ x: -700, opacity: 0 }}
@@ -48,47 +93,65 @@ function Login() {
       className="h-full w-full px-4 flex items-center justify-center"
     >
       <form
-        onSubmit={handleSubmit(submitLoginForm)}
+        onSubmit={handleSubmit((data: LoginForm) => {
+          loginMutation.mutate(data);
+        })}
         autoComplete="false"
         id="form"
         className="px-4 py-3.5 w-full sm:w-[430px] h-[420px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
         {/* TOP AND LEFT */}
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A] h-[100px] top-0 left-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] top-0 left-0"
-        ></div>
+        <motion.div
+          variants={formSideDesignHeightVariants}
+          initial={false}
+          animate="visible"
+          className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
+        ></motion.div>
+        <motion.div
+          variants={formSideDesignWidthVariants}
+          initial={false}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
+        ></motion.div>
         {/* BOTTOM AND RIGHT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] bottom-0 right-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] bottom-0 right-0"
-        ></div>
+        <motion.div
+          variants={formSideDesignWidthVariants}
+          initial={false}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
+        ></motion.div>
+        <motion.div
+          variants={formSideDesignHeightVariants}
+          initial={false}
+          animate="visible"
+          className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
+        ></motion.div>
         {/* TOP AND RIGHT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] top-0 right-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] top-0 right-0"
-        ></div>
+        <motion.div
+          variants={formSideDesignWidthVariants}
+          initial={false}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
+        ></motion.div>
+        <motion.div
+          variants={formSideDesignHeightVariants}
+          initial={false}
+          animate="visible"
+          className="absolute  w-[1px] bg-[#FFE30A] top-0 right-0"
+        ></motion.div>
         {/* BOTTOM AND LEFT */}
-        <div
-          id="form-design"
-          className="absolute w-[100px] bg-[#FFE30A] h-[1px] bottom-0 left-0"
-        ></div>
-        <div
-          id="form-design"
-          className="absolute  w-[1px] bg-[#FFE30A]  h-[100px] bottom-0 left-0"
-        ></div>
+        <motion.div
+          variants={formSideDesignWidthVariants}
+          initial={false}
+          animate="visible"
+          className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
+        ></motion.div>
+        <motion.div
+          variants={formSideDesignHeightVariants}
+          initial={false}
+          animate="visible"
+          className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
+        ></motion.div>
         <header className="w-full flex justify-between items-center">
           <h1 className="text-white text-xl">SIGN IN</h1>
           <span className="text-[#FFE30A] text-3xl">
@@ -122,7 +185,7 @@ function Login() {
             <label htmlFor="password" className="text-[#FFE30A] text-[0.7rem]">
               PASSWORD
             </label>
-            <div className="w-full p-2.5 space-x-2 rounded-sm bg-primary outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
+            <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
@@ -162,9 +225,7 @@ function Login() {
             <p className="text-white">
               No account yet?{" "}
               <span className="text-[#EBD30C] underline-offset-2 underline">
-                <Link href={"/auth/signup"} className="">
-                  signup here
-                </Link>
+                <Link href={"/auth/signup"}>signup here</Link>
               </span>
             </p>
           </div>

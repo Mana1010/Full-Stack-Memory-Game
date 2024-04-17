@@ -5,95 +5,110 @@ import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
 import { motion } from "framer-motion";
-import { CgProfile } from "react-icons/cg";
-import { GoPersonAdd } from "react-icons/go";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
+import { RiMenu2Line } from "react-icons/ri";
+import MenuBar from "@/components/MenuBar";
 
 export default function Home() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const formSideDesignWidthVariants = {
     visible: {
-      boxShadow: toggle ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
-      width: toggle ? "100%" : "15px",
+      boxShadow: toggle ? "0 0 35px #FFE30A" : "0 0 10px #FFE30A",
+      width: toggle ? "100%" : "10px",
       transition: {
-        duration: 0.7,
+        duration: 0.5,
         ease: "easeOut",
       },
     },
   };
   const formSideDesignHeightVariants = {
     visible: {
-      boxShadow: toggle ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
-      height: toggle ? "100%" : "15px",
+      boxShadow: toggle ? "0 0 35px #FFE30A" : "0 0 10px #FFE30A",
+      height: toggle ? "100%" : "10px",
       transition: {
-        duration: 0.7,
+        duration: 0.5,
       },
     },
   };
   return (
-    <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
+    <main
+      onClick={() => setToggle(false)}
+      className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center"
+    >
       <div className={`h-full w-full relative sm:rounded-md`}>
         <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0">
-          {/* <div className="space-x-2">
-            <motion.button
-              whileHover={{}}
-              onClick={() => router.push("/auth/login")}
-              className=" py-2 px-5 text-white rounded-sm bg-primary"
+          <div className="relative p-2">
+            <span
+              onClick={(e) => {
+                e.stopPropagation(), setToggle((prev) => !prev);
+              }}
+              className="cursor-pointer text-white text-3xl"
             >
-              SIGN IN
-            </motion.button>
-            <motion.button
-              whileHover={{}}
-              onClick={() => router.push("/auth/signup")}
-              className=" py-2 px-5 text-white rounded-sm bg-primary"
-            >
-              SIGN UP
-            </motion.button>
-          </div> */}
-          <Menubar
-            onClick={() => setToggle((prev) => !prev)}
-            className="bg-transparent border-none relative"
-          >
+              <RiMenu2Line />
+            </span>
+            <motion.div
+              initial={false}
+              variants={formSideDesignHeightVariants}
+              animate="visible"
+              className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
+            ></motion.div>
+            <motion.div
+              initial={false}
+              variants={formSideDesignWidthVariants}
+              animate="visible"
+              className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
+            ></motion.div>
+            {/* BOTTOM AND RIGHT */}
+            <motion.div
+              initial={false}
+              variants={formSideDesignWidthVariants}
+              animate="visible"
+              className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
+            ></motion.div>
+            <motion.div
+              initial={false}
+              variants={formSideDesignHeightVariants}
+              animate="visible"
+              className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
+            ></motion.div>
             {/* TOP AND RIGHT */}
-            <div className="absolute bg-[#FFE30A] w-[15px] h-[1px] top-0 right-0"></div>
-            <div className="absolute  w-[1px] bg-[#FFE30A] h-[15px]  top-0 right-0"></div>
+            <motion.div
+              initial={false}
+              variants={formSideDesignWidthVariants}
+              animate="visible"
+              className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
+            ></motion.div>
+            <motion.div
+              initial={false}
+              variants={formSideDesignHeightVariants}
+              animate="visible"
+              className="absolute  w-[1px] bg-[#FFE30A]  top-0 right-0"
+            ></motion.div>
             {/* BOTTOM AND LEFT */}
-            <div className="absolute w-[15px] bg-[#FFE30A] h-[1px] bottom-0 left-0"></div>
-            <div className="absolute h-[15px] w-[1px] bg-[#FFE30A] bottom-0 left-0"></div>
-            <MenubarMenu>
-              <MenubarTrigger>
-                <GoPersonAdd className="text-2xl text-white" />
-              </MenubarTrigger>
-              <MenubarContent className="bg-primary border-none rounded-sm p-3 space-y-2">
-                <MenubarItem className="bg-[#293133] cursor-pointer text-[#FFE30A]">
-                  SIGN IN
-                </MenubarItem>
-
-                <MenubarItem className="bg-[#293133]  cursor-pointer text-[#FFE30A]">
-                  SIGN UP
-                </MenubarItem>
-              </MenubarContent>
-            </MenubarMenu>
-          </Menubar>
+            <motion.div
+              initial={false}
+              variants={formSideDesignWidthVariants}
+              animate="visible"
+              className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
+            ></motion.div>
+            <motion.div
+              initial={false}
+              variants={formSideDesignHeightVariants}
+              animate="visible"
+              className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
+            ></motion.div>
+            {toggle && <MenuBar />}
+          </div>
         </header>
 
         <div
-          className={`h-full items-center justify-center flex-col space-y-2 flex w-full px-5`}
+          className={`h-full items-center justify-center flex-col space-y-3 flex w-full px-5`}
         >
           <Image src={logo} alt="logo" width={616} priority />
-          <button className="bg-[#293133] text-white w-full py-2.5 text-lg font-bold rounded-md">
+          <button className="bg-[#293133] text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md">
             PLAY
           </button>
-          <button className="bg-[#293133] text-white w-full py-2.5 text-lg font-bold rounded-md">
+          <button className="bg-[#293133] text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md">
             ABOUT
           </button>
         </div>
