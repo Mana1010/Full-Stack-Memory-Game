@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { RiMenu2Line } from "react-icons/ri";
 import MenuBar from "@/components/MenuBar";
 
@@ -26,7 +26,7 @@ export default function Home() {
       boxShadow: toggle ? "0 0 35px #FFE30A" : "0 0 10px #FFE30A",
       height: toggle ? "100%" : "10px",
       transition: {
-        duration: 0.5,
+        duration: 0.2,
       },
     },
   };
@@ -97,7 +97,9 @@ export default function Home() {
               animate="visible"
               className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
             ></motion.div>
-            {toggle && <MenuBar />}
+            <AnimatePresence mode="wait">
+              {toggle && <MenuBar />}
+            </AnimatePresence>
           </div>
         </header>
 
