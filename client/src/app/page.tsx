@@ -7,7 +7,7 @@ import icon from "../components/images/icon.png";
 import { AnimatePresence, motion } from "framer-motion";
 import { RiMenu2Line } from "react-icons/ri";
 import MenuBar from "@/components/MenuBar";
-
+import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
 export default function Home() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
@@ -107,12 +107,60 @@ export default function Home() {
           className={`h-full items-center justify-center flex-col space-y-3 flex w-full px-5`}
         >
           <Image src={logo} alt="logo" width={616} priority />
-          <button className="bg-[#293133] text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md">
+          <motion.button
+            whileHover={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            whileTap={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
+          >
             PLAY
-          </button>
-          <button className="bg-[#293133] text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md">
+            <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
+              <MdGamepad />
+            </motion.span>
+          </motion.button>
+          <motion.button
+            whileHover={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            whileTap={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
+          >
+            LEADERBOARD
+            <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
+              <MdLeaderboard />
+            </motion.span>
+          </motion.button>
+          <motion.button
+            whileHover={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            whileTap={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
+          >
             ABOUT
-          </button>
+            <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
+              <MdRoundaboutRight />
+            </motion.span>
+          </motion.button>
         </div>
       </div>
       <div className="w-full hidden sm:block">

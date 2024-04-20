@@ -70,7 +70,7 @@ function MenuBar() {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="absolute w-[200px] top-[50px] bg-primary px-2 py-3 flex flex-col space-y-3"
+      className="absolute w-[200px] top-[50px] backdrop-blur-sm border-[#FFE30A] border-[1px] px-2 py-3 flex flex-col space-y-3 z-50"
     >
       <div>
         <p className="text-[#FFE30A] text-[0.75rem] font-bold">
@@ -79,7 +79,7 @@ function MenuBar() {
         <ul className="pt-2 flex flex-col gap-1">
           {navAuth.map((menu, index) => (
             <Link href={menu.route} key={index}>
-              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-slate-400/55 rounded-2xl">
+              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-slate-400/55 active:bg-slate-400/55 rounded-2xl">
                 <span className="text-[1rem]">{menu.icon}</span>
                 <span className=" text-[0.8rem]"> {menu.name}</span>
               </motion.li>
@@ -93,8 +93,8 @@ function MenuBar() {
         </p>
         <ul className="pt-2 flex flex-col gap-1">
           {devSocials.map((social, index) => (
-            <Link href={social.link} key={index}>
-              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-[#c8b948] rounded-2xl">
+            <Link href={social.link} key={index} target="_blank">
+              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-[#c8b948] rounded-2xl active:bg-[#c8b948]">
                 <span className="text-[1rem]">{social.icon}</span>
                 <span className=" text-[0.8rem]">
                   {" "}
