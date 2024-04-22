@@ -24,7 +24,7 @@ export default function RootLayout({
           <div id="bg" className="w-full h-screen overflow-hidden">
             <Header />
             {children}
-            <Toaster duration={1000} position="top-center" />
+            <Toaster duration={1500} position="top-center" />
           </div>
         </Provider>
       </body>

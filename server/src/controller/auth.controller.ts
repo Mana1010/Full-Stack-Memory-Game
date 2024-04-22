@@ -4,6 +4,8 @@ import bcrpyt from "bcrypt";
 import { User } from "../model/user.model";
 import { Request, Response } from "express";
 import { accessToken, refreshToken } from "../utils/token.utils";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import "dotenv/config";
 const schemaSignUp = z
   .object({
     username: z.string().min(1),
@@ -11,7 +13,6 @@ const schemaSignUp = z
     confirm: z.string().min(1),
   })
   .refine((data) => data.password === data.confirm, {
-    message: "Password don't match",
     path: ["confirm"],
   });
 const schemaLogIn = z.object({
@@ -20,8 +21,9 @@ const schemaLogIn = z.object({
 });
 type SchemaSignUp = z.infer<typeof schemaSignUp>;
 type SchemaLogIn = z.infer<typeof schemaLogIn>;
+
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password }: SchemaSignUp = req.body;
   const validateForm = schemaSignUp.safeParse(req.body);
   if (!validateForm.success) {
     res.status(400);
@@ -32,6 +34,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
     const createUser = await User.create({
       username,
       password: hashedPassword,
+      isOldUser: false,
     });
     const refresh_token = refreshToken(createUser._id.toString());
     const access_token = accessToken(createUser._id.toString());
@@ -58,7 +61,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const logIn = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password }: SchemaLogIn = req.body;
   const validateForm = schemaLogIn.safeParse(req.body);
   if (!validateForm.success) {
     res.status(400);
@@ -90,8 +93,33 @@ export const logIn = asyncHandler(async (req: Request, res: Response) => {
     })
     .json({
       message: "Welcome back! You're now logged in.",
+      isOldUser: authenticateUser.isOldUser,
       token: access_token,
     });
 });
 
+export const newAccessToken = asyncHandler(
+  async (req: Request, res: Response) => {
+    const refreshToken = req.cookies["refresh_token"];
+
+    if (!refreshToken) {
+      console.log(refreshToken);
+      res.status(403);
+      throw new Error("Forbidden");
+    }
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_KEY!,
+      (err: Error | null, decode: any) => {
+        if (err) {
+          res.status(403);
+          throw new Error("Forbidden");
+        }
+        const token = accessToken(decode._id.toString());
+        res.status(200).json({ message: token });
+        return;
+      }
+    );
+  }
+);
 // export const logOut = asyncHandler(async (req: Request, res: Response) => {});

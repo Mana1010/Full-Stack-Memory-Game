@@ -12,6 +12,7 @@ import { useMutation } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
+import SideDesign from "@/components/SideDesign";
 const schema = z.object({
   username: string().min(1, "This field is required"),
   password: string().min(1, "This field is required"),
@@ -45,10 +46,11 @@ function Login() {
     onSuccess: (data) => {
       toast.success(data.message);
       localStorage.setItem("token", data.token);
+      router.push(data.isOldUser ? "/levels" : "/profile-setup");
       reset();
     },
-    onError: (data: any) => {
-      toast.error(data.response.data.message);
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
   const formSideDesignWidthVariants = {
@@ -100,58 +102,10 @@ function Login() {
         id="form"
         className="px-4 py-3.5 w-full sm:w-[430px] h-[420px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
-        {/* TOP AND LEFT */}
-        <motion.div
-          variants={formSideDesignHeightVariants}
-          initial={false}
-          animate="visible"
-          className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
-        ></motion.div>
-        <motion.div
-          variants={formSideDesignWidthVariants}
-          initial={false}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
-        ></motion.div>
-        {/* BOTTOM AND RIGHT */}
-        <motion.div
-          variants={formSideDesignWidthVariants}
-          initial={false}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
-        ></motion.div>
-        <motion.div
-          variants={formSideDesignHeightVariants}
-          initial={false}
-          animate="visible"
-          className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
-        ></motion.div>
-        {/* TOP AND RIGHT */}
-        <motion.div
-          variants={formSideDesignWidthVariants}
-          initial={false}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
-        ></motion.div>
-        <motion.div
-          variants={formSideDesignHeightVariants}
-          initial={false}
-          animate="visible"
-          className="absolute  w-[1px] bg-[#FFE30A] top-0 right-0"
-        ></motion.div>
-        {/* BOTTOM AND LEFT */}
-        <motion.div
-          variants={formSideDesignWidthVariants}
-          initial={false}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
-        ></motion.div>
-        <motion.div
-          variants={formSideDesignHeightVariants}
-          initial={false}
-          animate="visible"
-          className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
-        ></motion.div>
+        <SideDesign
+          formSideDesignWidthVariants={formSideDesignWidthVariants}
+          formSideDesignHeightVariants={formSideDesignHeightVariants}
+        />
         <header className="w-full flex justify-between items-center">
           <h1 className="text-white text-xl">SIGN IN</h1>
           <span className="text-[#FFE30A] text-3xl">

@@ -15,6 +15,7 @@ import { useMutation } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
+import SideDesign from "@/components/SideDesign";
 interface ShowPassword {
   password: boolean;
   ["confirm-password"]: boolean;
@@ -38,7 +39,6 @@ function Signup() {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<DataSignUp>({
     defaultValues: {
@@ -67,7 +67,7 @@ function Signup() {
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       reset();
-      router.push("/levels");
+      router.push("/profile-setup");
     },
     onError: (data: any) => {
       toast.error(data.response.data.message);
@@ -108,11 +108,6 @@ function Signup() {
   function submitForm(data: DataSignUp) {
     signUpMutation.mutate(data);
   }
-  // function handleInputMonitor(e: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name } = e.target;
-  //   setTouchedField(name);
-  //   return;
-  // }
   return (
     <motion.main
       initial={{ x: -700, opacity: 0 }}
@@ -127,58 +122,10 @@ function Signup() {
         id="form"
         className="px-4 py-3.5 w-full sm:w-[430px] h-[500px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
-        {/* TOP AND LEFT */}
-        <motion.div
-          initial={false}
-          variants={formSideDesignHeightVariants}
-          animate="visible"
-          className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
-        ></motion.div>
-        <motion.div
-          initial={false}
-          variants={formSideDesignWidthVariants}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
-        ></motion.div>
-        {/* BOTTOM AND RIGHT */}
-        <motion.div
-          initial={false}
-          variants={formSideDesignWidthVariants}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
-        ></motion.div>
-        <motion.div
-          initial={false}
-          variants={formSideDesignHeightVariants}
-          animate="visible"
-          className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
-        ></motion.div>
-        {/* TOP AND RIGHT */}
-        <motion.div
-          initial={false}
-          variants={formSideDesignWidthVariants}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
-        ></motion.div>
-        <motion.div
-          initial={false}
-          variants={formSideDesignHeightVariants}
-          animate="visible"
-          className="absolute  w-[1px] bg-[#FFE30A]  top-0 right-0"
-        ></motion.div>
-        {/* BOTTOM AND LEFT */}
-        <motion.div
-          initial={false}
-          variants={formSideDesignWidthVariants}
-          animate="visible"
-          className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
-        ></motion.div>
-        <motion.div
-          initial={false}
-          variants={formSideDesignHeightVariants}
-          animate="visible"
-          className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
-        ></motion.div>
+        <SideDesign
+          formSideDesignWidthVariants={formSideDesignWidthVariants}
+          formSideDesignHeightVariants={formSideDesignHeightVariants}
+        />
         <header>
           <h1 className="text-white text-xl">REGISTER</h1>
         </header>

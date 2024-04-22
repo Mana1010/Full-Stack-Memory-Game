@@ -13,6 +13,10 @@ const schema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isOldUser: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

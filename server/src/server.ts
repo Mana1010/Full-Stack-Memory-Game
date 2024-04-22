@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { router as authRouter } from "./routes/auth.route";
 import { router as userRouter } from "./routes/user.route";
 import { errorHandle } from "./middleware/error.handling";
+import { newAccessToken } from "./controller/auth.controller";
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(morgan("dev"));
@@ -21,6 +22,7 @@ app.use(
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.get("/", newAccessToken);
 
 app.use(errorHandle);
 async function connectDb() {
