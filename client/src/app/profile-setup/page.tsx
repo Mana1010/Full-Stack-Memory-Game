@@ -14,12 +14,22 @@ import TubeDesign from "@/components/TubeDesign";
 import Gender from "@/components/pages/profile-setup/Gender";
 import Age from "@/components/pages/profile-setup/Age";
 import Username from "@/components/pages/profile-setup/Username";
+import { ProfileStore } from "@/utils/store/profile.store";
 const schema = z.object({
   ign: string().min(1, "This field is required"),
 });
 type ProfileForm = z.infer<typeof schema>;
 function ProfileSetup() {
-  const [active, setActive] = useState();
+  const {
+    setCurrentStep,
+    currentStep,
+    ign,
+    gender,
+    age,
+    setAgeIsDone,
+    setGenderIsDone,
+    setIgnIsDone,
+  } = ProfileStore();
   const {
     handleSubmit,
     formState: { errors },
@@ -60,7 +70,6 @@ function ProfileSetup() {
   //   window.addEventListener("beforeunload", load);
   //   return () => window.removeEventListener("beforeunload", load);
   // }, []);
-
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">
       <TubeDesign />
@@ -68,24 +77,73 @@ function ProfileSetup() {
           formSideDesignHeightVariants={formSideDesignHeightVariants}
           formSideDesignWidthVariants={formSideDesignWidthVariants}
         /> */}
-      <Gender />
+      <AnimatePresence mode="wait">
+        {currentStep === "gender" && <Gender />}
+        {currentStep === "age" && <Age />}
+        {currentStep === "username" && <Username />}
+      </AnimatePresence>
       <div className="w-full justify-center items-center flex absolute bottom-[100px]">
         <div className="space-x-4">
-          {/* <button
-            style={{ boxShadow: "0 0 8px #ffe30a" }}
-            id="button-submit"
-            type="submit"
-            className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
-          >
-            BACK
-          </button> */}
-          <button
-            style={{ boxShadow: "0 0 8px #ffe30a" }}
-            id="button-submit"
-            className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
-          >
-            NEXT
-          </button>
+          {currentStep === "gender" || (
+            <button
+              onClick={() => {
+                setCurrentStep(currentStep === "age" ? "gender" : "age");
+                {
+                  currentStep === "age"
+                    ? setGenderIsDone(false)
+                    : setAgeIsDone(false);
+                }
+              }}
+              style={{ boxShadow: "0 0 8px #ffe30a" }}
+              id="button-submit"
+              type="submit"
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+            >
+              BACK
+            </button>
+          )}
+          {/* Button group for the next and submit */}
+          {currentStep === "gender" && (
+            <button
+              style={{
+                boxShadow: gender.value ? "0 0 8px #ffe30a" : "none",
+              }}
+              id="button-submit"
+              disabled={gender.value === null}
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400"
+              onClick={() => {
+                setCurrentStep("age");
+                setGenderIsDone(true);
+              }}
+            >
+              NEXT
+            </button>
+          )}
+          {currentStep === "age" && (
+            <button
+              style={{ boxShadow: "0 0 8px #ffe30a" }}
+              id="button-submit"
+              disabled={age.value === null}
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              onClick={() => {
+                setCurrentStep("ign");
+                setAgeIsDone(true);
+              }}
+            >
+              NEXT
+            </button>
+          )}
+          {currentStep === "username" && (
+            <button
+              style={{ boxShadow: "0 0 8px #ffe30a" }}
+              id="button-submit"
+              disabled={ign.value === null}
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              onClick={() => setCurrentStep("age")}
+            >
+              SUBMIT
+            </button>
+          )}
         </div>
       </div>
     </main>

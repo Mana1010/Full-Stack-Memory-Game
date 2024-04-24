@@ -1,16 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { IoRadioButtonOffSharp, IoRadioButtonOnSharp } from "react-icons/io5";
-
-interface CheckType {
-  male: boolean;
-  female: boolean;
-}
+import { ProfileStore } from "@/utils/store/profile.store";
+import { motion } from "framer-motion";
 function Gender() {
-  const [checkedValue, setCheckedValue] = useState<CheckType>({
-    male: false,
-    female: false,
-  });
+  const { setGender, gender } = ProfileStore();
   return (
     <div className="w-full flex justify-center items-center flex-col">
       {" "}
@@ -23,14 +17,12 @@ function Gender() {
       <div className="flex gap-5 flex-col justify-center pt-10">
         <div className="space-x-2 flex items-center">
           <button
-            onClick={() =>
-              setCheckedValue({ ...checkedValue, female: false, male: true })
-            }
+            onClick={() => setGender("male")}
             type="button"
             id="male"
             className="text-[#ffe30a] text-3xl"
           >
-            {checkedValue.male ? (
+            {gender.value === "male" ? (
               <IoRadioButtonOnSharp />
             ) : (
               <IoRadioButtonOffSharp />
@@ -40,14 +32,12 @@ function Gender() {
         </div>
         <div className="space-x-2 flex items-center">
           <button
-            onClick={() =>
-              setCheckedValue({ ...checkedValue, male: false, female: true })
-            }
+            onClick={() => setGender("female")}
             type="button"
             id="female"
             className="text-[#ffe30a] text-3xl"
           >
-            {checkedValue.female ? (
+            {gender.value === "female" ? (
               <IoRadioButtonOnSharp />
             ) : (
               <IoRadioButtonOffSharp />
