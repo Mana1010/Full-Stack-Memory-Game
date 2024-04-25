@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { string, z } from "zod";
 import { useRouter } from "next/navigation";
@@ -13,7 +12,7 @@ import { toast } from "sonner";
 import TubeDesign from "@/components/TubeDesign";
 import Gender from "@/components/pages/profile-setup/Gender";
 import Age from "@/components/pages/profile-setup/Age";
-import Username from "@/components/pages/profile-setup/Username";
+import IGN from "@/components/pages/profile-setup/IGN";
 import { ProfileStore } from "@/utils/store/profile.store";
 const schema = z.object({
   ign: string().min(1, "This field is required"),
@@ -80,7 +79,7 @@ function ProfileSetup() {
       <AnimatePresence mode="wait">
         {currentStep === "gender" && <Gender />}
         {currentStep === "age" && <Age />}
-        {currentStep === "username" && <Username />}
+        {currentStep === "username" && <IGN />}
       </AnimatePresence>
       <div className="w-full justify-center items-center flex absolute bottom-[100px]">
         <div className="space-x-4">
@@ -97,7 +96,7 @@ function ProfileSetup() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               type="submit"
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
             >
               BACK
             </button>
@@ -110,7 +109,7 @@ function ProfileSetup() {
               }}
               id="button-submit"
               disabled={gender.value === null}
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400"
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
               onClick={() => {
                 setCurrentStep("age");
                 setGenderIsDone(true);
@@ -124,7 +123,7 @@ function ProfileSetup() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               disabled={age.value === null}
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
               onClick={() => {
                 setCurrentStep("ign");
                 setAgeIsDone(true);
@@ -133,13 +132,11 @@ function ProfileSetup() {
               NEXT
             </button>
           )}
-          {currentStep === "username" && (
+          {currentStep === "ign" && (
             <button
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
-              disabled={ign.value === null}
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
-              onClick={() => setCurrentStep("age")}
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
             >
               SUBMIT
             </button>

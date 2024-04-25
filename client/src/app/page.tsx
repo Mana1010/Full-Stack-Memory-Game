@@ -8,6 +8,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RiMenu2Line } from "react-icons/ri";
 import MenuBar from "@/components/MenuBar";
 import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "@/utils/baseUrl";
 export default function Home() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
@@ -30,6 +33,7 @@ export default function Home() {
       },
     },
   };
+
   return (
     <main
       onClick={() => setToggle(false)}

@@ -1,18 +1,40 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoRadioButtonOffSharp, IoRadioButtonOnSharp } from "react-icons/io5";
 import { ProfileStore } from "@/utils/store/profile.store";
-import { motion } from "framer-motion";
+import { animate, motion } from "framer-motion";
 function Gender() {
   const { setGender, gender } = ProfileStore();
+
+  const pageTransitionVariant = {
+    hidden: {
+      x: -300,
+      opacity: 0,
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+        type: "string",
+      },
+    },
+  };
+
   return (
-    <div className="w-full flex justify-center items-center flex-col">
+    <motion.div
+      variants={pageTransitionVariant}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="w-full flex justify-center items-center flex-col"
+    >
       {" "}
       <h1
         style={{ textShadow: "0 0 15px #ffe30a" }}
-        className=" text-3xl font-extrabold text-[#ffe30a] tracking-wider"
+        className=" text-xl font-extrabold text-[#ffe30a] tracking-wider"
       >
-        ARE YOU?
+        YOUR GENDER
       </h1>
       <div className="flex gap-5 flex-col justify-center pt-10">
         <div className="space-x-2 flex items-center">
@@ -46,7 +68,7 @@ function Gender() {
           <label className="text-md text-white">FEMALE</label>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

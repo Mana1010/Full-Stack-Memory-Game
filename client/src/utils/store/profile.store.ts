@@ -1,4 +1,3 @@
-import { profile } from "console";
 import { create } from "zustand";
 
 //This store is for the step profile verification.
@@ -8,7 +7,7 @@ interface ProfileState {
     isDone: boolean;
   };
   age: {
-    value: string | null;
+    value: number[];
     isDone: boolean;
   };
   ign: {
@@ -20,7 +19,7 @@ interface ProfileStoreSchema extends ProfileState {
   currentStep: string;
   setIgn: (value: string) => void;
   setGender: (value: string) => void;
-  setAge: (value: string) => void;
+  setAge: (value: number[]) => void;
   setGenderIsDone: (isDone: boolean) => void;
   setAgeIsDone: (isDone: boolean) => void;
   setIgnIsDone: (isDone: boolean) => void;
@@ -32,7 +31,7 @@ const store = (set: any) => ({
     isDone: false,
   },
   age: {
-    value: null,
+    value: [1],
     isDone: false,
   },
   ign: {
@@ -56,11 +55,11 @@ const store = (set: any) => ({
       },
     }));
   },
-  setAge: (value: string) => {
+  setAge: (value: number[]) => {
     set((state: ProfileState) => ({
       age: {
         ...state.age,
-        value,
+        value: value,
       },
     }));
   },

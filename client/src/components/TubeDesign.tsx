@@ -88,7 +88,17 @@ function TubeDesign() {
             animate="visible"
             className="rounded-full w-[45px] h-[45px] bg-primary text-[white] flex justify-center items-center"
           >
-            2
+            {age.isDone ? (
+              <motion.span
+                initial={{ scale: 3 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <FaStar />
+              </motion.span>
+            ) : (
+              "2"
+            )}
           </motion.div>{" "}
           <motion.div
             variants={ignActiveVariant}
