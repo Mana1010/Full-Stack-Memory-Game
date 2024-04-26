@@ -13,6 +13,8 @@ import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
+import loading from "../../../../components/images/loading.gif";
+import Image from "next/image";
 const schema = z.object({
   username: string().min(1, "This field is required"),
   password: string().min(1, "This field is required"),
@@ -172,9 +174,13 @@ function Login() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               type="submit"
-              className="w-[200px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              className="w-[200px] h-[50px] bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in flex justify-center items-center"
             >
-              SUBMIT
+              {loginMutation.isLoading ? (
+                <Image width={60} src={loading} alt="" priority />
+              ) : (
+                "SUBMIT"
+              )}
             </button>
             <p className="text-white">
               No account yet?{" "}

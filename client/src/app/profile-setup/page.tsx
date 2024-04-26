@@ -61,21 +61,17 @@ function ProfileSetup() {
     },
   });
 
-  // useEffect(() => {
-  //   function load(e: BeforeUnloadEvent) {
-  //     e.preventDefault();
-  //   }
+  useEffect(() => {
+    function load(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
 
-  //   window.addEventListener("beforeunload", load);
-  //   return () => window.removeEventListener("beforeunload", load);
-  // }, []);
+    window.addEventListener("beforeunload", load);
+    return () => window.removeEventListener("beforeunload", load);
+  }, []);
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">
       <TubeDesign />
-      {/* <SideDesign
-          formSideDesignHeightVariants={formSideDesignHeightVariants}
-          formSideDesignWidthVariants={formSideDesignWidthVariants}
-        /> */}
       <AnimatePresence mode="wait">
         {currentStep === "gender" && <Gender />}
         {currentStep === "age" && <Age />}

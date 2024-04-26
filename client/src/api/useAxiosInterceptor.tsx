@@ -4,13 +4,18 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import refreshToken from "@/utils/refreshToken";
+import { baseUrl } from "@/utils/baseUrl";
+import checkUser from "./checkUser";
 interface DecodedToken {
   id: string;
   iat: number;
   exp: number;
 }
-const getToken = localStorage.getItem("token");
-const axiosInterceptor = axios.create({
+const getToken =
+  typeof localStorage.getItem("token") !== "undefined"
+    ? localStorage.getItem("token")
+    : null;
+export const axiosInterceptor = axios.create({
   baseURL: " http://localhost:3000/",
   headers: {
     Authorization: `Bearer ${getToken}`,

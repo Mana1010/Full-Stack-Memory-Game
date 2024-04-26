@@ -16,6 +16,7 @@ import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
+import loading from "../../../../components/images/loading.gif";
 interface ShowPassword {
   password: boolean;
   ["confirm-password"]: boolean;
@@ -240,9 +241,13 @@ function Signup() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               type="submit"
-              className="w-[200px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in"
+              className="w-[200px] h-[50px] bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in flex justify-center items-center"
             >
-              SUBMIT
+              {signUpMutation.isLoading ? (
+                <Image width={60} src={loading} alt="" priority />
+              ) : (
+                "SUBMIT"
+              )}
             </button>
             <p className="text-white">
               Already have an account?{" "}

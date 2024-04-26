@@ -11,6 +11,7 @@ import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
+import SideDesign from "@/components/SideDesign";
 export default function Home() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
@@ -50,57 +51,10 @@ export default function Home() {
             >
               <RiMenu2Line />
             </span>
-            <motion.div
-              initial={false}
-              variants={formSideDesignHeightVariants}
-              animate="visible"
-              className="absolute w-[1px] bg-[#FFE30A] top-0 left-0"
-            ></motion.div>
-            <motion.div
-              initial={false}
-              variants={formSideDesignWidthVariants}
-              animate="visible"
-              className="absolute bg-[#FFE30A] h-[1px] top-0 left-0"
-            ></motion.div>
-            {/* BOTTOM AND RIGHT */}
-            <motion.div
-              initial={false}
-              variants={formSideDesignWidthVariants}
-              animate="visible"
-              className="absolute bg-[#FFE30A] h-[1px] bottom-0 right-0"
-            ></motion.div>
-            <motion.div
-              initial={false}
-              variants={formSideDesignHeightVariants}
-              animate="visible"
-              className="absolute  w-[1px] bg-[#FFE30A] bottom-0 right-0"
-            ></motion.div>
-            {/* TOP AND RIGHT */}
-            <motion.div
-              initial={false}
-              variants={formSideDesignWidthVariants}
-              animate="visible"
-              className="absolute bg-[#FFE30A] h-[1px] top-0 right-0"
-            ></motion.div>
-            <motion.div
-              initial={false}
-              variants={formSideDesignHeightVariants}
-              animate="visible"
-              className="absolute  w-[1px] bg-[#FFE30A]  top-0 right-0"
-            ></motion.div>
-            {/* BOTTOM AND LEFT */}
-            <motion.div
-              initial={false}
-              variants={formSideDesignWidthVariants}
-              animate="visible"
-              className="absolute bg-[#FFE30A] h-[1px] bottom-0 left-0"
-            ></motion.div>
-            <motion.div
-              initial={false}
-              variants={formSideDesignHeightVariants}
-              animate="visible"
-              className="absolute w-[1px] bg-[#FFE30A] bottom-0 left-0"
-            ></motion.div>
+            <SideDesign
+              formSideDesignHeightVariants={formSideDesignHeightVariants}
+              formSideDesignWidthVariants={formSideDesignWidthVariants}
+            />
             <AnimatePresence mode="wait">
               {toggle && <MenuBar />}
             </AnimatePresence>
