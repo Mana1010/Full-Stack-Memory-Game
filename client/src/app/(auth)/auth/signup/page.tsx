@@ -64,7 +64,7 @@ function Signup() {
       });
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       reset();
@@ -98,14 +98,14 @@ function Signup() {
       },
     },
   };
-  // useEffect(() => {
-  //   function load(e: BeforeUnloadEvent) {
-  //     e.preventDefault();
-  //   }
+  useEffect(() => {
+    function load(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
 
-  //   window.addEventListener("beforeunload", load);
-  //   return () => window.removeEventListener("beforeunload", load);
-  // }, []);
+    window.addEventListener("beforeunload", load);
+    return () => window.removeEventListener("beforeunload", load);
+  }, []);
   function submitForm(data: DataSignUp) {
     signUpMutation.mutate(data);
   }

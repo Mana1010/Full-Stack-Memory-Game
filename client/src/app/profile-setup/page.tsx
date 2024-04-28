@@ -14,6 +14,7 @@ import Gender from "@/components/pages/profile-setup/Gender";
 import Age from "@/components/pages/profile-setup/Age";
 import IGN from "@/components/pages/profile-setup/IGN";
 import { ProfileStore } from "@/utils/store/profile.store";
+import { useQuery } from "react-query";
 const schema = z.object({
   ign: string().min(1, "This field is required"),
 });
@@ -28,6 +29,7 @@ function ProfileSetup() {
     setAgeIsDone,
     setGenderIsDone,
     setIgnIsDone,
+    setIgn,
   } = ProfileStore();
   const {
     handleSubmit,
@@ -41,6 +43,19 @@ function ProfileSetup() {
     resolver: zodResolver(schema),
   });
   const router = useRouter();
+  const checkUser = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}/auth/verify`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+      setIgn(response.data.message.username);
+      return response.data.message;
+    },
+  });
   const profileMutation = useMutation({
     mutationFn: async (data: ProfileForm) => {
       const response = await axios.post(`${baseUrl}/user/profile-setup`, data, {
@@ -75,7 +90,7 @@ function ProfileSetup() {
       <AnimatePresence mode="wait">
         {currentStep === "gender" && <Gender />}
         {currentStep === "age" && <Age />}
-        {currentStep === "username" && <IGN />}
+        {currentStep === "ign" && <IGN />}
       </AnimatePresence>
       <div className="w-full justify-center items-center flex absolute bottom-[100px]">
         <div className="space-x-4">
@@ -130,9 +145,12 @@ function ProfileSetup() {
           )}
           {currentStep === "ign" && (
             <button
-              style={{ boxShadow: "0 0 8px #ffe30a" }}
+              style={{
+                boxShadow: ign.value ? "0 0 8px #ffe30a" : "none",
+              }}
+              disabled={ign.value === "" || ign.value === null}
               id="button-submit"
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
+              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
             >
               SUBMIT
             </button>

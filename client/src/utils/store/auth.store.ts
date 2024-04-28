@@ -1,10 +1,36 @@
-import { create } from "zustand";
+// import { create } from "zustand";
+// import axios from "axios";
+// import { baseUrl } from "../baseUrl";
 
-interface AuthStore {
-  profile: null;
-}
-const store = (set: any) => ({
-  profile: null,
-});
+// export interface UserAuth {
+//   username: string;
+//   isOldUser: boolean;
+//   _id: string;
+// }
+// interface AuthStore {
+//   userAuthInfo: UserAuth | null;
+//   authInfo: () => Promise<UserAuth>;
+// }
 
-export const authStore = create<AuthStore>(store);
+// const store = (set: any) => ({
+//   userAuthInfo: null,
+//   authInfo: async () => {
+//     try {
+//       const response = await axios.get(`${baseUrl}/auth/verify`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("token")}`,
+//         },
+//         withCredentials: true,
+//       });
+//       // localStorage.setItem(
+//       //   "isOldUser",
+//       //   JSON.stringify(response.data.message.isOldUser)
+//       // );
+//       return response.data.message;
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   },
+// });
+
+// export const authStore = create<AuthStore>(store);

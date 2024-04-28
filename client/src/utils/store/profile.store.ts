@@ -38,6 +38,7 @@ const store = (set: any) => ({
     value: null,
     isDone: false,
   },
+  photo: {},
   currentStep: "gender",
   setIgn: (value: string) => {
     set((state: ProfileState) => ({

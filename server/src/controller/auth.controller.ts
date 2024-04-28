@@ -22,6 +22,7 @@ const schemaLogIn = z.object({
 type SchemaSignUp = z.infer<typeof schemaSignUp>;
 type SchemaLogIn = z.infer<typeof schemaLogIn>;
 
+//For Signup
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
   const { username, password }: SchemaSignUp = req.body;
   const validateForm = schemaSignUp.safeParse(req.body);
@@ -60,6 +61,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+//For Login
 export const logIn = asyncHandler(async (req: Request, res: Response) => {
   const { username, password }: SchemaLogIn = req.body;
   const validateForm = schemaLogIn.safeParse(req.body);
@@ -98,6 +100,7 @@ export const logIn = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+//For accessing new token and checking if the refresh token is still valid
 export const newAccessToken = asyncHandler(
   async (req: Request, res: Response) => {
     const refreshToken = req.cookies["refresh_token"];
@@ -120,6 +123,27 @@ export const newAccessToken = asyncHandler(
         return;
       }
     );
+  }
+);
+//Checking if the user is successfully set its profile
+export const verifyOldUser = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("running");
+    if (!req.user) {
+      res.status(401);
+      throw new Error("Unauthorized");
+    }
+
+    const findUser = await User.findById(req.user._id).select(
+      "username isOldUser"
+    );
+
+    if (!findUser) {
+      res.status(401);
+      throw new Error("Unathorized");
+    }
+
+    res.status(200).json({ message: findUser });
   }
 );
 // export const logOut = asyncHandler(async (req: Request, res: Response) => {});

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,8 +11,8 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import SideDesign from "@/components/SideDesign";
+
 export default function Home() {
-  const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const formSideDesignWidthVariants = {
     visible: {
@@ -34,7 +33,6 @@ export default function Home() {
       },
     },
   };
-
   return (
     <main
       onClick={() => setToggle(false)}

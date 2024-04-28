@@ -4,8 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import refreshToken from "@/utils/refreshToken";
-import { baseUrl } from "@/utils/baseUrl";
-import checkUser from "./checkUser";
+import { getAuthUser } from "./getAuthUser";
 interface DecodedToken {
   id: string;
   iat: number;
@@ -49,6 +48,11 @@ function useAxiosInterceptor() {
               return Promise.reject("Error");
             }
           }
+          const checkUser = await getAuthUser();
+
+          if (!checkUser.isOldUser) {
+            router.push("/profile-setup");
+          }
           return config;
         } catch (err) {
           localStorage.removeItem("token");
@@ -57,7 +61,14 @@ function useAxiosInterceptor() {
         }
       }
     );
-    const responseIntercept = axiosInterceptor.interceptors.response.use();
+    const responseIntercept = axiosInterceptor.interceptors.response.use(
+      async (response) => {
+        return response;
+      },
+      (err) => {
+        return Promise.reject(err);
+      }
+    );
     return () => {
       axiosInterceptor.interceptors.request.eject(requestIntercept);
       axiosInterceptor.interceptors.response.eject(responseIntercept);

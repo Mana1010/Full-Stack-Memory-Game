@@ -6,26 +6,14 @@ import { axiosInterceptor } from "@/api/useAxiosInterceptor";
 import { useQuery } from "react-query";
 import axios from "axios";
 function Check() {
-  const query = useQuery({
-    queryKey: ["hillo"],
+  const axiosIntercept = useAxiosInterceptor();
+  const checking = useQuery({
+    queryKey: ["checking"],
     queryFn: async () => {
-      const response = await axios.get(`${baseUrl}/user/verify`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axiosIntercept.get(`${baseUrl}/user/check`);
       return response.data;
     },
   });
-  const axiosIntercept = useAxiosInterceptor();
-  // const checking = useQuery({
-  //   queryKey: ["checking"],
-  //   queryFn: async () => {
-  //     const response = await axiosIntercept.get(`${baseUrl}/user/check`);
-  //     return await response.data;
-  //   },
-  // });
   return <div>Check</div>;
 }
 
