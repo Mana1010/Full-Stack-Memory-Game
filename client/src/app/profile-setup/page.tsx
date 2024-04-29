@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { string, z } from "zod";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
@@ -15,11 +13,14 @@ import Age from "@/components/pages/profile-setup/Age";
 import IGN from "@/components/pages/profile-setup/IGN";
 import { ProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
+import { randomIcon } from "@/utils/icons";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 const schema = z.object({
   ign: string().min(1, "This field is required"),
 });
 type ProfileForm = z.infer<typeof schema>;
 function ProfileSetup() {
+  const axiosInterceptor = useAxiosInterceptor();
   const {
     setCurrentStep,
     currentStep,
@@ -28,25 +29,13 @@ function ProfileSetup() {
     age,
     setAgeIsDone,
     setGenderIsDone,
-    setIgnIsDone,
     setIgn,
   } = ProfileStore();
-  const {
-    handleSubmit,
-    formState: { errors },
-    register,
-    reset,
-  } = useForm<ProfileForm>({
-    defaultValues: {
-      ign: "",
-    },
-    resolver: zodResolver(schema),
-  });
   const router = useRouter();
   const checkUser = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await axios.get(`${baseUrl}/auth/verify`, {
+      const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -69,21 +58,25 @@ function ProfileSetup() {
     onSuccess: (data) => {
       toast.success(data.message);
       router.push("/levels");
-      reset();
     },
     onError: (err: any) => {
       toast.error(err.response.data.message);
     },
   });
-
   useEffect(() => {
     function load(e: BeforeUnloadEvent) {
       e.preventDefault();
     }
-
     window.addEventListener("beforeunload", load);
     return () => window.removeEventListener("beforeunload", load);
   }, []);
+  //For icons
+  function sendIcon() {
+    const imgUrl = randomIcon(gender.value).src;
+    const formData = new FormData();
+    formData.append("photo", imgUrl);
+    return formData.get("photo");
+  }
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">
       <TubeDesign />
@@ -145,6 +138,7 @@ function ProfileSetup() {
           )}
           {currentStep === "ign" && (
             <button
+              onClick={() => sendIcon()}
               style={{
                 boxShadow: ign.value ? "0 0 8px #ffe30a" : "none",
               }}

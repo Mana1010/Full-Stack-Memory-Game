@@ -14,6 +14,7 @@ interface ProfileState {
     value: string | null;
     isDone: boolean;
   };
+  profilePic: string | null;
 }
 interface ProfileStoreSchema extends ProfileState {
   currentStep: string;
@@ -38,7 +39,7 @@ const store = (set: any) => ({
     value: null,
     isDone: false,
   },
-  photo: {},
+  profilePic: null,
   currentStep: "gender",
   setIgn: (value: string) => {
     set((state: ProfileState) => ({
@@ -87,6 +88,9 @@ const store = (set: any) => ({
         isDone,
       },
     }));
+  },
+  setPhoto: (photo: string) => {
+    set({ photo });
   },
   setCurrentStep: (value: string) => {
     set({ currentStep: value });
