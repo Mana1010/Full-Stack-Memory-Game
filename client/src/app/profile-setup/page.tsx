@@ -13,7 +13,6 @@ import Age from "@/components/pages/profile-setup/Age";
 import IGN from "@/components/pages/profile-setup/IGN";
 import { ProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
-import { randomIcon } from "@/utils/icons";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 const schema = z.object({
   ign: string().min(1, "This field is required"),
@@ -27,9 +26,11 @@ function ProfileSetup() {
     ign,
     gender,
     age,
+    profilePic,
     setAgeIsDone,
     setGenderIsDone,
     setIgn,
+    setProfilePic,
   } = ProfileStore();
   const router = useRouter();
   const checkUser = useQuery({
@@ -63,6 +64,7 @@ function ProfileSetup() {
       toast.error(err.response.data.message);
     },
   });
+  console.log(profilePic);
   useEffect(() => {
     function load(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -71,12 +73,6 @@ function ProfileSetup() {
     return () => window.removeEventListener("beforeunload", load);
   }, []);
   //For icons
-  function sendIcon() {
-    const imgUrl = randomIcon(gender.value).src;
-    const formData = new FormData();
-    formData.append("photo", imgUrl);
-    return formData.get("photo");
-  }
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">
       <TubeDesign />
@@ -115,6 +111,30 @@ function ProfileSetup() {
               disabled={gender.value === null}
               className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
               onClick={() => {
+                const boyProfilePic = [
+                  "boy1",
+                  "boy2",
+                  "boy3",
+                  "boy4",
+                  "boy5",
+                  "boy6",
+                  "boy7",
+                  "boy8",
+                ];
+                const girlProfilePic = [
+                  "girl1",
+                  "girl2",
+                  "girl3",
+                  "girl4",
+                  "girl5",
+                  "girl6",
+                ];
+                const checkGender: string[] =
+                  gender.value === "male" ? boyProfilePic : girlProfilePic;
+                const randomize = Math.floor(
+                  Math.random() * checkGender.length
+                );
+                setProfilePic(checkGender[randomize]);
                 setCurrentStep("age");
                 setGenderIsDone(true);
               }}
@@ -138,7 +158,6 @@ function ProfileSetup() {
           )}
           {currentStep === "ign" && (
             <button
-              onClick={() => sendIcon()}
               style={{
                 boxShadow: ign.value ? "0 0 8px #ffe30a" : "none",
               }}

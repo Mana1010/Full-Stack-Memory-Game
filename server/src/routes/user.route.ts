@@ -1,8 +1,6 @@
 import express from "express";
-
 import { protectedRoutes } from "../middleware/protected.route";
+import { profileUpload } from "../controller/user.controller";
 export const router = express.Router();
 
-router.get("/check", (req, res) => {
-  res.send("Hello world");
-});
+router.route("/profile").post(profileUpload);
