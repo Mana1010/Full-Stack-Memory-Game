@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ProfileStore } from "@/utils/store/profile.store";
+import { useProfileStore } from "@/utils/store/profile.store";
 import SideDesign from "@/components/SideDesign";
 function IGN() {
-  const { ign, setIgn } = ProfileStore();
+  const { ign, setIgn } = useProfileStore();
   const [focus, isFocus] = useState(false);
   const formSideDesignWidthVariants = {
     visible: {

@@ -3,62 +3,13 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
-import { AnimatePresence, motion } from "framer-motion";
-import { RiMenu2Line } from "react-icons/ri";
-import MenuBar from "@/components/MenuBar";
+import { motion } from "framer-motion";
 import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { baseUrl } from "@/utils/baseUrl";
-import SideDesign from "@/components/SideDesign";
 
 export default function Home() {
-  const [toggle, setToggle] = useState(false);
-  const formSideDesignWidthVariants = {
-    visible: {
-      boxShadow: toggle ? "0 0 35px #FFE30A" : "0 0 10px #FFE30A",
-      width: toggle ? "100%" : "10px",
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-  const formSideDesignHeightVariants = {
-    visible: {
-      boxShadow: toggle ? "0 0 35px #FFE30A" : "0 0 10px #FFE30A",
-      height: toggle ? "100%" : "10px",
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
   return (
-    <main
-      onClick={() => setToggle(false)}
-      className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center"
-    >
+    <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
       <div className={`h-full w-full relative sm:rounded-md`}>
-        <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0">
-          <div className="relative p-2">
-            <span
-              onClick={(e) => {
-                e.stopPropagation(), setToggle((prev) => !prev);
-              }}
-              className="cursor-pointer text-white text-3xl"
-            >
-              <RiMenu2Line />
-            </span>
-            <SideDesign
-              formSideDesignHeightVariants={formSideDesignHeightVariants}
-              formSideDesignWidthVariants={formSideDesignWidthVariants}
-            />
-            <AnimatePresence mode="wait">
-              {toggle && <MenuBar />}
-            </AnimatePresence>
-          </div>
-        </header>
-
         <div
           className={`h-full items-center justify-center flex-col space-y-3 flex w-full px-5`}
         >

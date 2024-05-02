@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 //This store is for the step profile verification.
-interface ProfileState {
+export interface ProfileState {
   gender: {
     value: string | null;
     isDone: boolean;
@@ -98,4 +98,4 @@ const store = (set: any) => ({
   },
 });
 
-export const ProfileStore = create<ProfileStoreSchema>(store);
+export const useProfileStore = create<ProfileStoreSchema>(store);

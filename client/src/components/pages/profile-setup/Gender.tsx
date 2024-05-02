@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { IoRadioButtonOffSharp, IoRadioButtonOnSharp } from "react-icons/io5";
-import { ProfileStore } from "@/utils/store/profile.store";
+import { useProfileStore } from "@/utils/store/profile.store";
 import { animate, motion } from "framer-motion";
 function Gender() {
-  const { setGender, gender } = ProfileStore();
+  const { setGender, gender } = useProfileStore();
 
   const pageTransitionVariant = {
     hidden: {

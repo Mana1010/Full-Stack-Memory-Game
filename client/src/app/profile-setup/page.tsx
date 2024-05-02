@@ -11,13 +11,17 @@ import TubeDesign from "@/components/TubeDesign";
 import Gender from "@/components/pages/profile-setup/Gender";
 import Age from "@/components/pages/profile-setup/Age";
 import IGN from "@/components/pages/profile-setup/IGN";
-import { ProfileStore } from "@/utils/store/profile.store";
+import { useProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
-const schema = z.object({
-  ign: string().min(1, "This field is required"),
-});
-type ProfileForm = z.infer<typeof schema>;
+import { ProfileState } from "@/utils/store/profile.store";
+
+interface Profile {
+  age: number;
+  gender: string | null;
+  ign: string | null;
+  profilePic: string | null;
+}
 function ProfileSetup() {
   const axiosInterceptor = useAxiosInterceptor();
   const {
@@ -31,7 +35,7 @@ function ProfileSetup() {
     setGenderIsDone,
     setIgn,
     setProfilePic,
-  } = ProfileStore();
+  } = useProfileStore();
   const router = useRouter();
   const checkUser = useQuery({
     queryKey: ["user"],
@@ -47,13 +51,17 @@ function ProfileSetup() {
     },
   });
   const profileMutation = useMutation({
-    mutationFn: async (data: ProfileForm) => {
-      const response = await axios.post(`${baseUrl}/user/profile-setup`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+    mutationFn: async (data: Profile) => {
+      const response = await axios.post(
+        `${baseUrl}/user/profile-upload`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
       return response.data;
     },
     onSuccess: (data) => {
@@ -64,7 +72,6 @@ function ProfileSetup() {
       toast.error(err.response.data.message);
     },
   });
-  console.log(profilePic);
   useEffect(() => {
     function load(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -158,6 +165,15 @@ function ProfileSetup() {
           )}
           {currentStep === "ign" && (
             <button
+              onClick={() => {
+                const data = {
+                  age: age.value[0],
+                  gender: gender.value,
+                  profilePic,
+                  ign: ign.value,
+                };
+                profileMutation.mutate(data);
+              }}
               style={{
                 boxShadow: ign.value ? "0 0 8px #ffe30a" : "none",
               }}

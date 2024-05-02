@@ -5,7 +5,7 @@ import Link from "next/link";
 import { TiUserAddOutline } from "react-icons/ti";
 import { CiLogin } from "react-icons/ci";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
-function MenuBar() {
+function Sidebar() {
   const navAuth = [
     {
       name: "REGISTER",
@@ -108,4 +108,4 @@ function MenuBar() {
     </motion.div>
   );
 }
-export default MenuBar;
+export default Sidebar;

@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { ProfileStore } from "@/utils/store/profile.store";
+import { useProfileStore } from "@/utils/store/profile.store";
 import { Slider } from "@/components/ui/slider";
 function Age() {
-  const { age, setAge } = ProfileStore();
+  const { age, setAge } = useProfileStore();
 
   const pageTransitionVariant = {
     hidden: {
