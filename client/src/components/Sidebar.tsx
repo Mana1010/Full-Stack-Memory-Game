@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { delay, easeIn, motion } from "framer-motion";
 import Link from "next/link";
 import { TiUserAddOutline } from "react-icons/ti";
 import { CiLogin } from "react-icons/ci";
@@ -9,6 +9,11 @@ import { useModalStore } from "@/utils/store/modal.store";
 import Image from "next/image";
 import icon from "../../src//components//images//small-logo.png";
 import { FaXmark } from "react-icons/fa6";
+import { BiCheckShield } from "react-icons/bi";
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { IoIosArrowDroprightCircle } from "react-icons/io";
+import { IoShareSocialOutline } from "react-icons/io5";
+
 function Sidebar() {
   const [showSocial, setShowSocial] = useState(false);
   const {
@@ -57,33 +62,29 @@ function Sidebar() {
       index: 4,
     },
   ];
-  const menubarVariant = {
-    hidden: {
-      left: "45px",
-      opacity: 0,
-    },
+  const sidebarVariant = {
     visible: {
-      opacity: 1,
-      left: "50px",
+      width: openSidebar ? 260 : 70,
       transition: {
-        duration: 0.6,
-        ease: "easeIn",
-        type: "spring",
+        ease: "easeOut",
+        duration: 0.2,
       },
     },
-    exit: {
-      left: "45px",
-      opacity: 0,
+  };
+  const arrowRightVariant = {
+    visible: {
+      rotate: openSidebar ? 180 : 0,
+      transition: {
+        duration: 0.3,
+      },
     },
   };
-  if (!openSidebar) return;
   return (
     <motion.div
-      // variants={menubarVariant}
-      // initial="hidden"
-      // animate="visible"
-      // exit="exit"
-      className="absolute w-[250px] h-screen top-0 bottom-0 left-0 backdrop-blur-sm bg-primary z-[999999] py-3"
+      variants={sidebarVariant}
+      initial={false}
+      animate="visible"
+      className={`absolute w-full h-screen top-0 bottom-0 bg-[#191F23] z-[999999] py-3`}
     >
       {/* <div>
         <p className="text-[#FFE30A] text-[0.75rem] font-bold">
@@ -103,29 +104,78 @@ function Sidebar() {
           ))}
         </ul>
       </div> */}
-
       {/* For Sidebar's Header */}
-      <header className="flex justify-between items-center pr-3">
-        <Image src={icon} alt="icon" width={130} priority />
-        <button className="text-white text-lg" onClick={setOpenSidebar}>
-          <FaXmark />
+      <motion.button
+        variants={arrowRightVariant}
+        animate="visible"
+        onClick={setOpenSidebar}
+        type="button"
+        className="text-secondary text-2xl absolute right-[-10px]"
+      >
+        <IoIosArrowDroprightCircle />
+      </motion.button>
+      {/* <div className="flex w-full flex-col space-y-4 text-2xl justify-center items-center h-[200px]">
+        <button className="p-1.5 bg-secondary/80 rounded-full">
+          <BiCheckShield />
         </button>
-      </header>
-      <div className="px-2 pt-10 space-y-5">
-        <p className="text-secondary text-[0.65rem] font-bold">GAME MENU</p>
-        <div>
-          <button className="">AUTHENTICATION</button>
-          <ul className="pt-2 flex flex-col gap-1">
-            {navAuth.map((menu, index) => (
-              <Link href={menu.route} key={index}>
-                <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-slate-400/55 active:bg-slate-400/55 rounded-2xl">
-                  <span className="text-[1rem]">{menu.icon}</span>
-                  <span className=" text-[0.8rem]"> {menu.name}</span>
-                </motion.li>
-              </Link>
-            ))}
-          </ul>
-        </div>
+        <button className="p-1.5 bg-secondary/80 rounded-full">
+          <IoShareSocialOutline />
+        </button>
+      </div> */}
+      <div>
+        <header className={`pr-3 `}>
+          <Image src={icon} alt="icon" width={130} priority />
+        </header>
+        <motion.div className="px-2 pt-10 space-y-5">
+          {/* <p
+            className={`text-secondary text-[0.65rem] font-bold ${
+              openSidebar ? "text-start" : "text-center"
+            }`}
+          >
+            {openSidebar ? "MAIN MENU" : "MENU"}
+          </p> */}
+
+          <div className="space-y-2 w-full">
+            <button
+              style={{ boxShadow: "-1px -1px 5px black" }}
+              className="flex items-center text-white justify-between w-full py-2 px-1"
+            >
+              <div className={`flex space-x-1 items-center w-full`}>
+                <span className="text-xl">
+                  <BiCheckShield />
+                </span>
+                <span
+                  className={`text-[0.8rem]  ${
+                    openSidebar ? "flex" : "hidden"
+                  }`}
+                >
+                  AUTHENTICATION
+                </span>
+              </div>
+              <span className={`text-3xl`}>
+                <RiArrowDropDownLine />
+              </span>
+            </button>
+            <button
+              style={{ boxShadow: "-1px -1px 5px black" }}
+              className="flex items-center text-white justify-between w-full py-2 px-1"
+            >
+              <div className="flex space-x-1 items-center">
+                <span className="text-xl">
+                  <IoShareSocialOutline />
+                </span>
+                <span
+                  className={`text-[0.8rem] ${openSidebar ? "flex" : "hidden"}`}
+                >
+                  DEV
+                </span>
+              </div>
+              <span className="text-3xl">
+                <RiArrowDropDownLine />
+              </span>
+            </button>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );

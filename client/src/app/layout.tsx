@@ -23,7 +23,6 @@ export default function RootLayout({
       <body className={poppins.className}>
         <Provider>
           <div id="bg" className="w-full h-screen overflow-hidden">
-            <Header />
             <Sidebar />
             {children}
             <Toaster duration={1500} position="top-center" />
