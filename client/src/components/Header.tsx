@@ -34,24 +34,20 @@ function Header() {
       },
     },
   };
+
   return (
-    <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0  z-50">
-      <div className="relative p-2">
+    <header className="w-full flex items-center py-6 px-4 absolute top-0 right-0 left-0 z-50">
+      <div className="p-2">
         <span
           onClick={() => {
             setOpenSidebar();
           }}
-          className="cursor-pointer text-white text-3xl"
+          className={`relative cursor-pointer text-white text-3xl ${
+            openSidebar ? "hidden" : "flex"
+          }`}
         >
           <RiMenu2Line />
         </span>
-        <SideDesign
-          formSideDesignHeightVariants={formSideDesignHeightVariants}
-          formSideDesignWidthVariants={formSideDesignWidthVariants}
-        />
-        <AnimatePresence mode="wait">
-          {openSidebar && <Sidebar />}
-        </AnimatePresence>
       </div>
     </header>
   );

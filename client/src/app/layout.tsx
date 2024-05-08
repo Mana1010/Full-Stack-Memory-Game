@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "./Provider";
 import { Toaster } from "sonner";
 import { lazy } from "react";
+import Sidebar from "@/components/Sidebar";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Provider>
           <div id="bg" className="w-full h-screen overflow-hidden">
             <Header />
+            <Sidebar />
             {children}
             <Toaster duration={1500} position="top-center" />
           </div>

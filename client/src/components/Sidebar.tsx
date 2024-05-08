@@ -1,11 +1,24 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { TiUserAddOutline } from "react-icons/ti";
 import { CiLogin } from "react-icons/ci";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
+import { useModalStore } from "@/utils/store/modal.store";
+import Image from "next/image";
+import icon from "../../src//components//images//small-logo.png";
+import { FaXmark } from "react-icons/fa6";
 function Sidebar() {
+  const [showSocial, setShowSocial] = useState(false);
+  const {
+    openSidebar,
+    openAuthMenu,
+    openDevSocial,
+    setOpenSidebar,
+    setOpenAuthMenu,
+    setOpenDevSocial,
+  } = useModalStore();
   const navAuth = [
     {
       name: "REGISTER",
@@ -46,12 +59,12 @@ function Sidebar() {
   ];
   const menubarVariant = {
     hidden: {
-      top: "45px",
+      left: "45px",
       opacity: 0,
     },
     visible: {
       opacity: 1,
-      top: "50px",
+      left: "50px",
       transition: {
         duration: 0.6,
         ease: "easeIn",
@@ -59,35 +72,20 @@ function Sidebar() {
       },
     },
     exit: {
-      top: "45px",
+      left: "45px",
       opacity: 0,
     },
   };
-
+  if (!openSidebar) return;
   return (
     <motion.div
-      variants={menubarVariant}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className="absolute w-[200px] top-[50px] backdrop-blur-sm border-[#FFE30A] border-[1px] px-2 py-3 flex flex-col space-y-3 z-50"
+      // variants={menubarVariant}
+      // initial="hidden"
+      // animate="visible"
+      // exit="exit"
+      className="absolute w-[250px] h-screen top-0 bottom-0 left-0 backdrop-blur-sm bg-primary z-[999999] py-3"
     >
-      <div>
-        <p className="text-[#FFE30A] text-[0.75rem] font-bold">
-          AUTHENTICATION
-        </p>
-        <ul className="pt-2 flex flex-col gap-1">
-          {navAuth.map((menu, index) => (
-            <Link href={menu.route} key={index}>
-              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-slate-400/55 active:bg-slate-400/55 rounded-2xl">
-                <span className="text-[1rem]">{menu.icon}</span>
-                <span className=" text-[0.8rem]"> {menu.name}</span>
-              </motion.li>
-            </Link>
-          ))}
-        </ul>
-      </div>
-      <div>
+      {/* <div>
         <p className="text-[#FFE30A] text-[0.75rem] font-bold">
           DEVELOPER&apos;S SOCIAL
         </p>
@@ -104,6 +102,30 @@ function Sidebar() {
             </Link>
           ))}
         </ul>
+      </div> */}
+
+      {/* For Sidebar's Header */}
+      <header className="flex justify-between items-center pr-3">
+        <Image src={icon} alt="icon" width={130} priority />
+        <button className="text-white text-lg" onClick={setOpenSidebar}>
+          <FaXmark />
+        </button>
+      </header>
+      <div className="px-2 pt-10 space-y-5">
+        <p className="text-secondary text-[0.65rem] font-bold">GAME MENU</p>
+        <div>
+          <button className="">AUTHENTICATION</button>
+          <ul className="pt-2 flex flex-col gap-1">
+            {navAuth.map((menu, index) => (
+              <Link href={menu.route} key={index}>
+                <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-slate-400/55 active:bg-slate-400/55 rounded-2xl">
+                  <span className="text-[1rem]">{menu.icon}</span>
+                  <span className=" text-[0.8rem]"> {menu.name}</span>
+                </motion.li>
+              </Link>
+            ))}
+          </ul>
+        </div>
       </div>
     </motion.div>
   );

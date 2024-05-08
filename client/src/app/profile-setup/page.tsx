@@ -14,7 +14,6 @@ import IGN from "@/components/pages/profile-setup/IGN";
 import { useProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
-import { ProfileState } from "@/utils/store/profile.store";
 
 interface Profile {
   age: number;
@@ -103,7 +102,7 @@ function ProfileSetup() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               type="submit"
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
+              className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in font-bold"
             >
               BACK
             </button>
@@ -116,7 +115,7 @@ function ProfileSetup() {
               }}
               id="button-submit"
               disabled={gender.value === null}
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
+              className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
               onClick={() => {
                 const boyProfilePic = [
                   "boy1",
@@ -154,7 +153,7 @@ function ProfileSetup() {
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
               disabled={age.value === null}
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in font-bold"
+              className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in font-bold"
               onClick={() => {
                 setCurrentStep("ign");
                 setAgeIsDone(true);
@@ -179,7 +178,7 @@ function ProfileSetup() {
               }}
               disabled={ign.value === "" || ign.value === null}
               id="button-submit"
-              className="w-[150px] py-2.5 bg-[#EBD30C] text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
+              className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
             >
               SUBMIT
             </button>

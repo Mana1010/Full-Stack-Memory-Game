@@ -2,9 +2,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaStar } from "react-icons/fa";
-import { ProfileStore } from "@/utils/store/profile.store";
+import { useProfileStore } from "@/utils/store/profile.store";
 function TubeDesign() {
-  const { currentStep, gender, age, ign } = ProfileStore();
+  const { currentStep, gender, age, ign } = useProfileStore();
   const tubeLightVariant = {
     visible: {
       width:
@@ -63,7 +63,7 @@ function TubeDesign() {
           style={{ boxShadow: "0 0 15px #FFE30A" }}
           variants={tubeLightVariant}
           animate="visible"
-          className="h-[3px] absolute inset-0 bg-[#FFE30A] w-0"
+          className="h-[3px] absolute inset-0 bg-secondary w-0"
         ></motion.div>
         <div className="absolute bg-transparent w-full flex justify-between items-center">
           <motion.div
