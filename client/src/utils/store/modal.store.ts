@@ -13,7 +13,7 @@ interface ModalStoreSchema extends ModalState {
 }
 const store = (set: any) => ({
   openSidebar: false,
-  openAuthMenu: false,
+  openAuthMenu: true,
   openDevSocial: false,
   setOpenSidebar: () => {
     set((state: ModalState) => ({

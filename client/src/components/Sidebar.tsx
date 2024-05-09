@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { delay, easeIn, motion } from "framer-motion";
-import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { TiUserAddOutline } from "react-icons/ti";
 import { CiLogin } from "react-icons/ci";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
@@ -13,9 +12,14 @@ import { BiCheckShield } from "react-icons/bi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
-
+import Link from "next/link";
+import { MdLogin } from "react-icons/md";
+import { PiUserPlus } from "react-icons/pi";
+import { useMediaQuery } from "react-responsive";
+import SideDesign from "./SideDesign";
 function Sidebar() {
   const [showSocial, setShowSocial] = useState(false);
+  const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
   const {
     openSidebar,
     openAuthMenu,
@@ -28,35 +32,35 @@ function Sidebar() {
     {
       name: "REGISTER",
       route: "/auth/signup",
-      icon: <TiUserAddOutline />,
+      icon: <PiUserPlus />,
     },
     {
       name: "LOGIN",
       route: "/auth/login",
-      icon: <CiLogin />,
+      icon: <MdLogin />,
     },
   ];
   const devSocials = [
     {
-      name: "Facebook",
+      name: "FACEBOOK",
       link: "https://www.facebook.com/tanvic.clarito?mibextid=ZbWKwL",
       icon: <FaFacebook />,
       index: 1,
     },
     {
-      name: "Tiktok",
+      name: "TIKTOK",
       link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
       icon: <FaTiktok />,
       index: 2,
     },
     {
-      name: "Github",
+      name: "GITHUB",
       link: "https://github.com/Mana1010",
       icon: <FaGithub />,
       index: 3,
     },
     {
-      name: "LinkedIn",
+      name: "LINKEDIN",
       link: "https://www.linkedin.com/in/tristan-vic-clarito-a256322a0/",
       icon: <FaLinkedin />,
       index: 4,
@@ -66,7 +70,16 @@ function Sidebar() {
     visible: {
       width: openSidebar ? 260 : 70,
       transition: {
-        ease: "easeOut",
+        ease: "linear",
+        duration: 0.2,
+      },
+    },
+  };
+  const sidebarMobileVariant = {
+    visible: {
+      width: openSidebar ? 260 : 13,
+      transition: {
+        ease: "linear",
         duration: 0.2,
       },
     },
@@ -75,35 +88,17 @@ function Sidebar() {
     visible: {
       rotate: openSidebar ? 180 : 0,
       transition: {
-        duration: 0.3,
+        duration: 0.2,
       },
     },
   };
   return (
     <motion.div
-      variants={sidebarVariant}
+      variants={mobileScreen ? sidebarMobileVariant : sidebarVariant}
       initial={false}
       animate="visible"
-      className={`absolute w-full h-screen top-0 bottom-0 bg-[#191F23] z-[999999] py-3`}
+      className={`absolute h-screen top-0 bottom-0 bg-[#191F23] z-[999999] py-3`}
     >
-      {/* <div>
-        <p className="text-[#FFE30A] text-[0.75rem] font-bold">
-          DEVELOPER&apos;S SOCIAL
-        </p>
-        <ul className="pt-2 flex flex-col gap-1">
-          {devSocials.map((social, index) => (
-            <Link href={social.link} key={index} target="_blank">
-              <motion.li className="text-white p-2 flex space-x-3 items-center hover:bg-[#c8b948] rounded-2xl active:bg-[#c8b948]">
-                <span className="text-[1rem]">{social.icon}</span>
-                <span className=" text-[0.8rem]">
-                  {" "}
-                  {social.name.toUpperCase()}
-                </span>
-              </motion.li>
-            </Link>
-          ))}
-        </ul>
-      </div> */}
       {/* For Sidebar's Header */}
       <motion.button
         variants={arrowRightVariant}
@@ -114,68 +109,124 @@ function Sidebar() {
       >
         <IoIosArrowDroprightCircle />
       </motion.button>
-      {/* <div className="flex w-full flex-col space-y-4 text-2xl justify-center items-center h-[200px]">
-        <button className="p-1.5 bg-secondary/80 rounded-full">
-          <BiCheckShield />
-        </button>
-        <button className="p-1.5 bg-secondary/80 rounded-full">
-          <IoShareSocialOutline />
-        </button>
-      </div> */}
-      <div>
+      <div className={`${mobileScreen && !openSidebar ? "hidden" : "initial"}`}>
         <header className={`pr-3 `}>
           <Image src={icon} alt="icon" width={130} priority />
         </header>
-        <motion.div className="px-2 pt-10 space-y-5">
-          {/* <p
-            className={`text-secondary text-[0.65rem] font-bold ${
-              openSidebar ? "text-start" : "text-center"
-            }`}
-          >
-            {openSidebar ? "MAIN MENU" : "MENU"}
-          </p> */}
 
-          <div className="space-y-2 w-full">
-            <button
-              style={{ boxShadow: "-1px -1px 5px black" }}
-              className="flex items-center text-white justify-between w-full py-2 px-1"
-            >
-              <div className={`flex space-x-1 items-center w-full`}>
-                <span className="text-xl">
-                  <BiCheckShield />
-                </span>
-                <span
-                  className={`text-[0.8rem]  ${
-                    openSidebar ? "flex" : "hidden"
-                  }`}
-                >
-                  AUTHENTICATION
-                </span>
-              </div>
-              <span className={`text-3xl`}>
-                <RiArrowDropDownLine />
-              </span>
-            </button>
-            <button
-              style={{ boxShadow: "-1px -1px 5px black" }}
-              className="flex items-center text-white justify-between w-full py-2 px-1"
-            >
-              <div className="flex space-x-1 items-center">
-                <span className="text-xl">
-                  <IoShareSocialOutline />
-                </span>
-                <span
-                  className={`text-[0.8rem] ${openSidebar ? "flex" : "hidden"}`}
-                >
-                  DEV
-                </span>
-              </div>
-              <span className="text-3xl">
-                <RiArrowDropDownLine />
-              </span>
-            </button>
+        {/* For Profile */}
+        <div className="space-y-2 py-3">
+          <div>
+            <Image src={icon} alt="icon" priority width={100} />
           </div>
-        </motion.div>
+        </div>
+        <div className={`px-2 pt-8 space-y-2 `}>
+          <div className="space-y-2 w-full">
+            <div className="space-y-1">
+              <button
+                onClick={setOpenAuthMenu}
+                style={{ boxShadow: "-1px -1px 5px black" }}
+                className="flex items-center text-white justify-between w-full py-2 px-1"
+              >
+                <div className={`flex space-x-1 items-center w-full`}>
+                  <span className="text-xl">
+                    <BiCheckShield />
+                  </span>
+                  {openSidebar && (
+                    <span
+                      className={`text-[0.8rem] ${
+                        openSidebar ? "flex" : "hidden"
+                      }`}
+                    >
+                      AUTHENTICATION
+                    </span>
+                  )}
+                </div>
+                <span
+                  style={{
+                    transform: `rotate(${openAuthMenu ? "180deg" : "0"})`,
+                  }}
+                  className={`text-3xl transition-transform duration-200 ease-in`}
+                >
+                  <RiArrowDropDownLine />
+                </span>
+              </button>
+
+              <ul
+                className={`${
+                  openAuthMenu ? "flex" : "hidden"
+                } transition-all duration-200 flex-col`}
+              >
+                {navAuth.map((nav) => (
+                  <Link href={nav.route} key={nav.name}>
+                    <li
+                      style={{ boxShadow: "-1px -1px 3px black" }}
+                      className={`flex space-x-2 text-[#EBD30C] text-[0.82rem] items-center p-2 m-1 ${
+                        !openSidebar && "justify-center"
+                      }`}
+                    >
+                      <span>{nav.icon}</span>
+                      <span className={`${openSidebar ? "flex" : "hidden "}`}>
+                        {nav.name}
+                      </span>
+                    </li>
+                  </Link>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <button
+                onClick={setOpenDevSocial}
+                style={{ boxShadow: "-1px -1px 5px black" }}
+                className={`flex items-center text-white justify-between w-full py-2 px-1 `}
+              >
+                <div className="flex space-x-1 items-center">
+                  <span className="text-xl">
+                    <IoShareSocialOutline />
+                  </span>
+                  <span
+                    className={`text-[0.8rem] ${
+                      openSidebar ? "flex" : "hidden"
+                    } space-x-1`}
+                  >
+                    <span>DEV</span>
+                    <span>SOCIAL</span>
+                  </span>
+                </div>
+                <span
+                  style={{
+                    transform: `rotate(${openDevSocial ? "180deg" : "0"})`,
+                  }}
+                  className="text-3xl transition-transform duration-200 ease-in"
+                >
+                  <RiArrowDropDownLine />
+                </span>
+              </button>
+
+              <ul
+                className={`${
+                  openDevSocial ? "flex" : "hidden"
+                } transition-all duration-200 flex-col`}
+              >
+                {devSocials.map((dev) => (
+                  <Link href={dev.link} key={dev.name}>
+                    <li
+                      style={{ boxShadow: "-1px -1px 3px black" }}
+                      className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
+                        !openSidebar && "justify-center"
+                      }`}
+                    >
+                      <span>{dev.icon}</span>
+                      <span className={`${openSidebar ? "flex" : "hidden"}`}>
+                        {dev.name}
+                      </span>
+                    </li>
+                  </Link>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
