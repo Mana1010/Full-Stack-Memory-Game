@@ -1,13 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { TiUserAddOutline } from "react-icons/ti";
-import { CiLogin } from "react-icons/ci";
+import { motion } from "framer-motion";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import Image from "next/image";
 import icon from "../../src//components//images//small-logo.png";
-import { FaXmark } from "react-icons/fa6";
+import vamp from "../../src//components//images//vampire.png";
 import { BiCheckShield } from "react-icons/bi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
@@ -16,17 +14,25 @@ import Link from "next/link";
 import { MdLogin } from "react-icons/md";
 import { PiUserPlus } from "react-icons/pi";
 import { useMediaQuery } from "react-responsive";
+import card from "../components/images/cards.png";
 import SideDesign from "./SideDesign";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "@/utils/baseUrl";
+import { usePathname } from "next/navigation";
 function Sidebar() {
+  const pathname = usePathname();
   const [showSocial, setShowSocial] = useState(false);
   const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
   const {
     openSidebar,
     openAuthMenu,
     openDevSocial,
+    openEditModal,
     setOpenSidebar,
     setOpenAuthMenu,
     setOpenDevSocial,
+    setOpenEditModal,
   } = useModalStore();
   const navAuth = [
     {
@@ -66,6 +72,12 @@ function Sidebar() {
       index: 4,
     },
   ];
+  const getUser = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}`);
+    },
+  });
   const sidebarVariant = {
     visible: {
       width: openSidebar ? 260 : 70,
@@ -92,6 +104,27 @@ function Sidebar() {
       },
     },
   };
+  const formSideDesignWidthVariants = {
+    visible: {
+      boxShadow: openEditModal ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
+      width: openEditModal ? "100%" : "20px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+  const formSideDesignHeightVariants = {
+    visible: {
+      boxShadow: openEditModal ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
+      height: openEditModal ? "100%" : "20px",
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+  if (pathname === "/profile-setup") return;
   return (
     <motion.div
       variants={mobileScreen ? sidebarMobileVariant : sidebarVariant}
@@ -115,12 +148,40 @@ function Sidebar() {
         </header>
 
         {/* For Profile */}
-        <div className="space-y-2 py-3">
-          <div>
-            <Image src={icon} alt="icon" priority width={100} />
+        <div className="space-y-2 py-5 px-2">
+          <div
+            style={{
+              boxShadow: "-1px -1px 5px black",
+            }}
+            className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+          >
+            <Image src={vamp} alt="icon" priority className="w-full" />
+            <Image
+              src={card}
+              alt="cards"
+              width={50}
+              priority
+              className="absolute top-[-18px] right-0 z-[-1]"
+            />
+            <SideDesign
+              formSideDesignWidthVariants={formSideDesignWidthVariants}
+              formSideDesignHeightVariants={formSideDesignHeightVariants}
+            />
+          </div>
+          <div className="pt-1">
+            <small className="text-white break-all">#53342329342</small>
+            <h5
+              style={{ textShadow: "0 0 10px #FFE30A" }}
+              className="text-secondary"
+            >
+              TRISTAN
+            </h5>
+            <small className="text-white break-all text-[0.7rem]">
+              tristanvicclarito@gmail.com
+            </small>
           </div>
         </div>
-        <div className={`px-2 pt-8 space-y-2 `}>
+        <div className={`px-2 pt-2 space-y-2 `}>
           <div className="space-y-2 w-full">
             <div className="space-y-1">
               <button

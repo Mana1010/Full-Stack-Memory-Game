@@ -4,17 +4,20 @@ interface ModalState {
   openSidebar: boolean;
   openAuthMenu: boolean;
   openDevSocial: boolean;
+  openEditModal: boolean;
 }
 
 interface ModalStoreSchema extends ModalState {
   setOpenSidebar: () => void;
   setOpenAuthMenu: () => void;
   setOpenDevSocial: () => void;
+  setOpenEditModal: () => void;
 }
 const store = (set: any) => ({
   openSidebar: false,
   openAuthMenu: true,
   openDevSocial: false,
+  openEditModal: false,
   setOpenSidebar: () => {
     set((state: ModalState) => ({
       openSidebar: !state.openSidebar,
@@ -28,6 +31,11 @@ const store = (set: any) => ({
   setOpenDevSocial: () => {
     set((state: ModalState) => ({
       openDevSocial: !state.openDevSocial,
+    }));
+  },
+  setOpenEditModal: () => {
+    set((state: ModalState) => ({
+      openEditModal: !state.openEditModal,
     }));
   },
 });
