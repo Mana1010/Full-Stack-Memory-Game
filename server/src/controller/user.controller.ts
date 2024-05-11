@@ -57,3 +57,7 @@ export const profileUpload = asyncHandler(
     }
   }
 );
+
+// export const getProfile = asyncHandler(async (req: Request, res: Response) => {
+//   const;
+// });

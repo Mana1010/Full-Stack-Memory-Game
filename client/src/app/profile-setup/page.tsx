@@ -14,6 +14,7 @@ import IGN from "@/components/pages/profile-setup/IGN";
 import { useProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
+import { ignSchema } from "@/components/pages/profile-setup/IGN";
 
 interface Profile {
   age: number;
@@ -174,9 +175,11 @@ function ProfileSetup() {
                 profileMutation.mutate(data);
               }}
               style={{
-                boxShadow: ign.value ? "0 0 8px #ffe30a" : "none",
+                boxShadow: ignSchema.safeParse({ ign: ign.value }).success
+                  ? "0 0 8px #ffe30a"
+                  : "none",
               }}
-              disabled={ign.value === "" || ign.value === null}
+              disabled={!ignSchema.safeParse({ ign: ign.value }).success}
               id="button-submit"
               className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
             >

@@ -8,7 +8,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 const schemaSignUp = z
   .object({
-    username: z.string().min(1),
+    username: z.string().min(1).max(15),
     password: z.string().min(1).min(7),
     confirm: z.string().min(1),
   })

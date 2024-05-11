@@ -72,12 +72,12 @@ function Sidebar() {
       index: 4,
     },
   ];
-  const getUser = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await axios.get(`${baseUrl}`);
-    },
-  });
+  // const getUser = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: async () => {
+  //     const response = await axios.get(`${baseUrl}`);
+  //   },
+  // });
   const sidebarVariant = {
     visible: {
       width: openSidebar ? 260 : 70,
@@ -142,7 +142,11 @@ function Sidebar() {
       >
         <IoIosArrowDroprightCircle />
       </motion.button>
-      <div className={`${mobileScreen && !openSidebar ? "hidden" : "initial"}`}>
+      <div
+        className={`${
+          mobileScreen && !openSidebar ? "hidden" : "initial"
+        } overflow-y-auto`}
+      >
         <header className={`pr-3 `}>
           <Image src={icon} alt="icon" width={130} priority />
         </header>
@@ -168,7 +172,7 @@ function Sidebar() {
               formSideDesignHeightVariants={formSideDesignHeightVariants}
             />
           </div>
-          <div className="pt-1">
+          <div className={`pt-1 ${openSidebar ? "initial" : "hidden"}`}>
             <small className="text-white break-all">#53342329342</small>
             <h5
               style={{ textShadow: "0 0 10px #FFE30A" }}
