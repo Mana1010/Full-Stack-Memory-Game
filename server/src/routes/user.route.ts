@@ -1,6 +1,16 @@
 import express from "express";
 import { protectedRoutes } from "../middleware/protected.route";
-import { profileUpload } from "../controller/user.controller";
+import {
+  profileUpload,
+  getProfile,
+  editProfile,
+  getAccountDetails,
+} from "../controller/user.controller";
 export const router = express.Router();
 
-router.route("/profile-upload").post(protectedRoutes, profileUpload);
+router
+  .route("/profile")
+  .get(protectedRoutes, getProfile)
+  .post(protectedRoutes, profileUpload)
+  .put(protectedRoutes, editProfile);
+router.route("/account-details").get(protectedRoutes, getAccountDetails);

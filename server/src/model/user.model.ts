@@ -23,4 +23,4 @@ const schema = new mongoose.Schema(
   }
 );
 type UserSchema = mongoose.InferSchemaType<typeof schema>;
-export const User = mongoose.model<UserSchema>("users", schema);
+export const User = mongoose.model<UserSchema>("User", schema);

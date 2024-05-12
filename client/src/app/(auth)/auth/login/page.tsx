@@ -15,12 +15,14 @@ import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
 import loading from "../../../../components/images/loading.gif";
 import Image from "next/image";
+import { useUserStore } from "@/utils/store/user.store";
 const schema = z.object({
   username: string().min(1, "This field is required"),
   password: string().min(1, "This field is required"),
 });
 type LoginForm = z.infer<typeof schema>;
 function Login() {
+  const { setIsAuthenticated } = useUserStore();
   const {
     handleSubmit,
     formState: { errors },
@@ -45,7 +47,7 @@ function Login() {
       });
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       router.push(data.isOldUser ? "/levels" : "/profile-setup");

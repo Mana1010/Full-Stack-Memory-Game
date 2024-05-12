@@ -128,7 +128,6 @@ export const newAccessToken = asyncHandler(
 //Checking if the user is successfully set its profile
 export const verifyOldUser = asyncHandler(
   async (req: Request, res: Response) => {
-    console.log("running");
     if (!req.user) {
       res.status(401);
       throw new Error("Unauthorized");

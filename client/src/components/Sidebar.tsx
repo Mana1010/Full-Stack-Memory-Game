@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
@@ -20,10 +20,14 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { usePathname } from "next/navigation";
+import firstTop from "../components/images/trophies/1st-prize.png";
+import { useUserStore } from "@/utils/store/user.store";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 function Sidebar() {
   const pathname = usePathname();
-  const [showSocial, setShowSocial] = useState(false);
   const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
+  const { isAuthenticated, setIsAuthenticated } = useUserStore();
+  const axiosInterceptor = useAxiosInterceptor();
   const {
     openSidebar,
     openAuthMenu,
@@ -72,12 +76,20 @@ function Sidebar() {
       index: 4,
     },
   ];
-  // const getUser = useQuery({
-  //   queryKey: ["user"],
-  //   queryFn: async () => {
-  //     const response = await axios.get(`${baseUrl}`);
-  //   },
-  // });
+  const getUser = useQuery({
+    queryKey: ["user-profile"],
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+      console.log(response.data.message);
+      return response.data.message;
+    },
+    enabled: isAuthenticated,
+  });
   const sidebarVariant = {
     visible: {
       width: openSidebar ? 260 : 70,
@@ -125,6 +137,7 @@ function Sidebar() {
     },
   };
   if (pathname === "/profile-setup") return;
+
   return (
     <motion.div
       variants={mobileScreen ? sidebarMobileVariant : sidebarVariant}
@@ -145,7 +158,7 @@ function Sidebar() {
       <div
         className={`${
           mobileScreen && !openSidebar ? "hidden" : "initial"
-        } overflow-y-auto`}
+        } overflow-hidden`}
       >
         <header className={`pr-3 `}>
           <Image src={icon} alt="icon" width={130} priority />
@@ -154,35 +167,59 @@ function Sidebar() {
         {/* For Profile */}
         <div className="space-y-2 py-5 px-2">
           <div
-            style={{
-              boxShadow: "-1px -1px 5px black",
-            }}
-            className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+            className={`flex ${
+              openSidebar ? "justify-between" : "justify-center"
+            } items-center spce-x-2`}
           >
-            <Image src={vamp} alt="icon" priority className="w-full" />
-            <Image
-              src={card}
-              alt="cards"
-              width={50}
-              priority
-              className="absolute top-[-18px] right-0 z-[-1]"
-            />
-            <SideDesign
-              formSideDesignWidthVariants={formSideDesignWidthVariants}
-              formSideDesignHeightVariants={formSideDesignHeightVariants}
-            />
+            <div
+              style={{
+                boxShadow: "-1px -1px 5px black",
+              }}
+              className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+            >
+              <Image
+                src={
+                  getUser.data?.profilePic?.secure_url
+                    ? getUser.data?.profilePic.secure_url
+                    : vamp
+                }
+                width={200}
+                height={200}
+                alt="icon"
+                priority
+                className="w-full"
+              />
+              <Image
+                src={card}
+                alt="cards"
+                width={50}
+                priority
+                className="absolute top-[-18px] right-0 z-[-1]"
+              />
+              <SideDesign
+                formSideDesignWidthVariants={formSideDesignWidthVariants}
+                formSideDesignHeightVariants={formSideDesignHeightVariants}
+              />
+            </div>
+            {/* For the records */}
+            <div
+              className={`w-full flex justify-center ${
+                openSidebar || "hidden"
+              }`}
+            >
+              <Image src={firstTop} alt="first-top" width={70} priority />
+            </div>
           </div>
           <div className={`pt-1 ${openSidebar ? "initial" : "hidden"}`}>
-            <small className="text-white break-all">#53342329342</small>
+            <small className="text-white break-all">
+              {getUser.data?.userId}
+            </small>
             <h5
               style={{ textShadow: "0 0 10px #FFE30A" }}
               className="text-secondary"
             >
-              TRISTAN
+              {getUser.data?.ign}
             </h5>
-            <small className="text-white break-all text-[0.7rem]">
-              tristanvicclarito@gmail.com
-            </small>
           </div>
         </div>
         <div className={`px-2 pt-2 space-y-2 `}>

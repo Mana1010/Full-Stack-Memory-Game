@@ -5,11 +5,13 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import refreshToken from "@/utils/refreshToken";
 import { getAuthUser } from "./getAuthUser";
+import { useUserStore } from "@/utils/store/user.store";
 interface DecodedToken {
   id: string;
   iat: number;
   exp: number;
 }
+console.log("Help");
 const getToken =
   typeof localStorage.getItem("token") !== "undefined"
     ? localStorage.getItem("token")
@@ -21,14 +23,18 @@ export const axiosInterceptor = axios.create({
   },
   withCredentials: true,
 });
-
 function useAxiosInterceptor() {
-  const getToken = localStorage.getItem("token") ?? null;
+  const { setIsAuthenticated } = useUserStore();
+  const getToken =
+    typeof localStorage.getItem("token") !== "undefined"
+      ? localStorage.getItem("token")
+      : null;
   const router = useRouter();
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
       async (config) => {
         if (!getToken) {
+          setIsAuthenticated(false);
           router.push("/auth/login");
           return Promise.reject("Token is not available");
         }
@@ -39,22 +45,25 @@ function useAxiosInterceptor() {
           if (currentTime > decodedAccessToken) {
             const newAccessToken = await refreshToken();
             if (newAccessToken) {
+              setIsAuthenticated(true);
               localStorage.setItem("token", JSON.stringify(newAccessToken));
               config.headers.Authorization = `Bearer ${newAccessToken}`;
               return config;
             } else {
+              setIsAuthenticated(false);
               localStorage.removeItem("token");
               router.push("/auth/login");
               return Promise.reject("Error");
             }
           }
           const checkUser = await getAuthUser();
-
           if (!checkUser.isOldUser) {
             router.push("/profile-setup");
           }
+          setIsAuthenticated(true);
           return config;
         } catch (err) {
+          setIsAuthenticated(false);
           localStorage.removeItem("token");
           router.push("/auth/login");
           return Promise.reject(err);
@@ -73,7 +82,7 @@ function useAxiosInterceptor() {
       axiosInterceptor.interceptors.request.eject(requestIntercept);
       axiosInterceptor.interceptors.response.eject(responseIntercept);
     };
-  }, [getToken, router]);
+  }, [getToken, router, setIsAuthenticated]);
   return axiosInterceptor;
 }
 

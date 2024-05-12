@@ -14,6 +14,6 @@ const schema = new mongoose.Schema({
 type LeaderBoardSchema = mongoose.InferSchemaType<typeof schema>;
 
 export const Leaderboard = mongoose.model<LeaderBoardSchema>(
-  "leaderboard",
+  "Leaderboard",
   schema
 );

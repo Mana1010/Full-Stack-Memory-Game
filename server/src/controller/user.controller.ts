@@ -16,7 +16,6 @@ type ProfileSchema = z.infer<typeof profileSchema>;
 export const profileUpload = asyncHandler(
   async (req: Request, res: Response) => {
     const { age, gender, ign, profilePic }: ProfileSchema = req.body;
-    console.log(req.body);
     const validateData = profileSchema.safeParse(req.body);
     if (!validateData.success) {
       res.status(400);
@@ -43,8 +42,15 @@ export const profileUpload = asyncHandler(
           public_id: uploadResponse.public_id,
         },
       });
+      const getUser = await User.findById(req.user?._id);
+      if (!getUser) {
+        res.status(401);
+        throw new Error("Unauthorized");
+      }
+      getUser.isOldUser = !getUser.isOldUser;
       createProfile.userId = req.user?._id;
       await createProfile.save();
+      await getUser?.save();
       if (!createProfile) {
         res.status(400);
         throw new Error("Error!!");
@@ -58,6 +64,29 @@ export const profileUpload = asyncHandler(
   }
 );
 
-// export const getProfile = asyncHandler(async (req: Request, res: Response) => {
-//   const;
-// });
+export const getProfile = asyncHandler(async (req: Request, res: Response) => {
+  const getProfile = await Profile.findOne({
+    userId: req.user?._id,
+  })
+    .select(["-__v", "-updatedAt"])
+    .lean();
+  if (!getProfile) {
+    res.status(400);
+    throw new Error("User is not defined yet");
+  }
+  res.status(200).json({ message: getProfile });
+});
+export const getAccountDetails = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAccountDetails = await Profile.findOne({
+      userId: req.user?._id,
+    })
+      .populate("userId")
+      .select(["-__v", "-updatedAt"])
+      .lean();
+  }
+);
+
+export const editProfile = asyncHandler(
+  async (req: Request, res: Response) => {}
+);

@@ -9,7 +9,6 @@ import { router as userRouter } from "./routes/user.route";
 import { errorHandle } from "./middleware/error.handling";
 import { newAccessToken } from "./controller/auth.controller";
 import { v2 as cloudinary } from "cloudinary";
-import bodyParser from "body-parser";
 const app = express();
 const PORT = process.env.PORT || 8080;
 

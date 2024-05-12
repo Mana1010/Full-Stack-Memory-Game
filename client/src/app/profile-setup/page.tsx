@@ -15,6 +15,10 @@ import { useProfileStore } from "@/utils/store/profile.store";
 import { useQuery } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { ignSchema } from "@/components/pages/profile-setup/IGN";
+import { QueryClient } from "react-query";
+import loading from "../../components/images/loading.gif";
+import Image from "next/image";
+import { useUserStore } from "@/utils/store/user.store";
 
 interface Profile {
   age: number;
@@ -23,6 +27,7 @@ interface Profile {
   profilePic: string | null;
 }
 function ProfileSetup() {
+  const { setIsAuthenticated } = useUserStore();
   const axiosInterceptor = useAxiosInterceptor();
   const {
     setCurrentStep,
@@ -37,6 +42,7 @@ function ProfileSetup() {
     setProfilePic,
   } = useProfileStore();
   const router = useRouter();
+  const queryClient = new QueryClient();
   const checkUser = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -52,19 +58,16 @@ function ProfileSetup() {
   });
   const profileMutation = useMutation({
     mutationFn: async (data: Profile) => {
-      const response = await axios.post(
-        `${baseUrl}/user/profile-upload`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${baseUrl}/user/profile`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      queryClient.invalidateQueries();
       toast.success(data.message);
       router.push("/levels");
     },
@@ -181,9 +184,13 @@ function ProfileSetup() {
               }}
               disabled={!ignSchema.safeParse({ ign: ign.value }).success}
               id="button-submit"
-              className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
+              className="w-[150px] h-[46px] l bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
             >
-              SUBMIT
+              {profileMutation.isLoading ? (
+                <Image width={60} src={loading} alt="loading" priority />
+              ) : (
+                "SUBMIT"
+              )}
             </button>
           )}
         </div>

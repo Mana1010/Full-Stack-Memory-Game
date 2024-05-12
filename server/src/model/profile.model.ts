@@ -35,4 +35,4 @@ const schema = new mongoose.Schema(
   }
 );
 type ProfileSchema = mongoose.InferSchemaType<typeof schema>;
-export const Profile = mongoose.model<ProfileSchema>("profile", schema);
+export const Profile = mongoose.model<ProfileSchema>("Profile", schema);
