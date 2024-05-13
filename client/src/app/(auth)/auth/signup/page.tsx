@@ -9,7 +9,6 @@ import memoryBg from "../../../../components/images/icon.png";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
-import Provider from "@/app/Provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
 import axios from "axios";

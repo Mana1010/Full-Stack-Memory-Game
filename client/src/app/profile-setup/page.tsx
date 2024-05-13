@@ -28,7 +28,6 @@ interface Profile {
 }
 function ProfileSetup() {
   const { setIsAuthenticated } = useUserStore();
-  const axiosInterceptor = useAxiosInterceptor();
   const {
     setCurrentStep,
     currentStep,
@@ -43,19 +42,6 @@ function ProfileSetup() {
   } = useProfileStore();
   const router = useRouter();
   const queryClient = new QueryClient();
-  const checkUser = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
-      setIgn(response.data.message.username);
-      return response.data.message;
-    },
-  });
   const profileMutation = useMutation({
     mutationFn: async (data: Profile) => {
       const response = await axios.post(`${baseUrl}/user/profile`, data, {

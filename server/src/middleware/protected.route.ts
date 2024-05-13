@@ -7,8 +7,6 @@ import { User } from "../model/user.model";
 export const protectedRoutes = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.headers.authorization;
-
-    console.log(accessToken);
     if (!accessToken) {
       res.status(401).json("Unauthorized");
       return;

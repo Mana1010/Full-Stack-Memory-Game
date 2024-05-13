@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { useProfileStore } from "@/utils/store/profile.store";
 import SideDesign from "@/components/SideDesign";
 import { z } from "zod";
+import { useQuery } from "react-query";
+import { baseUrl } from "@/utils/baseUrl";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 export const ignSchema = z.object({
   ign: z
     .string()
@@ -13,10 +16,25 @@ export const ignSchema = z.object({
       message: "IGN cannot start with space as first character",
     }),
 });
+
 // type IgnSchema = z.infer<typeof ignSchema>;
 function IGN() {
+  const axiosInterceptor = useAxiosInterceptor();
   const { ign, setIgn } = useProfileStore();
   const [focus, isFocus] = useState(false);
+  const checkUser = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+      setIgn(response.data.message.username);
+      return response.data.message;
+    },
+  });
   const formSideDesignWidthVariants = {
     visible: {
       boxShadow: focus ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",

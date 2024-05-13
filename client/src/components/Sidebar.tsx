@@ -79,7 +79,7 @@ function Sidebar() {
   const getUser = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
-      const response = await axios.get(`${baseUrl}/user/profile`, {
+      const response = await axiosInterceptor.get(`${baseUrl}/user/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -88,7 +88,7 @@ function Sidebar() {
       console.log(response.data.message);
       return response.data.message;
     },
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && pathname !== "/profile-setup",
   });
   const sidebarVariant = {
     visible: {
