@@ -27,6 +27,7 @@ interface Profile {
   profilePic: string | null;
 }
 function ProfileSetup() {
+  const axiosInterceptor = useAxiosInterceptor();
   const { setIsAuthenticated } = useUserStore();
   const {
     setCurrentStep,
@@ -42,14 +43,31 @@ function ProfileSetup() {
   } = useProfileStore();
   const router = useRouter();
   const queryClient = new QueryClient();
-  const profileMutation = useMutation({
-    mutationFn: async (data: Profile) => {
-      const response = await axios.post(`${baseUrl}/user/profile`, data, {
+  useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         withCredentials: true,
       });
+      setIgn(response.data.message.username);
+      return;
+    },
+  });
+  const profileMutation = useMutation({
+    mutationFn: async (data: Profile) => {
+      const response = await axiosInterceptor.post(
+        `${baseUrl}/user/profile`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
       return response.data;
     },
     onSuccess: async (data) => {

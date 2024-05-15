@@ -7,16 +7,19 @@ import refreshToken from "@/utils/refreshToken";
 import { getAuthUser } from "./getAuthUser";
 import { useUserStore } from "@/utils/store/user.store";
 import { axiosInterceptor } from "./axiosPrivate";
+import { usePathname } from "next/navigation";
 interface DecodedToken {
   id: string;
   iat: number;
   exp: number;
 }
 function useAxiosInterceptor() {
+  const pathname = usePathname();
   const { setIsAuthenticated } = useUserStore();
   const router = useRouter();
   const getToken =
     typeof window !== "undefined" && localStorage.getItem("token");
+  const unprotectedRoute = ["/", "auth/signup", "/about"];
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
       async (config) => {
@@ -46,8 +49,11 @@ function useAxiosInterceptor() {
           return config;
         } catch (err) {
           setIsAuthenticated(false);
+          if (!unprotectedRoute.includes(pathname)) {
+            console.log("Running");
+            router.push("/auth/login");
+          }
           localStorage.removeItem("token");
-          router.push("/auth/login");
           return Promise.reject(err);
         }
       }
@@ -61,7 +67,9 @@ function useAxiosInterceptor() {
           const status = err?.response.status;
           if (status === 401 || status === 403) {
             setIsAuthenticated(false);
-            router.push("/auth/login");
+            if (!unprotectedRoute.includes(pathname)) {
+              router.push("/auth/login");
+            }
             return;
           }
         }
@@ -72,7 +80,7 @@ function useAxiosInterceptor() {
       axiosInterceptor.interceptors.request.eject(requestIntercept);
       axiosInterceptor.interceptors.response.eject(responseIntercept);
     };
-  }, [router, setIsAuthenticated, getToken]);
+  }, [router, setIsAuthenticated, getToken, pathname, unprotectedRoute]);
   return axiosInterceptor;
 }
 

@@ -5,7 +5,6 @@ import { nanoid } from "nanoid";
 import { motion } from "framer-motion";
 import { FaAppleAlt } from "react-icons/fa";
 import { GiOrange, GiGrapes, GiBanana, GiCoconuts } from "react-icons/gi";
-import { Icon } from "next/dist/lib/metadata/types/metadata-types";
 import { FaLemon } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 

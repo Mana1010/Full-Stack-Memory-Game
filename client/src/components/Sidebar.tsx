@@ -23,20 +23,27 @@ import { usePathname } from "next/navigation";
 import firstTop from "../components/images/trophies/1st-prize.png";
 import { useUserStore } from "@/utils/store/user.store";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
+import { CgDetailsLess } from "react-icons/cg";
+import { IoIosLogOut } from "react-icons/io";
+import Loading from "./Loading";
 function Sidebar() {
   const pathname = usePathname();
-  const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
+  // const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
   const { isAuthenticated, setIsAuthenticated } = useUserStore();
   const axiosInterceptor = useAxiosInterceptor();
+  // const [openSidebar, setOpenSidebar] = useState(() => {
+  //   const storedValue = localStorage.getItem("openSidebar");
+  //   return storedValue !== null ? JSON.parse(storedValue) : false;
+  // });
   const {
-    openSidebar,
     openAuthMenu,
     openDevSocial,
     openEditModal,
-    setOpenSidebar,
+    openSidebar,
     setOpenAuthMenu,
     setOpenDevSocial,
     setOpenEditModal,
+    setOpenSidebar,
   } = useModalStore();
   const navAuth = [
     {
@@ -90,24 +97,6 @@ function Sidebar() {
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
   });
-  const sidebarVariant = {
-    visible: {
-      width: openSidebar ? 260 : 70,
-      transition: {
-        ease: "linear",
-        duration: 0.2,
-      },
-    },
-  };
-  const sidebarMobileVariant = {
-    visible: {
-      width: openSidebar ? 260 : 13,
-      transition: {
-        ease: "linear",
-        duration: 0.2,
-      },
-    },
-  };
   const arrowRightVariant = {
     visible: {
       rotate: openSidebar ? 180 : 0,
@@ -137,200 +126,258 @@ function Sidebar() {
     },
   };
   if (pathname === "/profile-setup") return;
-
   return (
-    <motion.div
-      variants={mobileScreen ? sidebarMobileVariant : sidebarVariant}
-      initial={false}
-      animate="visible"
-      className={`absolute h-screen top-0 bottom-0 bg-[#191F23] z-[999999] py-3`}
+    <div
+      className={`absolute h-screen top-0 bottom-0 bg-[#191F23] z-[999999] py-3 ${
+        openSidebar ? "w-[260px]" : "sm:w-[70px] w-[10px]"
+      } transition-all duration-200 ease-linear`}
     >
-      {/* For Sidebar's Header */}
-      <motion.button
-        variants={arrowRightVariant}
-        animate="visible"
-        onClick={setOpenSidebar}
-        type="button"
-        className="text-secondary text-2xl absolute right-[-10px]"
-      >
-        <IoIosArrowDroprightCircle />
-      </motion.button>
-      <div
-        className={`${
-          mobileScreen && !openSidebar ? "hidden" : "initial"
-        } overflow-hidden`}
-      >
-        <header className={`pr-3 `}>
-          <Image src={icon} alt="icon" width={130} priority />
-        </header>
+      <div className="h-full relative">
+        {/* For Sidebar's Header */}
+        <motion.button
+          variants={arrowRightVariant}
+          animate="visible"
+          onClick={setOpenSidebar}
+          type="button"
+          className="text-secondary text-2xl absolute right-[-10px]"
+        >
+          <IoIosArrowDroprightCircle />
+        </motion.button>
+        <div
+          className={`overflow-hidden flex-col sm:flex ${
+            openSidebar ? "flex" : "hidden"
+          }`}
+        >
+          <header className={`pr-3 `}>
+            <Link href={"/"}>
+              {" "}
+              <Image src={icon} alt="icon" width={130} priority />
+            </Link>
+          </header>
+          <div>
+            {getUser.isLoading ? (
+              <Loading />
+            ) : (
+              <div>
+                {/* For Profile */}
+                {isAuthenticated && (
+                  <div className="space-y-2 py-5 px-2">
+                    <div
+                      className={`flex ${
+                        openSidebar ? "justify-between" : "justify-center"
+                      } items-center spce-x-2`}
+                    >
+                      <div
+                        style={{
+                          boxShadow: "-1px -1px 5px black",
+                        }}
+                        className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+                      >
+                        <Image
+                          src={
+                            getUser.data?.profilePic?.secure_url &&
+                            getUser.data?.profilePic.secure_url
+                          }
+                          width={200}
+                          height={200}
+                          alt="icon"
+                          priority
+                        />
+                        <Image
+                          src={card}
+                          alt="cards"
+                          width={50}
+                          priority
+                          className="absolute top-[-18px] right-0 z-[-1]"
+                        />
+                        <SideDesign
+                          formSideDesignWidthVariants={
+                            formSideDesignWidthVariants
+                          }
+                          formSideDesignHeightVariants={
+                            formSideDesignHeightVariants
+                          }
+                        />
+                      </div>
 
-        {/* For Profile */}
-        <div className="space-y-2 py-5 px-2">
-          <div
-            className={`flex ${
-              openSidebar ? "justify-between" : "justify-center"
-            } items-center spce-x-2`}
+                      {/* For the records */}
+                      <div
+                        className={`w-full flex justify-center ${
+                          !openSidebar && "hidden"
+                        }`}
+                      >
+                        <Image
+                          src={firstTop}
+                          alt="first-top"
+                          width={70}
+                          priority
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={`pt-1 ${openSidebar ? "initial" : "hidden"}`}
+                    >
+                      <small className="text-white break-all">
+                        {getUser.data?.userId}
+                      </small>
+                      <h5
+                        style={{ textShadow: "0 0 10px #FFE30A" }}
+                        className="text-secondary"
+                      >
+                        {getUser.data?.ign}
+                      </h5>
+                    </div>
+                  </div>
+                )}
+                {/* end of Profile*/}
+                <div className={`px-2 pt-2 space-y-2 `}>
+                  <div className="space-y-2 w-full">
+                    {!isAuthenticated && (
+                      <div className="space-y-1">
+                        <motion.button
+                          onClick={setOpenAuthMenu}
+                          style={{ boxShadow: "-1px -1px 5px black" }}
+                          className="flex items-center text-white justify-between w-full py-2 px-1 relative overflow-hidden hover:bg-secondary hover:shadow-none"
+                        >
+                          <div className={`flex space-x-1 items-center w-full`}>
+                            <span className="text-xl">
+                              <BiCheckShield />
+                            </span>
+                            {openSidebar && (
+                              <span
+                                className={`text-[0.8rem] ${
+                                  openSidebar ? "flex" : "hidden"
+                                }`}
+                              >
+                                AUTHENTICATION
+                                <span className="text-[#191F23]/75 absolute right-[40px] bottom-2 text-6xl h-full flex">
+                                  <BiCheckShield />
+                                </span>
+                              </span>
+                            )}
+                          </div>
+                          <span
+                            style={{
+                              transform: `rotate(${
+                                openAuthMenu ? "180deg" : "0"
+                              })`,
+                            }}
+                            className={`text-3xl transition-transform duration-200 ease-in`}
+                          >
+                            <RiArrowDropDownLine />
+                          </span>
+                        </motion.button>
+
+                        <ul
+                          className={`${
+                            openAuthMenu ? "flex" : "hidden"
+                          } transition-all duration-200 flex-col`}
+                        >
+                          {navAuth.map((nav) => (
+                            <Link href={nav.route} key={nav.name}>
+                              <li
+                                style={{ boxShadow: "-1px -1px 3px black" }}
+                                className={`flex space-x-2 text-[#EBD30C] text-[0.82rem] items-center p-2 m-1 ${
+                                  !openSidebar && "justify-center"
+                                }`}
+                              >
+                                <span>{nav.icon}</span>
+                                <span
+                                  className={`${
+                                    openSidebar ? "flex" : "hidden "
+                                  }`}
+                                >
+                                  {nav.name}
+                                </span>
+                              </li>
+                            </Link>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div>
+                      <button
+                        onClick={setOpenDevSocial}
+                        style={{ boxShadow: "-1px -1px 5px black" }}
+                        className={`flex items-center text-white justify-between w-full py-2 px-1 `}
+                      >
+                        <div className="flex space-x-1 items-center">
+                          <span className="text-xl">
+                            <IoShareSocialOutline />
+                          </span>
+                          <button
+                            className={`text-[0.8rem] ${
+                              openSidebar ? "flex" : "hidden"
+                            } space-x-1`}
+                          >
+                            <span>DEV</span>
+                            <span>SOCIAL</span>
+                          </button>
+                        </div>
+                        <span
+                          style={{
+                            transform: `rotate(${
+                              openDevSocial ? "180deg" : "0"
+                            })`,
+                          }}
+                          className="text-3xl transition-transform duration-200 ease-in"
+                        >
+                          <RiArrowDropDownLine />
+                        </span>
+                      </button>
+
+                      <ul
+                        className={`${
+                          openDevSocial ? "flex" : "hidden"
+                        } transition-all duration-200 flex-col`}
+                      >
+                        {devSocials.map((dev) => (
+                          <Link href={dev.link} key={dev.name}>
+                            <li
+                              style={{ boxShadow: "-1px -1px 3px black" }}
+                              className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
+                                !openSidebar && "justify-center"
+                              }`}
+                            >
+                              <span>{dev.icon}</span>
+                              <span
+                                className={`${openSidebar ? "flex" : "hidden"}`}
+                              >
+                                {dev.name}
+                              </span>
+                            </li>
+                          </Link>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        {!getUser.isLoading && (
+          <footer
+            className={`absolute bottom-0 ${
+              openSidebar ? "flex" : "hidden"
+            } sm:flex w-full p-2 flex-col justify-center items-center space-y-2`}
           >
-            <div
-              style={{
-                boxShadow: "-1px -1px 5px black",
-              }}
-              className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+            <button
+              style={{ boxShadow: "-1px -1px 3px black" }}
+              className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center"
             >
-              <Image
-                src={
-                  getUser.data?.profilePic?.secure_url
-                    ? getUser.data?.profilePic.secure_url
-                    : vamp
-                }
-                width={200}
-                height={200}
-                alt="icon"
-                priority
-                className="w-full"
-              />
-              <Image
-                src={card}
-                alt="cards"
-                width={50}
-                priority
-                className="absolute top-[-18px] right-0 z-[-1]"
-              />
-              <SideDesign
-                formSideDesignWidthVariants={formSideDesignWidthVariants}
-                formSideDesignHeightVariants={formSideDesignHeightVariants}
-              />
-            </div>
-            {/* For the records */}
-            <div
-              className={`w-full flex justify-center ${
-                openSidebar || "hidden"
-              }`}
+              {openSidebar ? "ACCOUNT DETAILS" : <CgDetailsLess />}
+            </button>
+            <button
+              style={{ boxShadow: "-1px -1px 3px black" }}
+              className="py-2.5 w-full text-red-400 rounded-sm text-[0.89rem] flex justify-center items-center"
             >
-              <Image src={firstTop} alt="first-top" width={70} priority />
-            </div>
-          </div>
-          <div className={`pt-1 ${openSidebar ? "initial" : "hidden"}`}>
-            <small className="text-white break-all">
-              {getUser.data?.userId}
-            </small>
-            <h5
-              style={{ textShadow: "0 0 10px #FFE30A" }}
-              className="text-secondary"
-            >
-              {getUser.data?.ign}
-            </h5>
-          </div>
-        </div>
-        <div className={`px-2 pt-2 space-y-2 `}>
-          <div className="space-y-2 w-full">
-            <div className="space-y-1">
-              <button
-                onClick={setOpenAuthMenu}
-                style={{ boxShadow: "-1px -1px 5px black" }}
-                className="flex items-center text-white justify-between w-full py-2 px-1"
-              >
-                <div className={`flex space-x-1 items-center w-full`}>
-                  <span className="text-xl">
-                    <BiCheckShield />
-                  </span>
-                  {openSidebar && (
-                    <span
-                      className={`text-[0.8rem] ${
-                        openSidebar ? "flex" : "hidden"
-                      }`}
-                    >
-                      AUTHENTICATION
-                    </span>
-                  )}
-                </div>
-                <span
-                  style={{
-                    transform: `rotate(${openAuthMenu ? "180deg" : "0"})`,
-                  }}
-                  className={`text-3xl transition-transform duration-200 ease-in`}
-                >
-                  <RiArrowDropDownLine />
-                </span>
-              </button>
-
-              <ul
-                className={`${
-                  openAuthMenu ? "flex" : "hidden"
-                } transition-all duration-200 flex-col`}
-              >
-                {navAuth.map((nav) => (
-                  <Link href={nav.route} key={nav.name}>
-                    <li
-                      style={{ boxShadow: "-1px -1px 3px black" }}
-                      className={`flex space-x-2 text-[#EBD30C] text-[0.82rem] items-center p-2 m-1 ${
-                        !openSidebar && "justify-center"
-                      }`}
-                    >
-                      <span>{nav.icon}</span>
-                      <span className={`${openSidebar ? "flex" : "hidden "}`}>
-                        {nav.name}
-                      </span>
-                    </li>
-                  </Link>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <button
-                onClick={setOpenDevSocial}
-                style={{ boxShadow: "-1px -1px 5px black" }}
-                className={`flex items-center text-white justify-between w-full py-2 px-1 `}
-              >
-                <div className="flex space-x-1 items-center">
-                  <span className="text-xl">
-                    <IoShareSocialOutline />
-                  </span>
-                  <span
-                    className={`text-[0.8rem] ${
-                      openSidebar ? "flex" : "hidden"
-                    } space-x-1`}
-                  >
-                    <span>DEV</span>
-                    <span>SOCIAL</span>
-                  </span>
-                </div>
-                <span
-                  style={{
-                    transform: `rotate(${openDevSocial ? "180deg" : "0"})`,
-                  }}
-                  className="text-3xl transition-transform duration-200 ease-in"
-                >
-                  <RiArrowDropDownLine />
-                </span>
-              </button>
-
-              <ul
-                className={`${
-                  openDevSocial ? "flex" : "hidden"
-                } transition-all duration-200 flex-col`}
-              >
-                {devSocials.map((dev) => (
-                  <Link href={dev.link} key={dev.name}>
-                    <li
-                      style={{ boxShadow: "-1px -1px 3px black" }}
-                      className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
-                        !openSidebar && "justify-center"
-                      }`}
-                    >
-                      <span>{dev.icon}</span>
-                      <span className={`${openSidebar ? "flex" : "hidden"}`}>
-                        {dev.name}
-                      </span>
-                    </li>
-                  </Link>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+              {openSidebar ? "LOGOUT" : <IoIosLogOut />}
+            </button>
+          </footer>
+        )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 export default Sidebar;

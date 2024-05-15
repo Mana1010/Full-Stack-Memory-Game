@@ -19,22 +19,8 @@ export const ignSchema = z.object({
 
 // type IgnSchema = z.infer<typeof ignSchema>;
 function IGN() {
-  const axiosInterceptor = useAxiosInterceptor();
   const { ign, setIgn } = useProfileStore();
   const [focus, isFocus] = useState(false);
-  const checkUser = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
-      setIgn(response.data.message.username);
-      return response.data.message;
-    },
-  });
   const formSideDesignWidthVariants = {
     visible: {
       boxShadow: focus ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",

@@ -6,6 +6,7 @@ import { create } from "zustand";
 //   ign: string;
 //   gender: string;
 // }
+
 interface UserState {
   isAuthenticated: boolean;
 }
@@ -13,7 +14,7 @@ interface UserSetState extends UserState {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
 const store = (set: any) => ({
-  isAuthenticated: false,
+  isAuthenticated: true,
   setIsAuthenticated: async (isAuthenticated: boolean) => {
     set({ isAuthenticated });
   },
