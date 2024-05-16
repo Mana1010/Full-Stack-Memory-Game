@@ -145,4 +145,16 @@ export const verifyOldUser = asyncHandler(
     res.status(200).json({ message: findUser });
   }
 );
-// export const logOut = asyncHandler(async (req: Request, res: Response) => {});
+//For logout
+export const logOut = asyncHandler(async (req: Request, res: Response) => {
+  // res.clearCookie("refreshToken");
+  const refreshToken = req.cookies?.refresh_token;
+  if (!refreshToken) {
+    res.status(403);
+    throw new Error("Forbidden");
+  }
+  res
+    .status(200)
+    .clearCookie("refresh_token")
+    .json({ message: "Logout Successfully" });
+});

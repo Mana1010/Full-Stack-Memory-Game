@@ -16,7 +16,7 @@ import { PiUserPlus } from "react-icons/pi";
 import { useMediaQuery } from "react-responsive";
 import card from "../components/images/cards.png";
 import SideDesign from "./SideDesign";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { usePathname } from "next/navigation";
@@ -26,7 +26,11 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { CgDetailsLess } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import Loading from "./Loading";
+import { toast } from "sonner";
+import { QueryClient } from "react-query";
+import { useRouter } from "next/navigation";
 function Sidebar() {
+  const router = useRouter();
   const pathname = usePathname();
   // const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
   const { isAuthenticated, setIsAuthenticated } = useUserStore();
@@ -35,6 +39,7 @@ function Sidebar() {
   //   const storedValue = localStorage.getItem("openSidebar");
   //   return storedValue !== null ? JSON.parse(storedValue) : false;
   // });
+
   const {
     openAuthMenu,
     openDevSocial,
@@ -96,6 +101,31 @@ function Sidebar() {
       return response.data.message;
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
+  });
+  const queryClient = new QueryClient();
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInterceptor.post(
+        `${baseUrl}/auth/logout`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries();
+      toast.success(data.message);
+      localStorage.removeItem("token");
+      router.push("/auth/login");
+    },
+    onError: (err) => {
+      toast.success("Failed to logout");
+    },
   });
   const arrowRightVariant = {
     visible: {
@@ -305,14 +335,14 @@ function Sidebar() {
                           <span className="text-xl">
                             <IoShareSocialOutline />
                           </span>
-                          <button
+                          <div
                             className={`text-[0.8rem] ${
                               openSidebar ? "flex" : "hidden"
                             } space-x-1`}
                           >
                             <span>DEV</span>
                             <span>SOCIAL</span>
-                          </button>
+                          </div>
                         </div>
                         <span
                           style={{
@@ -356,7 +386,7 @@ function Sidebar() {
             )}
           </div>
         </div>
-        {!getUser.isLoading && (
+        {!getUser.isLoading && isAuthenticated && (
           <footer
             className={`absolute bottom-0 ${
               openSidebar ? "flex" : "hidden"
@@ -369,6 +399,7 @@ function Sidebar() {
               {openSidebar ? "ACCOUNT DETAILS" : <CgDetailsLess />}
             </button>
             <button
+              onClick={() => logoutMutation.mutate()}
               style={{ boxShadow: "-1px -1px 3px black" }}
               className="py-2.5 w-full text-red-400 rounded-sm text-[0.89rem] flex justify-center items-center"
             >

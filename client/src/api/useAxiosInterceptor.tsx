@@ -50,7 +50,6 @@ function useAxiosInterceptor() {
         } catch (err) {
           setIsAuthenticated(false);
           if (!unprotectedRoute.includes(pathname)) {
-            console.log("Running");
             router.push("/auth/login");
           }
           localStorage.removeItem("token");
@@ -66,6 +65,7 @@ function useAxiosInterceptor() {
         if (err.response) {
           const status = err?.response.status;
           if (status === 401 || status === 403) {
+            console.log("Running butodin");
             setIsAuthenticated(false);
             if (!unprotectedRoute.includes(pathname)) {
               router.push("/auth/login");
@@ -80,7 +80,8 @@ function useAxiosInterceptor() {
       axiosInterceptor.interceptors.request.eject(requestIntercept);
       axiosInterceptor.interceptors.response.eject(responseIntercept);
     };
-  }, [router, setIsAuthenticated, getToken, pathname, unprotectedRoute]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, setIsAuthenticated, getToken, pathname]);
   return axiosInterceptor;
 }
 
