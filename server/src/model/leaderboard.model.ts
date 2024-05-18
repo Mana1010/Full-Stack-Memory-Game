@@ -7,10 +7,13 @@ const schema = new mongoose.Schema({
   },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: ["User", "Profile"],
+    ref: "User",
+  },
+  profileId: {
+    type: Schema.Types.ObjectId,
+    ref: "Profile",
   },
 });
-
 type LeaderBoardSchema = mongoose.InferSchemaType<typeof schema>;
 
 export const Leaderboard = mongoose.model<LeaderBoardSchema>(

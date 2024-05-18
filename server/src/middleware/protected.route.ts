@@ -7,6 +7,7 @@ import { User } from "../model/user.model";
 export const protectedRoutes = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.headers.authorization;
+    console.log(accessToken);
     if (!accessToken) {
       res.status(401).json("Unauthorized");
       return;
@@ -18,8 +19,7 @@ export const protectedRoutes = asyncHandler(
       process.env.ACCESS_TOKEN_KEY!,
       async (err: Error | null, decode) => {
         if (err) {
-          res.status(403);
-          throw new Error("Forbidden");
+          return res.status(403).json({ message: "Forbidden" });
         } else {
           const decodedToken = decode as JwtPayload;
           req.user = await User.findById(decodedToken.id).select("-password");

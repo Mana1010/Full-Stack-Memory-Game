@@ -18,13 +18,13 @@ export interface ProfileState {
 }
 interface ProfileStoreSchema extends ProfileState {
   currentStep: string;
-  setIgn: (value: string) => void;
-  setGender: (value: string) => void;
+  setIgn: (value: string | null) => void;
+  setGender: (value: string | null) => void;
   setAge: (value: number[]) => void;
   setGenderIsDone: (isDone: boolean) => void;
   setAgeIsDone: (isDone: boolean) => void;
   setIgnIsDone: (isDone: boolean) => void;
-  setProfilePic: (value: string) => void;
+  setProfilePic: (value: string | null) => void;
   setCurrentStep: (value: string) => void;
 }
 const store = (set: any) => ({
@@ -42,7 +42,7 @@ const store = (set: any) => ({
   },
   profilePic: null,
   currentStep: "gender",
-  setIgn: (value: string) => {
+  setIgn: (value: string | null) => {
     set((state: ProfileState) => ({
       ign: {
         ...state.ign,
@@ -50,7 +50,7 @@ const store = (set: any) => ({
       },
     }));
   },
-  setGender: (value: string) => {
+  setGender: (value: string | null) => {
     set((state: ProfileState) => ({
       gender: {
         ...state.gender,
@@ -90,7 +90,7 @@ const store = (set: any) => ({
       },
     }));
   },
-  setProfilePic: (value: string) => {
+  setProfilePic: (value: string | null) => {
     set({ profilePic: value });
   },
   setCurrentStep: (value: string) => {

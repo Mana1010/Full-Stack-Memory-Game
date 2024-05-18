@@ -7,7 +7,7 @@ import { useModalStore } from "@/utils/store/modal.store";
 function Loading() {
   const { openSidebar } = useModalStore();
   return (
-    <div className="flex items-center justify-center flex-col space-y-1 px-3 h-[600px] ">
+    <div className="flex items-center justify-center flex-col space-y-1 px-3 h-[500px] ">
       <Image src={backCard} alt="back-card" priority width={30} />
       <span>
         <Image src={loading} alt="loading" priority width={50} />

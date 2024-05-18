@@ -137,6 +137,7 @@ function Signup() {
               USERNAME
             </label>
             <input
+              autoComplete="true"
               type="text"
               {...register("username")}
               name="username"
@@ -161,6 +162,7 @@ function Signup() {
             </label>
             <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
+                autoComplete="true"
                 type={showPassword.password ? "text" : "password"}
                 {...register("password")}
                 name="password"
@@ -202,6 +204,7 @@ function Signup() {
             </label>
             <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
+                autoComplete="true"
                 type={showPassword["confirm-password"] ? "text" : "password"}
                 {...register("confirm")}
                 name="confirm"

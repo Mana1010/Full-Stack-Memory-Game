@@ -19,10 +19,17 @@ function useAxiosInterceptor() {
   const router = useRouter();
   const getToken =
     typeof window !== "undefined" && localStorage.getItem("token");
-  const unprotectedRoute = ["/", "auth/signup", "/about"];
+  const unprotectedRoute = ["/", "/auth/signup", "/about"];
+  const protectedRoutes = ["/profile-setup"];
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
       async (config) => {
+        if (!getToken) {
+          if (!unprotectedRoute.includes(pathname)) router.push("/auth/login");
+          setIsAuthenticated(false);
+          return Promise.reject("No token available");
+        }
+
         try {
           const decodedToken: DecodedToken = jwtDecode(getToken as string);
           const decodedAccessToken = decodedToken.exp * 1000;
@@ -38,7 +45,7 @@ function useAxiosInterceptor() {
               setIsAuthenticated(false);
               localStorage.removeItem("token");
               router.push("/auth/login");
-              return Promise.reject("Error");
+              return Promise.reject("Your session token has been expired");
             }
           }
           const checkUser = await getAuthUser();
@@ -65,7 +72,6 @@ function useAxiosInterceptor() {
         if (err.response) {
           const status = err?.response.status;
           if (status === 401 || status === 403) {
-            console.log("Running butodin");
             setIsAuthenticated(false);
             if (!unprotectedRoute.includes(pathname)) {
               router.push("/auth/login");

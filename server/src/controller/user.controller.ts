@@ -5,6 +5,7 @@ import { z } from "zod";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { Profile } from "../model/profile.model";
+import { Leaderboard } from "../model/leaderboard.model";
 const profileSchema = z.object({
   age: z.number(),
   gender: z.string(),
@@ -42,6 +43,9 @@ export const profileUpload = asyncHandler(
           public_id: uploadResponse.public_id,
         },
       });
+      const createLeaderBoard = await Leaderboard.create({
+        bestScore: 0,
+      });
       const getUser = await User.findById(req.user?._id);
       if (!getUser) {
         res.status(401);
@@ -49,13 +53,16 @@ export const profileUpload = asyncHandler(
       }
       getUser.isOldUser = !getUser.isOldUser;
       createProfile.userId = req.user?._id;
+      createLeaderBoard.userId = req.user?._id;
+      createLeaderBoard.profileId = createProfile.id;
       await createProfile.save();
       await getUser?.save();
+      await createLeaderBoard.save();
       if (!createProfile) {
         res.status(400);
         throw new Error("Error!!");
       }
-      res.status(200).json({ message: "Success" });
+      res.status(201).json({ message: "Success" });
     } catch (err: any) {
       res.status(400);
       console.log(err);
@@ -84,6 +91,12 @@ export const getAccountDetails = asyncHandler(
       .populate("userId")
       .select(["-__v", "-updatedAt"])
       .lean();
+    if (!getAccountDetails) {
+      res.status(401);
+      throw new Error("Unauthorized");
+    }
+    console.log(getAccountDetails);
+    res.status(200).json({ message: getAccountDetails });
   }
 );
 

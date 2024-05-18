@@ -88,6 +88,7 @@ function Sidebar() {
       index: 4,
     },
   ];
+  localStorage.setItem("token", "refd");
   const getUser = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
@@ -97,7 +98,6 @@ function Sidebar() {
         },
         withCredentials: true,
       });
-      console.log(response.data.message);
       return response.data.message;
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
@@ -118,6 +118,7 @@ function Sidebar() {
       return response.data;
     },
     onSuccess: (data) => {
+      getUser.refetch();
       queryClient.invalidateQueries();
       toast.success(data.message);
       localStorage.removeItem("token");
@@ -208,8 +209,8 @@ function Sidebar() {
                             getUser.data?.profilePic?.secure_url &&
                             getUser.data?.profilePic.secure_url
                           }
-                          width={200}
-                          height={200}
+                          width={150}
+                          height={150}
                           alt="icon"
                           priority
                         />
@@ -390,9 +391,10 @@ function Sidebar() {
           <footer
             className={`absolute bottom-0 ${
               openSidebar ? "flex" : "hidden"
-            } sm:flex w-full p-2 flex-col justify-center items-center space-y-2`}
+            } sm:flex w-full p-1.5 flex-col justify-center items-center space-y-2`}
           >
             <button
+              onClick={() => router.push("/account-details")}
               style={{ boxShadow: "-1px -1px 3px black" }}
               className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center"
             >

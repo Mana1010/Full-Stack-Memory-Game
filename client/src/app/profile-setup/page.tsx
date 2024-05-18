@@ -19,6 +19,7 @@ import { QueryClient } from "react-query";
 import loading from "../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
+import { set } from "react-hook-form";
 
 interface Profile {
   age: number;
@@ -36,6 +37,8 @@ function ProfileSetup() {
     gender,
     age,
     profilePic,
+    setGender,
+    setAge,
     setAgeIsDone,
     setGenderIsDone,
     setIgn,
@@ -74,6 +77,13 @@ function ProfileSetup() {
       queryClient.invalidateQueries();
       toast.success(data.message);
       router.push("/levels");
+      setGender(null);
+      setAge([1]);
+      setCurrentStep("gender");
+      setAgeIsDone(false);
+      setGenderIsDone(false);
+      setIgn(null);
+      setProfilePic(null);
     },
     onError: (err: any) => {
       toast.error(err.response.data.message);

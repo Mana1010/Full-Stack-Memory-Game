@@ -48,6 +48,7 @@ function Login() {
       return response.data;
     },
     onSuccess: async (data) => {
+      setIsAuthenticated(true);
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       router.push(data.isOldUser ? "/levels" : "/profile-setup");
@@ -102,7 +103,6 @@ function Login() {
         onSubmit={handleSubmit((data: LoginForm) => {
           loginMutation.mutate(data);
         })}
-        autoComplete="false"
         id="form"
         className="px-4 py-3.5 w-full sm:w-[430px] h-[420px] backdrop-blur-sm rounded-sm mx-auto relative"
       >
@@ -145,6 +145,7 @@ function Login() {
             </label>
             <div className="w-full p-2.5 space-x-2 rounded-sm bg-transparent outline-[#EBD30C] outline-dashed outline-1 flex justify-between items-center">
               <input
+                autoComplete="true"
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
                 name="password"
