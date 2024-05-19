@@ -45,6 +45,7 @@ export const profileUpload = asyncHandler(
       });
       const createLeaderBoard = await Leaderboard.create({
         bestScore: 0,
+        username: req.user?.username,
       });
       const getUser = await User.findById(req.user?._id);
       if (!getUser) {
@@ -85,12 +86,14 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
 });
 export const getAccountDetails = asyncHandler(
   async (req: Request, res: Response) => {
-    const getAccountDetails = await Profile.findOne({
+    const getAccountDetails = await Leaderboard.findOne({
       userId: req.user?._id,
     })
       .populate("userId")
-      .select(["-__v", "-updatedAt"])
+      .populate("profileId")
+      .select(["-isOldUser", "-__v"])
       .lean();
+    console.log(getAccountDetails);
     if (!getAccountDetails) {
       res.status(401);
       throw new Error("Unauthorized");

@@ -55,6 +55,7 @@ function useAxiosInterceptor() {
           setIsAuthenticated(true);
           return config;
         } catch (err) {
+          console.log(err);
           setIsAuthenticated(false);
           if (!unprotectedRoute.includes(pathname)) {
             router.push("/auth/login");

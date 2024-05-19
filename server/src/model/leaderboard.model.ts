@@ -13,6 +13,10 @@ const schema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "Profile",
   },
+  username: {
+    type: String,
+    default: "",
+  },
 });
 type LeaderBoardSchema = mongoose.InferSchemaType<typeof schema>;
 

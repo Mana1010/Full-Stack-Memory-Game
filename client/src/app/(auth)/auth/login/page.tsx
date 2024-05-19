@@ -83,14 +83,14 @@ function Login() {
     },
   };
 
-  // useEffect(() => {
-  //   function load(e: BeforeUnloadEvent) {
-  //     e.preventDefault();
-  //   }
+  useEffect(() => {
+    function load(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
 
-  //   window.addEventListener("beforeunload", load);
-  //   return () => window.removeEventListener("beforeunload", load);
-  // }, []);
+    window.addEventListener("beforeunload", load);
+    return () => window.removeEventListener("beforeunload", load);
+  }, []);
 
   return (
     <motion.main

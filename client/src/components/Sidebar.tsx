@@ -88,7 +88,6 @@ function Sidebar() {
       index: 4,
     },
   ];
-  localStorage.setItem("token", "refd");
   const getUser = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
@@ -363,7 +362,7 @@ function Sidebar() {
                         } transition-all duration-200 flex-col`}
                       >
                         {devSocials.map((dev) => (
-                          <Link href={dev.link} key={dev.name}>
+                          <Link href={dev.link} key={dev.name} target="_blank">
                             <li
                               style={{ boxShadow: "-1px -1px 3px black" }}
                               className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
