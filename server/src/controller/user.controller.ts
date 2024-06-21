@@ -91,18 +91,18 @@ export const getAccountDetails = asyncHandler(
     })
       .populate("userId")
       .populate("profileId")
-      .select(["-isOldUser", "-__v"])
+      .select(["-isOldUser", "-__v", "-password"])
       .lean();
-    console.log(getAccountDetails);
     if (!getAccountDetails) {
       res.status(401);
       throw new Error("Unauthorized");
     }
-    console.log(getAccountDetails);
+
     res.status(200).json({ message: getAccountDetails });
   }
 );
 
-export const editProfile = asyncHandler(
-  async (req: Request, res: Response) => {}
-);
+export const editProfile = asyncHandler(async (req: Request, res: Response) => {
+  const getProfile = await Profile.findOne({ userId: req.user?._id });
+  console.log(getProfile);
+});
