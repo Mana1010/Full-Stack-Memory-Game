@@ -10,9 +10,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ProfilePicsModal from "@/components/ProfilePicsModal";
 import { useModalStore } from "@/utils/store/modal.store";
+import { useEditProfileStore } from "@/utils/store/edit-profile.store";
 function EditProfile() {
   const axiosInterceptor = useAxiosInterceptor();
   const { openSelectProfile, setOpenSelectProfile } = useModalStore();
+  const {
+    selectedProfile,
+    selectedPreviewCustomProfile,
+    selectedCustomProfile,
+  } = useEditProfileStore();
+  console.log(selectedCustomProfile);
   return (
     <div className="flex items-center justify-center w-full h-full flex-col px-4">
       <h3
@@ -26,12 +33,14 @@ function EditProfile() {
       <form className="sm:w-[450px] w-full relative py-2.5 px-3 h-[500px] flex flex-col items-center backdrop-blur-sm bg-transparent">
         <SideDesignNoFM size={120} />
         <div className="flex w-full justify-between items-center">
-          <div className="relative bg-white w-[120px] h-[120px] rounded-md">
+          <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden">
             <Image
-              src={cards}
+              src={selectedProfile ?? selectedPreviewCustomProfile ?? cards}
               alt="profile-pic"
+              height={120}
+              width={120}
               priority
-              className="w-full h-full bg-center"
+              className="w-full h-full object-cover object-center"
             />
           </div>
           <button
