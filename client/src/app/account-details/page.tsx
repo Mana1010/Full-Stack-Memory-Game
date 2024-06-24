@@ -14,6 +14,7 @@ import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
+import SideDesignNoFM from "@/components/SideDesignNoFM";
 export interface Profile {
   _id: string;
   age: number;
@@ -59,31 +60,6 @@ function AccountDetails() {
   const formatNum = new Intl.NumberFormat("en-US").format(
     getAccountDetails.data?.bestScore ?? 0
   );
-  // const formatCreatedAtTime = new Intl.DateTimeFormat("en-PH", {
-  //   weekday: "long",
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  //   hour: "numeric",
-  //   minute: "numeric",
-  //   second: "numeric",
-  //   timeZone: "UTC",
-  // }).format(getAccountDetails.data?.userId?.createdAt ?? 0);
-  // const formatCreatedAtTime = isNaN(
-  //   getAccountDetails.data?.userId.createdAt.getTime
-  // )
-  //   ? null
-  //   : new Intl.DateTimeFormat("en-PH", {
-  //       weekday: "long",
-  //       year: "numeric",
-  //       month: "long",
-  //       day: "numeric",
-  //       hour: "numeric",
-  //       minute: "numeric",
-  //       second: "numeric",
-  //       timeZone: "UTC",
-  //     }).format(getAccountDetails.data?.userId.createdAt);
-  // console.log(getAccountDetails.data?.userId.createdAt.getTime());
   console.log(
     new Date(
       getAccountDetails.data?.profileId.updatedAt ?? 0
@@ -102,38 +78,7 @@ function AccountDetails() {
 
       <div className="flex w-full sm:w-[800px] h-full flex-col pt-5 backdrop-blur-sm relative space-y-2">
         <div className="hidden lg:block">
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute left-0 top-0 h-[200px] w-[1px]"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute left-0 top-0 h-[1px] w-[200px]"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute right-0 top-0 h-[200px] w-[1px]"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute right-0 top-0 h-[1px] w-[200px]"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute w-[200px] h-[1px] bottom-0 right-0"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute w-[1px] h-[200px] bottom-0 right-0"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute w-[200px] h-[1px] bottom-0 left-0"
-          ></div>
-          <div
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="bg-secondary absolute w-[1px] h-[200px] bottom-0 left-0"
-          ></div>
+          <SideDesignNoFM size={200} />
         </div>
         {getAccountDetails.isLoading ? (
           <Loading />
@@ -141,7 +86,7 @@ function AccountDetails() {
           <div className="overflow-y-auto lg:overflow-y-visible">
             <div className="flex space-x-2 flex-col lg:flex-row px-2 justify-between items-center space-y-2 lg:space-y-0">
               <div className="flex space-x-2">
-                <div className="relative pt-1 bg-white rounded-md w-[120px] h-[120px]">
+                <div className="relative pt-1 bg-transparent rounded-md w-[120px] h-[120px]">
                   <Image
                     src={
                       getAccountDetails.data?.profileId.profilePic.secure_url ??
@@ -203,7 +148,7 @@ function AccountDetails() {
                 <span>EDIT PROFILE</span>
               </button>
             </div>
-            <div className="pl-2 flex flex-col pt-3 justify-start lg:justify-evenly items-center lg:flex-row h-full space-x-3">
+            <div className="pl-2 flex flex-col pt-3 justify-center lg:justify-evenly items-center lg:flex-row h-full lg:space-x-3">
               <div className="space-y-2 flex flex-col">
                 <strong className="text-secondary font-bold text-[0.8rem]">
                   IGN
@@ -249,7 +194,6 @@ function AccountDetails() {
                   </div>
                 </div>
               </div>
-
               <div className="space-y-2 flex flex-col">
                 <div>
                   <strong className="text-secondary font-bold text-[0.8rem]">
