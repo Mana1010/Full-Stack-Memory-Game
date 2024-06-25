@@ -32,7 +32,6 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.get("/", newAccessToken);
-
 app.use(errorHandle);
 async function connectDb() {
   try {

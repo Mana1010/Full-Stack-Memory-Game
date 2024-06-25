@@ -5,6 +5,7 @@ import {
   getProfile,
   editProfile,
   getAccountDetails,
+  showEditProfile,
 } from "../controller/user.controller";
 export const router = express.Router();
 
@@ -13,4 +14,6 @@ router
   .get(protectedRoutes, getProfile)
   .post(protectedRoutes, profileUpload)
   .put(protectedRoutes, editProfile);
+
+router.route("/edit-profile").get(protectedRoutes, showEditProfile);
 router.route("/account-details").get(protectedRoutes, getAccountDetails);

@@ -101,8 +101,29 @@ export const getAccountDetails = asyncHandler(
     res.status(200).json({ message: getAccountDetails });
   }
 );
-
+export const showEditProfile = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getProfile = await Profile.findOne({ userId: req.user?._id }).select([
+      "ign",
+      "age",
+      "profilePic.secure_url",
+    ]);
+    if (!getProfile) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    res.status(200).json({ message: getProfile });
+  }
+);
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
+  const { age, ign } = req.body;
   const getProfile = await Profile.findOne({ userId: req.user?._id });
-  console.log(getProfile);
+  if (!getProfile) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  getProfile.age = age;
+  getProfile.ign = ign;
+  await getProfile.save();
+  res.status(201).json({ message: "Profile updated successfully." });
 });

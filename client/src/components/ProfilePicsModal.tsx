@@ -45,9 +45,7 @@ function ProfilePicsModal() {
         <div className="grid grid-cols-5 sm:grid-cols-4 lg:grid-cols-7 justify-center items-center gap-3 pt-3">
           {profileSelection.map((avatar: StaticImageData, index: number) => (
             <button
-              onClick={() => {
-                setProfilePreview(avatar);
-              }}
+              onClick={() => setProfilePreview(avatar)}
               key={index}
               className={`w-[3.5rem] h-[3.5rem] rounded-full bg-white overflow-hidden ${
                 profilePreview?.src === avatar.src
