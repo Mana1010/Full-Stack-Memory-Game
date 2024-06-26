@@ -14,6 +14,8 @@ import { Slider } from "@/components/ui/slider";
 import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { UseQueryResult } from "react-query";
+import cards from "../../components/images/404-img.png";
+import { toast } from "sonner";
 
 interface EditProfileSchema {
   id: string;
@@ -57,10 +59,32 @@ function EditProfile() {
       return response.data.message;
     },
   });
+  const queryClient = new QueryClient();
+  const userId = getProfile?.data?.id;
   const editProfile = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (data: EditProfileSchema | File) => {
       const payload = new FormData();
-      const response = await axios.patch(`${baseUrl}/user/profile`);
+      for (const [key, value] of Object.entries(data)) {
+        payload.append(key, value);
+      }
+      const response = await axios.patch(
+        `${baseUrl}/user/profile/${userId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data.message;
+    },
+    onSuccess: (data) => {
+      toast.message(data);
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
   function handleAgeChange(value: number[]) {
@@ -72,7 +96,12 @@ function EditProfile() {
   function submitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const checkUser = schema.safeParse(payload);
+    const updatedData = {
+      ...payload,
+      profilePic: selectedCustomProfile ?? selectedProfile,
+    };
     if (checkUser.success) {
+      editProfile.mutate(updatedData);
     }
   }
   return (
@@ -85,7 +114,10 @@ function EditProfile() {
       >
         EDIT PROFILE
       </h3>
-      <form className="sm:w-[450px] w-full relative py-2.5 px-3 h-[500px] flex flex-col items-center backdrop-blur-sm bg-transparent">
+      <form
+        onSubmit={submitForm}
+        className="sm:w-[450px] w-full relative py-2.5 px-3 h-[500px] flex flex-col items-center backdrop-blur-sm bg-transparent"
+      >
         <SideDesignNoFM size={120} />
         <div className="flex w-full justify-between items-center">
           <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden">
@@ -93,7 +125,8 @@ function EditProfile() {
               src={
                 selectedProfile ??
                 selectedPreviewCustomProfile ??
-                getProfile.data?.profilePic?.secure_url
+                getProfile.data?.profilePic?.secure_url ??
+                cards
               }
               alt="profile-pic"
               height={120}

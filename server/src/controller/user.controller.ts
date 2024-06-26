@@ -116,8 +116,10 @@ export const showEditProfile = asyncHandler(
   }
 );
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
   const { age, ign } = req.body;
-  const getProfile = await Profile.findOne({ userId: req.user?._id });
+
+  const getProfile = await Profile.findOne({ userId: id });
   if (!getProfile) {
     res.status(404);
     throw new Error("User not found");
