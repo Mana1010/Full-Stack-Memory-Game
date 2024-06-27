@@ -11,6 +11,8 @@ const schema = new mongoose.Schema(
     age: {
       type: Number,
       required: true,
+      min: [1, "Age is minimum at 1"],
+      max: [150, "Age is maximum at 150"],
     },
     gender: {
       type: String,

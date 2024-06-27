@@ -18,11 +18,11 @@ import cards from "../../components/images/404-img.png";
 import { toast } from "sonner";
 
 interface EditProfileSchema {
-  id: string;
+  _id: string;
   ign: string;
   age: number;
   profilePic: {
-    secure_url: any;
+    secure_url: string;
   };
 }
 const schema = z.object({
@@ -60,10 +60,11 @@ function EditProfile() {
     },
   });
   const queryClient = new QueryClient();
-  const userId = getProfile?.data?.id;
+  const userId = getProfile?.data?._id;
   const editProfile = useMutation({
     mutationFn: async (data: EditProfileSchema | File) => {
       const payload = new FormData();
+      console.log(data);
       for (const [key, value] of Object.entries(data)) {
         payload.append(key, value);
       }
@@ -81,7 +82,8 @@ function EditProfile() {
       return response.data.message;
     },
     onSuccess: (data) => {
-      toast.message(data);
+      queryClient.invalidateQueries();
+      toast.success(data);
     },
     onError: (err: any) => {
       toast.error(err.response.data.message);
@@ -98,7 +100,7 @@ function EditProfile() {
     const checkUser = schema.safeParse(payload);
     const updatedData = {
       ...payload,
-      profilePic: selectedCustomProfile ?? selectedProfile,
+      file: selectedCustomProfile ?? selectedProfile,
     };
     if (checkUser.success) {
       editProfile.mutate(updatedData);
@@ -123,7 +125,7 @@ function EditProfile() {
           <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden">
             <Image
               src={
-                selectedProfile ??
+                selectedProfile?.avatar ??
                 selectedPreviewCustomProfile ??
                 getProfile.data?.profilePic?.secure_url ??
                 cards

@@ -7,6 +7,7 @@ import { LuPlus } from "react-icons/lu";
 import { useModalStore } from "@/utils/store/modal.store";
 import { useEditProfileStore } from "@/utils/store/edit-profile.store";
 import { StaticImageData } from "next/image";
+import { Profiles } from "@/utils/store/edit-profile.store";
 function ProfilePicsModal() {
   const { setOpenSelectProfile } = useModalStore();
   const {
@@ -16,9 +17,7 @@ function ProfilePicsModal() {
     setSelectedCustomProfile,
     setSelectedPreviewCustomProfile,
   } = useEditProfileStore();
-  const [profilePreview, setProfilePreview] = useState<StaticImageData | null>(
-    null
-  );
+  const [profilePreview, setProfilePreview] = useState<Profiles | null>(null);
   function uploadCustomProfile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
@@ -43,17 +42,17 @@ function ProfilePicsModal() {
       <div className="p-2.5 w-full sm:w-1/2 bg-primary rounded-md">
         <h2 className="text-secondary">SELECT YOUR PROFILE</h2>
         <div className="grid grid-cols-5 sm:grid-cols-4 lg:grid-cols-7 justify-center items-center gap-3 pt-3">
-          {profileSelection.map((avatar: StaticImageData, index: number) => (
+          {profileSelection.map((avatar: Profiles) => (
             <button
               onClick={() => setProfilePreview(avatar)}
-              key={index}
+              key={avatar.name}
               className={`w-[3.5rem] h-[3.5rem] rounded-full bg-white overflow-hidden ${
-                profilePreview?.src === avatar.src
+                profilePreview?.name === avatar.name
                   ? "ring-secondary ring-2"
                   : "ring-none"
               }`}
             >
-              <Image src={avatar} alt={avatar.src} priority />
+              <Image src={avatar.avatar} alt={avatar.name} priority />
             </button>
           ))}
           <label

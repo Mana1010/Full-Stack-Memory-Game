@@ -18,33 +18,88 @@ import vampire from "../../components/images/images/vampire.png";
 import frankestein from "../../components/images/images/frankenstein.png";
 import { StaticImageData } from "next/image";
 
+export interface Profiles {
+  avatar: StaticImageData;
+  name: string;
+}
 const profile = [
-  boy1,
-  boy2,
-  boy3,
-  boy4,
-  boy5,
-  boy6,
-  boy7,
-  boy8,
-  girl1,
-  girl2,
-  girl3,
-  girl4,
-  girl5,
-  girl6,
-  devil,
-  vampire,
-  frankestein,
+  {
+    avatar: boy1,
+    name: "boy1",
+  },
+  {
+    avatar: boy2,
+    name: "boy2",
+  },
+  {
+    avatar: boy3,
+    name: "boy3",
+  },
+  {
+    avatar: boy4,
+    name: "boy4",
+  },
+  {
+    avatar: boy5,
+    name: "boy5",
+  },
+  {
+    avatar: boy6,
+    name: "boy6",
+  },
+  {
+    avatar: boy7,
+    name: "boy7",
+  },
+  {
+    avatar: boy8,
+    name: "boy8",
+  },
+  {
+    avatar: girl1,
+    name: "girl1",
+  },
+  {
+    avatar: girl2,
+    name: "girl2",
+  },
+  {
+    avatar: girl3,
+    name: "girl3",
+  },
+  {
+    avatar: girl4,
+    name: "girl4",
+  },
+  {
+    avatar: girl5,
+    name: "girl5",
+  },
+  {
+    avatar: girl6,
+    name: "girl6",
+  },
+  {
+    avatar: devil,
+    name: "devil",
+  },
+  {
+    avatar: vampire,
+    name: "vampire",
+  },
+  {
+    avatar: frankestein,
+    name: "frankestein",
+  },
 ];
 interface EditProfileState {
-  profileSelection: StaticImageData[];
-  selectedProfile: StaticImageData | null;
-  selectedPreviewCustomProfile: string | null;
-  selectedCustomProfile: File | null;
+  profileSelection: Profiles[]; //For Avatar Selection
+  selectedProfile: Profiles | null; //For the provided Avatar only
+  selectedPreviewCustomProfile: string | null; //For previewing or showing a custom profile no the ready made avatar only and it formats from FileReader
+  selectedCustomProfile: File | null; //This is the one who is sent to the backend and it is File type
 }
 interface EditProfileStoreSchema extends EditProfileState {
-  setSelectedProfile: (data: StaticImageData | null) => void;
+  setSelectedProfile: (data: Profiles | null) => void;
   setSelectedPreviewCustomProfile: (data: string | null) => void;
   setSelectedCustomProfile: (data: File | null) => void;
 }
@@ -53,7 +108,7 @@ const store = (set: any) => ({
   selectedProfile: null,
   selectedPreviewCustomProfile: null,
   selectedCustomProfile: null,
-  setSelectedProfile: (data: StaticImageData | string | null) => {
+  setSelectedProfile: (data: Profiles | null) => {
     set({ selectedProfile: data });
   },
   setSelectedPreviewCustomProfile: (data: string | null) => {

@@ -9,10 +9,8 @@ import { router as userRouter } from "./routes/user.route";
 import { errorHandle } from "./middleware/error.handling";
 import { newAccessToken } from "./controller/auth.controller";
 import { v2 as cloudinary } from "cloudinary";
-import multer from "multer";
 const app = express();
 const PORT = process.env.PORT || 8080;
-const upload = multer();
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

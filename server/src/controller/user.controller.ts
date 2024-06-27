@@ -7,12 +7,11 @@ import { v2 as cloudinary } from "cloudinary";
 import { Profile } from "../model/profile.model";
 import { Leaderboard } from "../model/leaderboard.model";
 const profileSchema = z.object({
-  age: z.number(),
+  age: z.number().min(1).max(150),
   gender: z.string(),
   ign: z.string().min(1),
   profilePic: z.string(),
 });
-
 type ProfileSchema = z.infer<typeof profileSchema>;
 export const profileUpload = asyncHandler(
   async (req: Request, res: Response) => {
@@ -118,14 +117,28 @@ export const showEditProfile = asyncHandler(
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { age, ign } = req.body;
-
-  const getProfile = await Profile.findOne({ userId: id });
+  const getProfile = await Profile.findById(id);
   if (!getProfile) {
     res.status(404);
     throw new Error("User not found");
   }
-  getProfile.age = age;
-  getProfile.ign = ign;
+  if (req.file && getProfile.profilePic) {
+    const upload = await cloudinary.uploader.upload(req.file.path, {
+      folder: "memory-game/profile-picture",
+      upload_preset: "yxnopucd",
+    });
+    if (getProfile.profilePic.public_id) {
+      await cloudinary.api.delete_resources([getProfile.profilePic.public_id], {
+        type: "upload",
+        resource_type: "image",
+      });
+    }
+    getProfile.profilePic.public_id = upload.public_id;
+    getProfile.profilePic.secure_url = upload.secure_url;
+  }
+
+  if (age && getProfile.age !== age) getProfile.age = age;
+  if (ign && getProfile.ign !== ign) getProfile.ign = ign;
   await getProfile.save();
   res.status(201).json({ message: "Profile updated successfully." });
 });
