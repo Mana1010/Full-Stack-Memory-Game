@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import Image from "next/image";
 import icon from "../../src//components//images//small-logo.png";
-import vamp from "../../src//components//images//vampire.png";
 import { BiCheckShield } from "react-icons/bi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
@@ -13,11 +12,9 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import Link from "next/link";
 import { MdLogin } from "react-icons/md";
 import { PiUserPlus } from "react-icons/pi";
-import { useMediaQuery } from "react-responsive";
 import card from "../components/images/cards.png";
 import SideDesign from "./SideDesign";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { usePathname } from "next/navigation";
 import firstTop from "../components/images/trophies/1st-prize.png";
@@ -27,13 +24,10 @@ import { CgDetailsLess } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import Loading from "./Loading";
 import { toast } from "sonner";
-import { QueryClient } from "react-query";
 import { useRouter } from "next/navigation";
-import SideDesignNoFM from "./SideDesignNoFM";
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  // const mobileScreen = useMediaQuery({ query: "(max-width: 767px)" });
   const { isAuthenticated, setIsAuthenticated } = useUserStore();
   const axiosInterceptor = useAxiosInterceptor();
   // const [openSidebar, setOpenSidebar] = useState(() => {
@@ -102,7 +96,7 @@ function Sidebar() {
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
   });
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const response = await axiosInterceptor.post(

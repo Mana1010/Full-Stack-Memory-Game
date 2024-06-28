@@ -15,6 +15,8 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
+import ImagePreview from "@/components/ImagePreview";
+import { useModalStore } from "@/utils/store/modal.store";
 export interface Profile {
   _id: string;
   age: number;
@@ -41,6 +43,7 @@ interface AccountDetails {
 }
 function AccountDetails() {
   const axiosInterceptor = useAxiosInterceptor();
+  const { openImagePreview, setOpenImagePreview } = useModalStore();
   const router = useRouter();
   const getAccountDetails: UseQueryResult<AccountDetails | null> = useQuery({
     queryKey: ["account-details"],
@@ -86,24 +89,20 @@ function AccountDetails() {
           <div className="overflow-y-auto lg:overflow-y-visible">
             <div className="flex space-x-2 flex-col lg:flex-row px-2 justify-between items-center space-y-2 lg:space-y-0">
               <div className="flex space-x-2">
-                <div className="relative pt-1 bg-transparent rounded-md w-[120px] h-[120px]">
+                <div
+                  onClick={() => setOpenImagePreview()}
+                  className=" pt-1 bg-transparent rounded-md w-[120px] h-[120px] overflow-hidden relative"
+                >
                   <Image
                     src={
                       getAccountDetails.data?.profileId.profilePic.secure_url ??
                       ""
                     }
-                    width={150}
-                    height={200}
                     alt="profile-pic"
+                    fill
                     priority
-                    className="w-full h-full"
-                  />
-                  <Image
-                    src={cards}
-                    alt="cards"
-                    width={80}
-                    priority
-                    className="absolute top-[-20px] right-[3px] z-[-1]"
+                    objectFit="cover"
+                    objectPosition="center"
                   />
                 </div>
                 <div className="pt-2">
@@ -223,6 +222,7 @@ function AccountDetails() {
           </div>
         )}
       </div>
+      {openImagePreview && <ImagePreview />}
     </div>
   );
 }

@@ -1,19 +1,20 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
-import { useMutation, useQuery } from "react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "react-query";
 import Image from "next/image";
-import { QueryClient } from "react-query";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
-import { useForm } from "react-hook-form";
-import { string, z } from "zod";
+import { z } from "zod";
 import ProfilePicsModal from "@/components/ProfilePicsModal";
 import { useModalStore } from "@/utils/store/modal.store";
 import { useEditProfileStore } from "@/utils/store/edit-profile.store";
 import { Slider } from "@/components/ui/slider";
-import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
-import { UseQueryResult } from "react-query";
 import cards from "../../components/images/404-img.png";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -66,7 +67,7 @@ function EditProfile() {
       return response.data.message;
     },
   });
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const userId = getProfile?.data?._id;
   const editProfile = useMutation({
     mutationFn: async (data: EditProfileSchema | File) => {
@@ -132,7 +133,7 @@ function EditProfile() {
       >
         <SideDesignNoFM size={120} />
         <div className="flex w-full justify-between items-center">
-          <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden">
+          <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden ">
             <Image
               src={
                 selectedProfile?.avatar ??
@@ -141,10 +142,10 @@ function EditProfile() {
                 cards
               }
               alt="profile-pic"
-              height={120}
-              width={120}
+              fill
               priority
-              className="w-full h-full object-cover object-center"
+              objectFit="cover"
+              objectPosition="center"
             />
           </div>
           <button

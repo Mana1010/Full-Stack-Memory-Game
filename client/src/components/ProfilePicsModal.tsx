@@ -66,7 +66,7 @@ function ProfilePicsModal() {
             hidden
             id="file"
             type="file"
-            accept="image/jpeg, image/png, image/gif"
+            accept="image/jpeg, image/png"
           />
         </div>
         <div className="flex space-x-2 justify-center items-center md:justify-end md:items-center pt-5">
