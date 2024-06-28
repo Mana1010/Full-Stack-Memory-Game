@@ -6,6 +6,10 @@ import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { Profile } from "../model/profile.model";
 import { Leaderboard } from "../model/leaderboard.model";
+import {
+  uploadFileCloudinary,
+  deleteFileCloudinary,
+} from "../utils/cloudinary.utils";
 const profileSchema = z.object({
   age: z.number().min(1).max(150),
   gender: z.string(),
@@ -116,22 +120,30 @@ export const showEditProfile = asyncHandler(
 );
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { age, ign } = req.body;
+  const { age, ign, file } = req.body;
   const getProfile = await Profile.findById(id);
   if (!getProfile) {
     res.status(404);
     throw new Error("User not found");
   }
-  if (req.file && getProfile.profilePic) {
-    const upload = await cloudinary.uploader.upload(req.file.path, {
-      folder: "memory-game/profile-picture",
-      upload_preset: "yxnopucd",
-    });
+  if (getProfile.profilePic && (req.file || file !== "null")) {
+    console.log("Running hehe");
+    let upload;
+    if (req.file) {
+      upload = await uploadFileCloudinary(req.file.path);
+    } else {
+      console.log("Running the randomIcon");
+      const randomIcon = path.join(
+        __dirname,
+        "..",
+        "public",
+        "images",
+        `${file}.png`
+      );
+      upload = await uploadFileCloudinary(randomIcon);
+    }
     if (getProfile.profilePic.public_id) {
-      await cloudinary.api.delete_resources([getProfile.profilePic.public_id], {
-        type: "upload",
-        resource_type: "image",
-      });
+      await deleteFileCloudinary([getProfile.profilePic.public_id]);
     }
     getProfile.profilePic.public_id = upload.public_id;
     getProfile.profilePic.secure_url = upload.secure_url;

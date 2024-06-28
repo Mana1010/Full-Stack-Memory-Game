@@ -6,7 +6,7 @@ import Image from "next/image";
 import { QueryClient } from "react-query";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { string, z } from "zod";
 import ProfilePicsModal from "@/components/ProfilePicsModal";
 import { useModalStore } from "@/utils/store/modal.store";
 import { useEditProfileStore } from "@/utils/store/edit-profile.store";
@@ -16,6 +16,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import { UseQueryResult } from "react-query";
 import cards from "../../components/images/404-img.png";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface EditProfileSchema {
   _id: string;
@@ -34,23 +35,29 @@ const schema = z.object({
 });
 type EditProfileType = z.infer<typeof schema>;
 function EditProfile() {
+  const router = useRouter();
   const axiosInterceptor = useAxiosInterceptor();
   const { openSelectProfile, setOpenSelectProfile } = useModalStore();
   const {
     selectedProfile,
     selectedPreviewCustomProfile,
     selectedCustomProfile,
+    setSelectedCustomProfile,
+    setSelectedProfile,
   } = useEditProfileStore();
   const [payload, setPayload] = useState<EditProfileType | any>(null);
   const getProfile: UseQueryResult<EditProfileSchema | null> = useQuery({
     queryKey: ["edit-profile"],
     queryFn: async () => {
-      const response = await axios.get(`${baseUrl}/user/edit-profile`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axiosInterceptor.get(
+        `${baseUrl}/user/edit-profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
       const extractData = {
         ign: response.data.message.ign,
         age: [response.data.message.age],
@@ -68,7 +75,7 @@ function EditProfile() {
       for (const [key, value] of Object.entries(data)) {
         payload.append(key, value);
       }
-      const response = await axios.patch(
+      const response = await axiosInterceptor.patch(
         `${baseUrl}/user/profile/${userId}`,
         payload,
         {
@@ -84,6 +91,9 @@ function EditProfile() {
     onSuccess: (data) => {
       queryClient.invalidateQueries();
       toast.success(data);
+      router.push("/account-details");
+      setSelectedCustomProfile(null); //To reset the previewed image
+      setSelectedProfile(null); //To reset the previewed image
     },
     onError: (err: any) => {
       toast.error(err.response.data.message);
@@ -100,7 +110,7 @@ function EditProfile() {
     const checkUser = schema.safeParse(payload);
     const updatedData = {
       ...payload,
-      file: selectedCustomProfile ?? selectedProfile,
+      file: selectedCustomProfile ?? selectedProfile?.name ?? null,
     };
     if (checkUser.success) {
       editProfile.mutate(updatedData);
