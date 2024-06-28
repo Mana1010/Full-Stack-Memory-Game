@@ -31,8 +31,8 @@ function Gender() {
     >
       {" "}
       <h1
-        style={{ textShadow: "0 0 15px #ffe30a" }}
-        className=" text-xl font-extrabold text-[#ffe30a] tracking-wider"
+        style={{ textShadow: "0 0 15px white" }}
+        className=" text-xl font-extrabold text-white tracking-wider"
       >
         YOUR GENDER
       </h1>

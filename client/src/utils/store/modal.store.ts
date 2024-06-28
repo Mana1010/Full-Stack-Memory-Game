@@ -6,6 +6,7 @@ interface ModalState {
   openDevSocial: boolean;
   openEditModal: boolean;
   openSelectProfile: boolean;
+  openImagePreview: boolean;
 }
 
 interface ModalStoreSchema extends ModalState {
@@ -14,6 +15,7 @@ interface ModalStoreSchema extends ModalState {
   setOpenDevSocial: () => void;
   setOpenEditModal: () => void;
   setOpenSelectProfile: () => void;
+  setOpenImagePreview: () => void;
 }
 const store = (set: any) => ({
   openSidebar: false,
@@ -21,6 +23,7 @@ const store = (set: any) => ({
   openDevSocial: false,
   openEditModal: false,
   openSelectProfile: false,
+  openImagePreview: false,
 
   setOpenSidebar: () => {
     set((state: ModalState) => ({
@@ -45,6 +48,11 @@ const store = (set: any) => ({
   setOpenSelectProfile: () => {
     set((state: ModalState) => ({
       openSelectProfile: !state.openSelectProfile,
+    }));
+  },
+  setOpenImagePreview: () => {
+    set((state: ModalState) => ({
+      openImagePreview: !state.openImagePreview,
     }));
   },
 });

@@ -18,6 +18,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import cards from "../../components/images/404-img.png";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface EditProfileSchema {
   _id: string;
@@ -31,7 +32,7 @@ const schema = z.object({
   ign: z
     .string()
     .min(1, "This field is required")
-    .max(15, "The IGN is too long"),
+    .max(15, "The ign should not be exceed to 15"),
   age: z.tuple([z.number().min(1).max(150)]),
 });
 type EditProfileType = z.infer<typeof schema>;
@@ -47,6 +48,7 @@ function EditProfile() {
     setSelectedProfile,
   } = useEditProfileStore();
   const [payload, setPayload] = useState<EditProfileType | any>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const getProfile: UseQueryResult<EditProfileSchema | null> = useQuery({
     queryKey: ["edit-profile"],
     queryFn: async () => {
@@ -66,6 +68,7 @@ function EditProfile() {
       setPayload(extractData);
       return response.data.message;
     },
+    refetchOnWindowFocus: false,
   });
   const queryClient = useQueryClient();
   const userId = getProfile?.data?._id;
@@ -113,8 +116,12 @@ function EditProfile() {
       ...payload,
       file: selectedCustomProfile ?? selectedProfile?.name ?? null,
     };
+
     if (checkUser.success) {
       editProfile.mutate(updatedData);
+      setErrorMessage(null);
+    } else {
+      setErrorMessage(checkUser.error.issues[0].message);
     }
   }
   return (
@@ -157,7 +164,7 @@ function EditProfile() {
           </button>
         </div>
         <div className="py-5 w-full space-y-8">
-          <div className="w-full">
+          <div className="w-full space-y-1">
             <label htmlFor="ign" className="text-[0.7rem] text-secondary">
               IGN
             </label>
@@ -166,9 +173,31 @@ function EditProfile() {
               type="text"
               name="ign"
               id="ign"
-              onChange={(e) => setPayload({ ...payload, ign: e.target.value })}
+              onChange={(e) => {
+                console.log(e.target.value);
+                const checkUser = schema.safeParse({
+                  ...payload,
+                  ign: e.target.value,
+                });
+                if (checkUser.success) {
+                  setErrorMessage(null);
+                } else {
+                  setErrorMessage(checkUser.error.issues[0].message);
+                }
+                setPayload({ ...payload, ign: e.target.value });
+              }}
               className="w-full p-2.5 space-x-2 rounded-sm bg-primary text-white outline-[#EBD30C] border-none outline-dashed outline-1 bg-transparent"
             />
+            {errorMessage && (
+              <motion.small
+                initial={{ y: -5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, textShadow: "0 0 10px #EBD30C" }}
+                transition={{ duration: 0.1, ease: "easeIn" }}
+                className="text-[0.85rem] text-[#EBD30C]"
+              >
+                {errorMessage}
+              </motion.small>
+            )}
           </div>
           <div>
             {/* <label className="text-secondary text-[0.7rem]">AGE</label> */}

@@ -41,6 +41,7 @@ function Signup() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<DataSignUp>({
     defaultValues: {
@@ -133,9 +134,23 @@ function Signup() {
         </header>
         <div className="w-full pt-7 flex space-y-4 flex-col">
           <div className="space-y-1 flex flex-col">
-            <label htmlFor="username" className="text-[#FFE30A] text-[0.7rem]">
-              USERNAME
-            </label>
+            <div className="flex w-full justify-between items-center">
+              <label
+                htmlFor="username"
+                className="text-secondary text-[0.7rem]"
+              >
+                USERNAME
+              </label>
+              <small
+                className={`text-[0.7rem] ${
+                  watch("username").length > 15
+                    ? "text-red-500"
+                    : "text-secondary"
+                }`}
+              >
+                {watch("username").length}/15
+              </small>
+            </div>
             <input
               autoComplete="true"
               type="text"
