@@ -1,11 +1,7 @@
 "use client";
 import React from "react";
-import { useQuery, UseQueryResult } from "react-query";
-import { QueryClient } from "react-query";
 import { useQueryClient } from "react-query";
 import Image from "next/image";
-import cards from "../components/images/bg-two.png";
-import AccountDetails from "@/app/account-details/page";
 import { FaXmark } from "react-icons/fa6";
 import { useModalStore } from "@/utils/store/modal.store";
 function ImagePreview() {

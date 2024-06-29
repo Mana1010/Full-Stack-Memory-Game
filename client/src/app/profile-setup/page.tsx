@@ -1,10 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { string, z } from "zod";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useMutation } from "react-query";
-import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import TubeDesign from "@/components/TubeDesign";
@@ -19,7 +17,6 @@ import { QueryClient } from "react-query";
 import loading from "../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
-import { set } from "react-hook-form";
 
 interface Profile {
   age: number;

@@ -19,6 +19,8 @@ import cards from "../../components/images/404-img.png";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { FaMask } from "react-icons/fa";
+import loading from "../../components/images/loading.gif";
 
 interface EditProfileSchema {
   _id: string;
@@ -28,14 +30,14 @@ interface EditProfileSchema {
     secure_url: string;
   };
 }
-const schema = z.object({
+const editSchema = z.object({
   ign: z
     .string()
     .min(1, "This field is required")
     .max(15, "The ign should not be exceed to 15"),
   age: z.tuple([z.number().min(1).max(150)]),
 });
-type EditProfileType = z.infer<typeof schema>;
+type EditProfileType = z.infer<typeof editSchema>;
 function EditProfile() {
   const router = useRouter();
   const axiosInterceptor = useAxiosInterceptor();
@@ -110,8 +112,9 @@ function EditProfile() {
     });
   }
   function submitForm(e: React.FormEvent<HTMLFormElement>) {
+    alert("Hello");
     e.preventDefault();
-    const checkUser = schema.safeParse(payload);
+    const checkUser = editSchema.safeParse(payload);
     const updatedData = {
       ...payload,
       file: selectedCustomProfile ?? selectedProfile?.name ?? null,
@@ -120,9 +123,21 @@ function EditProfile() {
     if (checkUser.success) {
       editProfile.mutate(updatedData);
       setErrorMessage(null);
-    } else {
-      setErrorMessage(checkUser.error.issues[0].message);
     }
+  }
+  function checkChanges() {
+    const data = {
+      ign: getProfile.data?.ign,
+      age: [getProfile.data?.age],
+    };
+    if (
+      JSON.stringify(payload) === JSON.stringify(data) &&
+      !selectedProfile &&
+      !selectedCustomProfile
+    ) {
+      return true;
+    }
+    return false;
   }
   return (
     <div className="flex items-center justify-center w-full h-full flex-col px-4">
@@ -156,26 +171,41 @@ function EditProfile() {
             />
           </div>
           <button
+            disabled={editProfile.isLoading}
             onClick={() => setOpenSelectProfile()}
             type="button"
-            className="text-sm px-4 py-2.5 text-primary bg-secondary rounded-md"
+            className="text-sm px-4 py-2.5 text-primary bg-secondary rounded-sm flex space-x-2 items-center"
           >
-            <span>CHANGE AVATAR</span>
+            <span>
+              <FaMask />
+            </span>
+            <small>CHANGE AVATAR</small>
           </button>
         </div>
         <div className="py-5 w-full space-y-8">
           <div className="w-full space-y-1">
-            <label htmlFor="ign" className="text-[0.7rem] text-secondary">
-              IGN
-            </label>
+            <div className="w-full flex justify-between items-center">
+              <label htmlFor="ign" className="text-[0.7rem] text-secondary">
+                IGN
+              </label>
+              <small
+                className={`text-[0.7rem] ${
+                  (payload?.ign ? payload.ign.length : 0) > 15
+                    ? "text-red-500"
+                    : "text-secondary"
+                }`}
+              >
+                {payload?.ign ? payload.ign.length : 0}/15
+              </small>
+            </div>
             <input
+              disabled={editProfile.isLoading}
               value={payload?.ign ?? ""}
               type="text"
               name="ign"
               id="ign"
               onChange={(e) => {
-                console.log(e.target.value);
-                const checkUser = schema.safeParse({
+                const checkUser = editSchema.safeParse({
                   ...payload,
                   ign: e.target.value,
                 });
@@ -209,6 +239,7 @@ function EditProfile() {
                 {payload?.age ?? 0}
               </h4>
               <Slider
+                disabled={editProfile.isLoading}
                 value={payload?.age}
                 defaultValue={[1]}
                 min={1}
@@ -219,12 +250,24 @@ function EditProfile() {
             </div>
           </div>
         </div>
-        <div className="flex-grow flex justify-end items-end w-full pb-3">
+        <div className="flex-grow flex justify-between items-end w-full pb-3">
           <button
-            type="submit"
-            className="bg-secondary text-primary py-2.5 px-5 text-[0.8rem] rounded-md"
+            onClick={() => router.push("/account-details")}
+            type="button"
+            className="bg-secondary text-primary py-2.5 px-5 text-[0.8rem] rounded-sm"
           >
-            UPDATE PROFILE
+            BACK
+          </button>
+          <button
+            disabled={!!errorMessage || checkChanges() || editProfile.isLoading}
+            type="submit"
+            className="bg-secondary text-primary w-[150px] h-[43px] text-[0.8rem] rounded-sm disabled:bg-zinc-500 flex items-center justify-center"
+          >
+            {editProfile.isLoading ? (
+              <Image src={loading} width={50} alt="loading" priority />
+            ) : (
+              " UPDATE PROFILE"
+            )}
           </button>
         </div>
       </form>
