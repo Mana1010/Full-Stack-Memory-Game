@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IoIosLock } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
+
 function Levels() {
   const router = useRouter();
   const myObj = JSON.parse(localStorage.getItem("info") || "{}");
@@ -73,7 +74,9 @@ function Levels() {
             </div>
           </div>
           <button
-            onClick={() => router.push("/")}
+            onClick={() => {
+              router.push("/");
+            }}
             className="bg-[#3DA9FC] text-white py-2.5 text-lg w-[200px] rounded-md cursor-pointer"
           >
             BACK
