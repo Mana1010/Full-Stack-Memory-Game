@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { useProfileStore } from "@/utils/store/profile.store";
 import SideDesign from "@/components/SideDesign";
 import { z } from "zod";
-import { useQuery } from "react-query";
-import { baseUrl } from "@/utils/baseUrl";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 export const ignSchema = z.object({
   ign: z
@@ -87,7 +85,7 @@ function IGN() {
             type="text"
             value={ign.value as string}
             placeholder="In Game Name"
-            className="bg-transparent px-3 text-white outline-none w-full"
+            className="bg-transparent px-3 text-white outline-none w-full text-[0.8rem]"
             onChange={(e) => setIgn(e.target.value)}
           />
         </motion.div>
@@ -104,6 +102,20 @@ function IGN() {
           )}
         </div>
       </div>
+      <small
+        style={{
+          textShadow: `0 0 5px ${
+            (ign.value ? ign.value.length : 0) > 15 ? "red" : "#EBD30C"
+          }`,
+        }}
+        className={`text-[0.7rem] ${
+          (ign.value ? ign.value.length : 0) > 15
+            ? "text-red-500"
+            : "text-secondary"
+        }`}
+      >
+        {ign.value ? ign.value.length : 0}/15
+      </small>
     </motion.div>
   );
 }

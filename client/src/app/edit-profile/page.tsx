@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaMask } from "react-icons/fa";
 import loading from "../../components/images/loading.gif";
-
+import Loading from "@/components/Loading";
 interface EditProfileSchema {
   _id: string;
   ign: string;
@@ -112,7 +112,6 @@ function EditProfile() {
     });
   }
   function submitForm(e: React.FormEvent<HTMLFormElement>) {
-    alert("Hello");
     e.preventDefault();
     const checkUser = editSchema.safeParse(payload);
     const updatedData = {
@@ -154,123 +153,137 @@ function EditProfile() {
         className="sm:w-[450px] w-full relative py-2.5 px-3 h-[500px] flex flex-col items-center backdrop-blur-sm bg-transparent"
       >
         <SideDesignNoFM size={120} />
-        <div className="flex w-full justify-between items-center">
-          <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden ">
-            <Image
-              src={
-                selectedProfile?.avatar ??
-                selectedPreviewCustomProfile ??
-                getProfile.data?.profilePic?.secure_url ??
-                cards
-              }
-              alt="profile-pic"
-              fill
-              priority
-              objectFit="cover"
-              objectPosition="center"
-            />
-          </div>
-          <button
-            disabled={editProfile.isLoading}
-            onClick={() => setOpenSelectProfile()}
-            type="button"
-            className="text-sm px-4 py-2.5 text-primary bg-secondary rounded-sm flex space-x-2 items-center"
-          >
-            <span>
-              <FaMask />
-            </span>
-            <small>CHANGE AVATAR</small>
-          </button>
-        </div>
-        <div className="py-5 w-full space-y-8">
-          <div className="w-full space-y-1">
-            <div className="w-full flex justify-between items-center">
-              <label htmlFor="ign" className="text-[0.7rem] text-secondary">
-                IGN
-              </label>
-              <small
-                className={`text-[0.7rem] ${
-                  (payload?.ign ? payload.ign.length : 0) > 15
-                    ? "text-red-500"
-                    : "text-secondary"
-                }`}
-              >
-                {payload?.ign ? payload.ign.length : 0}/15
-              </small>
-            </div>
-            <input
-              disabled={editProfile.isLoading}
-              value={payload?.ign ?? ""}
-              type="text"
-              name="ign"
-              id="ign"
-              onChange={(e) => {
-                const checkUser = editSchema.safeParse({
-                  ...payload,
-                  ign: e.target.value,
-                });
-                if (checkUser.success) {
-                  setErrorMessage(null);
-                } else {
-                  setErrorMessage(checkUser.error.issues[0].message);
-                }
-                setPayload({ ...payload, ign: e.target.value });
-              }}
-              className="w-full p-2.5 space-x-2 rounded-sm bg-primary text-white outline-[#EBD30C] border-none outline-dashed outline-1 bg-transparent"
-            />
-            {errorMessage && (
-              <motion.small
-                initial={{ y: -5, opacity: 0 }}
-                animate={{ y: 0, opacity: 1, textShadow: "0 0 10px #EBD30C" }}
-                transition={{ duration: 0.1, ease: "easeIn" }}
-                className="text-[0.85rem] text-[#EBD30C]"
-              >
-                {errorMessage}
-              </motion.small>
-            )}
-          </div>
-          <div>
-            {/* <label className="text-secondary text-[0.7rem]">AGE</label> */}
-            <div className="space-y-2">
-              <h4
-                style={{ textShadow: "0 0 15px #ffe30a" }}
-                className=" text-2xl font-semibold text-[#ffe30a] text-center"
-              >
-                {payload?.age ?? 0}
-              </h4>
-              <Slider
+
+        {getProfile.isLoading ? (
+          <Loading />
+        ) : (
+          <div className="w-full h-full flex flex-col">
+            <div className="flex w-full justify-between items-center">
+              <div className="relative bg-white w-[120px] h-[120px] rounded-md overflow-hidden ">
+                <Image
+                  src={
+                    selectedProfile?.avatar ??
+                    selectedPreviewCustomProfile ??
+                    getProfile.data?.profilePic?.secure_url ??
+                    ""
+                  }
+                  alt="profile-pic"
+                  fill
+                  priority
+                  objectFit="cover"
+                  objectPosition="center"
+                />
+              </div>
+              <button
                 disabled={editProfile.isLoading}
-                value={payload?.age}
-                defaultValue={[1]}
-                min={1}
-                max={150}
-                step={1}
-                onValueChange={handleAgeChange}
-              />
+                onClick={() => setOpenSelectProfile()}
+                type="button"
+                className="text-sm px-4 py-2.5 text-primary bg-secondary rounded-sm flex space-x-2 items-center"
+              >
+                <span>
+                  <FaMask />
+                </span>
+                <small>CHANGE AVATAR</small>
+              </button>
+            </div>
+            <div className="py-5 w-full space-y-8">
+              <div className="w-full space-y-1">
+                <div className="w-full flex justify-between items-center">
+                  <label htmlFor="ign" className="text-[0.7rem] text-secondary">
+                    IGN
+                  </label>
+                  <small
+                    className={`text-[0.7rem] ${
+                      (payload?.ign ? payload.ign.length : 0) > 15
+                        ? "text-red-500"
+                        : "text-secondary"
+                    }`}
+                  >
+                    {payload?.ign ? payload.ign.length : 0}/15
+                  </small>
+                </div>
+                <input
+                  disabled={editProfile.isLoading}
+                  value={payload?.ign ?? ""}
+                  type="text"
+                  name="ign"
+                  id="ign"
+                  onChange={(e) => {
+                    const checkUser = editSchema.safeParse({
+                      ...payload,
+                      ign: e.target.value,
+                    });
+                    if (checkUser.success) {
+                      setErrorMessage(null);
+                    } else {
+                      setErrorMessage(checkUser.error.issues[0].message);
+                    }
+                    setPayload({ ...payload, ign: e.target.value });
+                  }}
+                  className="w-full p-2.5 space-x-2 rounded-sm bg-primary text-white outline-[#EBD30C] border-none outline-dashed outline-1 bg-transparent"
+                />
+                {errorMessage && (
+                  <motion.small
+                    initial={{ y: -5, opacity: 0 }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      textShadow: "0 0 10px #EBD30C",
+                    }}
+                    transition={{ duration: 0.1, ease: "easeIn" }}
+                    className="text-[0.85rem] text-[#EBD30C]"
+                  >
+                    {errorMessage}
+                  </motion.small>
+                )}
+              </div>
+              <div>
+                {/* <label className="text-secondary text-[0.7rem]">AGE</label> */}
+                <div className="space-y-2">
+                  <h4
+                    style={{ textShadow: "0 0 15px #ffe30a" }}
+                    className=" text-2xl font-semibold text-[#ffe30a] text-center"
+                  >
+                    {payload?.age ?? 0}
+                  </h4>
+                  <Slider
+                    disabled={editProfile.isLoading}
+                    value={payload?.age}
+                    defaultValue={[1]}
+                    min={1}
+                    max={150}
+                    step={1}
+                    onValueChange={handleAgeChange}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex-grow flex justify-between items-end w-full pb-3">
+              <button
+                onClick={() => router.push("/account-details")}
+                type="button"
+                className="bg-secondary text-primary py-2.5 px-5 text-[0.8rem] rounded-sm"
+              >
+                BACK
+              </button>
+              <button
+                disabled={
+                  !!errorMessage || checkChanges() || editProfile.isLoading
+                }
+                type="submit"
+                className="bg-secondary text-primary w-[150px] h-[43px] text-[0.8rem] rounded-sm disabled:bg-zinc-500 flex items-center justify-center"
+              >
+                {editProfile.isLoading ? (
+                  <Image src={loading} width={50} alt="loading" priority />
+                ) : (
+                  " UPDATE PROFILE"
+                )}
+              </button>
             </div>
           </div>
-        </div>
-        <div className="flex-grow flex justify-between items-end w-full pb-3">
-          <button
-            onClick={() => router.push("/account-details")}
-            type="button"
-            className="bg-secondary text-primary py-2.5 px-5 text-[0.8rem] rounded-sm"
-          >
-            BACK
-          </button>
-          <button
-            disabled={!!errorMessage || checkChanges() || editProfile.isLoading}
-            type="submit"
-            className="bg-secondary text-primary w-[150px] h-[43px] text-[0.8rem] rounded-sm disabled:bg-zinc-500 flex items-center justify-center"
-          >
-            {editProfile.isLoading ? (
-              <Image src={loading} width={50} alt="loading" priority />
-            ) : (
-              " UPDATE PROFILE"
-            )}
-          </button>
-        </div>
+        )}
       </form>
+
       {openSelectProfile && <ProfilePicsModal />}
     </div>
   );

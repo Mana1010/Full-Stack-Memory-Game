@@ -55,6 +55,7 @@ function ProfileSetup() {
       setIgn(response.data.message.username);
       return;
     },
+    refetchOnWindowFocus: false,
   });
   const profileMutation = useMutation({
     mutationFn: async (data: Profile) => {

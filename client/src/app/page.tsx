@@ -1,12 +1,25 @@
 "use client";
-import { useEffect, useState, useId } from "react";
 import Image from "next/image";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
 import { motion } from "framer-motion";
 import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
-
+import { useUserStore } from "@/utils/store/user.store";
+import { useRouter } from "next/navigation";
+import { Howl, Howler } from "howler";
+import bgMusic from "../resources/sound.mp3";
 export default function Home() {
+  const { isAuthenticated } = useUserStore();
+  const router = useRouter();
+  const sound = new Howl({
+    src: [bgMusic],
+  });
+  function playMe() {
+    sound.play();
+  }
+  function pauseMe() {
+    sound.pause();
+  }
   return (
     <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
       <div className={`h-full w-full relative sm:rounded-md`}>
@@ -25,6 +38,13 @@ export default function Home() {
               color: "#293133",
               boxShadow: "0 0 25px #FFE30A",
             }}
+            onClick={() =>
+              router.push(
+                isAuthenticated
+                  ? "/levels"
+                  : "/auth/login?message=You are not authenticated yet!"
+              )
+            }
             className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
           >
             PLAY
@@ -33,6 +53,7 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
+            onClick={playMe}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",
@@ -51,6 +72,7 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
+            onClick={pauseMe}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",

@@ -68,9 +68,9 @@ export const profileUpload = asyncHandler(
       }
       res.status(201).json({ message: "Success" });
     } catch (err: any) {
-      res.status(400);
-      console.log(err);
-      throw new Error(err);
+      res.status(400).json({
+        message: err.code === 11000 ? "IGN already exist" : err,
+      });
     }
   }
 );
