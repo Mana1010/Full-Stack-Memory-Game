@@ -6,16 +6,24 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
       type: String,
-      default: "",
     },
     password: {
       required: true,
       type: String,
-      default: "",
     },
     isOldUser: {
       type: Boolean,
       default: false,
+    },
+    setting: {
+      playSound: {
+        type: Boolean,
+        default: true,
+      },
+      selectMusic: {
+        type: String,
+        default: "",
+      },
     },
   },
   {

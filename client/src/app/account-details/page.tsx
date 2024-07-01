@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import ImagePreview from "@/components/ImagePreview";
 import { useModalStore } from "@/utils/store/modal.store";
+import { IoReturnDownBack } from "react-icons/io5";
 export interface Profile {
   _id: string;
   age: number;
@@ -147,76 +148,90 @@ function AccountDetails() {
                 <span>EDIT PROFILE</span>
               </button>
             </div>
-            <div className="pl-2 flex flex-col pt-3 justify-center lg:justify-evenly items-center lg:flex-row h-full lg:space-x-3">
-              <div className="space-y-2 flex flex-col">
-                <strong className="text-secondary font-bold text-[0.8rem]">
-                  IGN
-                </strong>
-                <div className="bg-primary text-white px-1.5 py-2 rounded-md w-[300px] break-all">
-                  <span className="text-[0.69rem]">
-                    {getAccountDetails.data?.profileId.ign}
-                  </span>
-                </div>
-
-                <div>
+            <div className="pl-2 flex flex-col pt-3 justify-center items-center h-full">
+              <div className="flex justify-center items-center w-full md:space-x-3 lg:flex-row flex-col">
+                <div className="space-y-2 flex flex-col">
                   <strong className="text-secondary font-bold text-[0.8rem]">
-                    AGE
-                  </strong>
-                  <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
-                    <span className="text-[0.69rem]">
-                      {getAccountDetails.data?.profileId.age}
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <strong className="text-secondary font-bold text-[0.8rem]">
-                    GENDER
+                    IGN
                   </strong>
                   <div className="bg-primary text-white px-1.5 py-2 rounded-md w-[300px] break-all">
                     <span className="text-[0.69rem]">
-                      {getAccountDetails.data?.profileId?.gender.toUpperCase()}
+                      {getAccountDetails.data?.profileId.ign}
                     </span>
                   </div>
-                </div>
 
-                <div>
-                  <strong className="text-secondary font-bold text-[0.8rem]">
-                    UPDATED AT
-                  </strong>
-                  <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
-                    <span className="text-[0.69rem]">
-                      {new Date(
-                        getAccountDetails.data?.profileId.updatedAt ?? 0
-                      ).toLocaleString()}
-                    </span>
+                  <div>
+                    <strong className="text-secondary font-bold text-[0.8rem]">
+                      AGE
+                    </strong>
+                    <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
+                      <span className="text-[0.69rem]">
+                        {getAccountDetails.data?.profileId.age}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong className="text-secondary font-bold text-[0.8rem]">
+                      GENDER
+                    </strong>
+                    <div className="bg-primary text-white px-1.5 py-2 rounded-md w-[300px] break-all">
+                      <span className="text-[0.69rem]">
+                        {getAccountDetails.data?.profileId?.gender.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong className="text-secondary font-bold text-[0.8rem]">
+                      UPDATED AT
+                    </strong>
+                    <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
+                      <span className="text-[0.69rem]">
+                        {new Date(
+                          getAccountDetails.data?.profileId.updatedAt ?? 0
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2 flex flex-col">
+                  <div>
+                    <strong className="text-secondary font-bold text-[0.8rem]">
+                      USERNAME
+                    </strong>
+                    <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
+                      <span className="text-[0.69rem]">
+                        {getAccountDetails.data?.userId.username}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong className="text-secondary font-bold text-[0.8rem]">
+                      ACCOUNT CREATED AT
+                    </strong>
+                    <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
+                      <span className="text-[0.69rem]">
+                        {new Date(
+                          getAccountDetails.data?.userId.createdAt ?? 0
+                        ).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="space-y-2 flex flex-col">
-                <div>
-                  <strong className="text-secondary font-bold text-[0.8rem]">
-                    USERNAME
-                  </strong>
-                  <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
-                    <span className="text-[0.69rem]">
-                      {getAccountDetails.data?.userId.username}
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <strong className="text-secondary font-bold text-[0.8rem]">
-                    ACCOUNT CREATED AT
-                  </strong>
-                  <div className="bg-primary text-white px-1.5 py-2 rounded-md  w-[300px] break-all">
-                    <span className="text-[0.69rem]">
-                      {new Date(
-                        getAccountDetails.data?.userId.createdAt ?? 0
-                      ).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
+              <div className="flex-grow flex items-center justify-center w-full">
+                {" "}
+                <button
+                  onClick={() => router.back()}
+                  className="bg-secondary text-primary px-5 py-2.5 rounded-sm flex items-center space-x-2"
+                >
+                  <span>
+                    <IoReturnDownBack />
+                  </span>
+                  <span>BACK</span>
+                </button>
               </div>
             </div>
           </div>

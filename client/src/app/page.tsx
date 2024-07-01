@@ -3,11 +3,14 @@ import Image from "next/image";
 import logo from "../components/images/logo.png";
 import icon from "../components/images/icon.png";
 import { motion } from "framer-motion";
-import { MdLeaderboard, MdRoundaboutRight, MdGamepad } from "react-icons/md";
+import {
+  MdLeaderboard,
+  MdRoundaboutRight,
+  MdGamepad,
+  MdOutlineSettings,
+} from "react-icons/md";
 import { useUserStore } from "@/utils/store/user.store";
 import { useRouter } from "next/navigation";
-import { Howl, Howler } from "howler";
-import { useEffect } from "react";
 import bgMusic from "../resources/bgSound.mp3";
 import { useAudioStore } from "@/utils/store/audio.store";
 export default function Home() {
@@ -78,6 +81,25 @@ export default function Home() {
             ABOUT
             <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
               <MdRoundaboutRight />
+            </motion.span>
+          </motion.button>
+          <motion.button
+            onClick={() => router.push("/setting")}
+            whileHover={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            whileTap={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
+          >
+            SETTING
+            <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
+              <MdOutlineSettings />
             </motion.span>
           </motion.button>
         </div>
