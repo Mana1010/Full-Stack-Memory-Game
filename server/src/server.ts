@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { router as authRouter } from "./routes/auth.route";
 import { router as userRouter } from "./routes/user.route";
+import { router as featureRouter } from "./routes/feature.route";
 import { errorHandle } from "./middleware/error.handling";
 import { newAccessToken } from "./controller/auth.controller";
 import { v2 as cloudinary } from "cloudinary";
@@ -30,6 +31,7 @@ app.use(
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/feature", featureRouter);
 app.get("/", newAccessToken);
 app.use(errorHandle);
 async function connectDb() {

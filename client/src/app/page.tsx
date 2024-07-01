@@ -48,6 +48,7 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
+            onClick={() => router.push("/leaderboard")}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",

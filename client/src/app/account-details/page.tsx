@@ -18,6 +18,7 @@ import SideDesignNoFM from "@/components/SideDesignNoFM";
 import ImagePreview from "@/components/ImagePreview";
 import { useModalStore } from "@/utils/store/modal.store";
 import { IoReturnDownBack } from "react-icons/io5";
+
 export interface Profile {
   _id: string;
   age: number;
@@ -63,11 +64,6 @@ function AccountDetails() {
   });
   const formatNum = new Intl.NumberFormat("en-US").format(
     getAccountDetails.data?.bestScore ?? 0
-  );
-  console.log(
-    new Date(
-      getAccountDetails.data?.profileId.updatedAt ?? 0
-    ).toLocaleTimeString()
   );
   return (
     <div className="py-5 flex flex-col w-full justify-center h-full items-center">

@@ -34,3 +34,7 @@
   backface-visibility: hidden;
   border-radius: 4px;
 }
+.leaderboard-bg {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url("../components/images/bg.png");
+}

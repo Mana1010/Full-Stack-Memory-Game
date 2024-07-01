@@ -48,7 +48,6 @@ export const profileUpload = asyncHandler(
       });
       const createLeaderBoard = await Leaderboard.create({
         bestScore: 0,
-        username: req.user?.username,
       });
       const getUser = await User.findById(req.user?._id);
       if (!getUser) {
@@ -127,7 +126,6 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("User not found");
   }
   if (getProfile.profilePic && (req.file || file !== "null")) {
-    console.log("Running hehe");
     let upload;
     if (req.file) {
       upload = await uploadFileCloudinary(req.file.path);
