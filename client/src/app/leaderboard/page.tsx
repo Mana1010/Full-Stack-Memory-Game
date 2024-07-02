@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import leaderboard from "../../components/images/titles/leaderboard.png";
 import leaderboardImg from "../../components/images/leaderboard-image.png";
 import Image from "next/image";
@@ -8,16 +8,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/utils/baseUrl";
 import { Profile } from "../account-details/page";
-
-// interface Leaderboard {
-//   message: {
-//     profileId: Profile;
-//     bestScore: number;
-//     _id: string;
-//   };
-// }
+import { useModalStore } from "@/utils/store/modal.store";
+import ImagePreviewPlayers from "@/components/ImagePreviewPlayers";
 function Leaderboard() {
   const router = useRouter();
+  const { openImagePreviewPlayer, setOpenImagePreviewPlayer } = useModalStore();
+  const [profileId, setProfileId] = useState<string | null>(null);
   const getAllPlayers = useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
@@ -32,10 +28,12 @@ function Leaderboard() {
       );
       return response.data.message;
     },
+    refetchOnWindowFocus: false,
   });
-  console.log(getAllPlayers.data);
+  // console.log(getAllPlayers.data?.players[0]?.userId._id);
+  // console.log(getAllPlayers.data?.userId === getAllPlayers.data?.players[3]?.userId._id);
   return (
-    <div className="py-2.5 flex flex-col w-full h-full">
+    <div className="py-2.5 flex flex-col w-full h-full relative">
       <header className="md:px-[5rem] px-5">
         <Image src={leaderboard} alt="leaderboard" priority />
       </header>
@@ -75,45 +73,83 @@ function Leaderboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {getAllPlayers.data?.map((player: any, index: number) => {
-                    const updatedIndex = index + 1;
-                    return (
-                      <tr key={player._id} className="space-y-2">
-                        <td
-                          style={{ textShadow: "0 0 15px #FFE30A" }}
-                          className="text-center text-secondary text-[0.8rem]"
+                  {getAllPlayers.data?.players?.map(
+                    (player: any, index: number) => {
+                      const updatedIndex = index + 1;
+                      const userId = getAllPlayers.data?.userId;
+                      return (
+                        <tr
+                          style={{
+                            boxShadow:
+                              player?.userId._id === userId
+                                ? "0 0 10px #FFE30A"
+                                : "none",
+                          }}
+                          key={player._id}
+                          className={` ${
+                            player?.userId._id === userId && "bg-secondary/85"
+                          }`}
                         >
-                          {updatedIndex}
-                        </td>
-                        <td className="flex items-center space-x-3 px-3">
-                          <div className="w-[40px] h-[40px]  relative ">
-                            <Image
-                              src={player.profileId.profilePic.secure_url}
-                              alt="profile-pic"
-                              fill
-                              objectFit="cover"
-                              objectPosition="center"
-                              priority
-                              className="rounded-full ring-1 ring-zinc-500"
-                            />
-                          </div>
-                          <span
-                            style={{ textShadow: "0 0 15px white" }}
-                            className="text-[0.9rem] text-white"
+                          <td
+                            style={{ textShadow: "0 0 15px #FFE30A" }}
+                            className={`text-[0.8rem] text-center  ${
+                              player?.userId._id === userId
+                                ? "text-primary"
+                                : "text-white"
+                            }`}
                           >
-                            {player.profileId.ign}
-                          </span>
-                        </td>
-                        <td
-                          style={{ textShadow: "0 0 15px #FFE30A" }}
-                          className="text-center text-[0.8rem] text-secondary"
-                        >
-                          {player.bestScore}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                            {updatedIndex}
+                          </td>
+                          <td className="flex items-center space-x-3 px-3 py-1">
+                            <button
+                              onClick={() => {
+                                setOpenImagePreviewPlayer();
+                                setProfileId(player.userId._id);
+                              }}
+                              className="w-[40px] h-[40px] relative"
+                            >
+                              <Image
+                                src={player.profileId.profilePic.secure_url}
+                                alt="profile-pic"
+                                fill
+                                sizes="100%"
+                                priority
+                                className="rounded-full ring-1 ring-zinc-500 object-cover object-center"
+                              />
+                            </button>
+                            <span
+                              style={{ textShadow: "0 0 15px white" }}
+                              className={`text-[0.9rem]  ${
+                                player?.userId._id === userId
+                                  ? "text-primary"
+                                  : "text-white"
+                              }`}
+                            >
+                              {player.profileId.ign}
+                            </span>
+                          </td>
+                          <td
+                            style={{ textShadow: "0 0 15px #FFE30A" }}
+                            className={`text-[0.8rem] text-center  ${
+                              player?.userId._id === userId
+                                ? "text-primary"
+                                : "text-white"
+                            }`}
+                          >
+                            {player.bestScore}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
+                {/* <tfoot className="absolute bottom-0 py-3 left-0 right-0 w-full">
+                  <colgroup>
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "80%" }} />
+                    <col style={{ width: "10%" }} />
+                  </colgroup>
+                </tfoot> */}
               </table>
             </div>
           </div>
@@ -122,6 +158,7 @@ function Leaderboard() {
           <Image src={leaderboardImg} alt="leaderboardImg" priority />
         </div>
       </div>
+      {openImagePreviewPlayer && <ImagePreviewPlayers id={profileId} />}
     </div>
   );
 }
