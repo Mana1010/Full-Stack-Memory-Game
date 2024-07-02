@@ -22,15 +22,21 @@ function ImagePreviewPlayers({ id }: { id: string | null }) {
         </button>
       </div>
       <div className="flex-grow flex justify-center items-center w-full flex-col">
-        <h1>
+        <div>
           <span
             style={{ textShadow: "0 0 15px #FFE30A" }}
             className="font-bold text-secondary text-xl"
           >
-            TRISTAN&apos;
+            {getPlayerProfile.profileId?.ign}&apos;s
           </span>{" "}
-          Picture
-        </h1>
+          <span
+            style={{ textShadow: "0 0 15px white" }}
+            className="text-white text-lg"
+          >
+            {" "}
+            Profile
+          </span>
+        </div>
         <div className="flex-grow flex justify-center items-center w-full">
           <Image
             src={getPlayerProfile.profileId?.profilePic?.secure_url ?? ""}
