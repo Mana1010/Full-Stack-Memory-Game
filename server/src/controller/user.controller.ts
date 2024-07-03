@@ -99,8 +99,16 @@ export const getAccountDetails = asyncHandler(
       res.status(401);
       throw new Error("Unauthorized");
     }
-
-    res.status(200).json({ message: getAccountDetails });
+    const getAllPlayers = await Leaderboard.find()
+      .sort({ bestScore: -1 })
+      .limit(50)
+      .select(["bestScore", "userId"]);
+    const getIndex = getAllPlayers.findIndex((player) =>
+      player.userId?.equals(req.user?._id)
+    ); //To determine and display which rank the user is placed.
+    res
+      .status(200)
+      .json({ message: { ...getAccountDetails, rank: getIndex + 1 } });
   }
 );
 export const showEditProfile = asyncHandler(

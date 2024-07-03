@@ -4,8 +4,12 @@ import { Response, Request } from "express";
 export const getLeaderboard = asyncHandler(
   async (req: Request, res: Response) => {
     const getPlayer = await Leaderboard.find()
-      .populate(["profileId", "userId"])
-      .sort("-bestScore");
+      .populate({ path: "profileId", select: ["profilePic.secure_url", "ign"] })
+      .populate({ path: "userId", select: "_id" })
+      .sort({ bestScore: -1 })
+      .limit(50)
+      .lean()
+      .select("-username");
     if (!getPlayer) {
       res.status(200).json({ message: "No Player yet" });
       return;

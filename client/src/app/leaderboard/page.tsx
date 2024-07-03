@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import leaderboard from "../../components/images/titles/leaderboard.png";
 import leaderboardImg from "../../components/images/leaderboard-image.png";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useQuery, UseQueryResult } from "react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,9 @@ import { baseUrl } from "@/utils/baseUrl";
 import { Profile } from "../account-details/page";
 import { useModalStore } from "@/utils/store/modal.store";
 import ImagePreviewPlayers from "@/components/ImagePreviewPlayers";
+import firstPlace from "../../components/images/trophies/1st-prize.png";
+import secondPlace from "../../components/images/trophies/2nd-place.png";
+import thirdPlace from "../../components/images/trophies/3rd-place.png";
 function Leaderboard() {
   const router = useRouter();
   const { openImagePreviewPlayer, setOpenImagePreviewPlayer } = useModalStore();
@@ -30,8 +33,8 @@ function Leaderboard() {
     },
     refetchOnWindowFocus: false,
   });
-  // console.log(getAllPlayers.data?.players[0]?.userId._id);
-  // console.log(getAllPlayers.data?.userId === getAllPlayers.data?.players[3]?.userId._id);
+  console.log(getAllPlayers.data);
+  const trophies = [firstPlace, secondPlace, thirdPlace];
   return (
     <div className="py-2.5 flex flex-col w-full h-full relative">
       <header className="md:px-[5rem] px-5">
@@ -42,7 +45,7 @@ function Leaderboard() {
           <div className="leaderboard-bg w-[400px] rounded-md h-[500px] relative">
             <div
               style={{ backdropFilter: "blur(1.5px)" }}
-              className="absolute inset-0 h-full w-full px-3 py-2 overflow-y-auto"
+              className="leaderboard-scroll-design absolute inset-0 h-full w-full px-3 py-2 overflow-y-auto"
             >
               <table className="w-full">
                 <colgroup>
@@ -90,15 +93,41 @@ function Leaderboard() {
                             player?.userId._id === userId && "bg-secondary/85"
                           }`}
                         >
-                          <td
-                            style={{ textShadow: "0 0 15px #FFE30A" }}
-                            className={`text-[0.8rem] text-center  ${
-                              player?.userId._id === userId
-                                ? "text-primary"
-                                : "text-white"
-                            }`}
-                          >
-                            {updatedIndex}
+                          <td className="text-center">
+                            {updatedIndex <= 3 ? (
+                              trophies.map(
+                                (trophy: StaticImageData, index: number) => {
+                                  const updatedIndexImage = index + 1;
+                                  if (updatedIndexImage === updatedIndex) {
+                                    return (
+                                      <div
+                                        key={index}
+                                        className="flex justify-center items-center"
+                                      >
+                                        <Image
+                                          src={trophy}
+                                          alt="trophy"
+                                          width={30}
+                                          priority
+                                        />
+                                      </div>
+                                    );
+                                  }
+                                }
+                              )
+                            ) : (
+                              <small
+                                style={{ textShadow: "0 0 15px #FFE30A" }}
+                                className={`text-[0.8rem] ${
+                                  player?.userId._id === userId
+                                    ? "text-primary"
+                                    : "text-secondary"
+                                }`}
+                              >
+                                {" "}
+                                {updatedIndex}
+                              </small>
+                            )}
                           </td>
                           <td className="flex items-center space-x-3 px-3 py-1">
                             <button
@@ -129,7 +158,7 @@ function Leaderboard() {
                             </span>
                           </td>
                           <td
-                            style={{ textShadow: "0 0 15px #FFE30A" }}
+                            style={{ textShadow: "0 0 15px white" }}
                             className={`text-[0.8rem] text-center  ${
                               player?.userId._id === userId
                                 ? "text-primary"

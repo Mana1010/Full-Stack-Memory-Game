@@ -38,3 +38,14 @@
   background: linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     url("../components/images/bg.png");
 }
+
+.leaderboard-scroll-design::-webkit-scrollbar {
+  width: 6px;
+  opacity: 0.3;
+  box-shadow: " 0 0 15px #ffe30a";
+}
+
+.leaderboard-scroll-design::-webkit-scrollbar-thumb {
+  background-color: #282e31;
+  border-radius: 10px;
+}

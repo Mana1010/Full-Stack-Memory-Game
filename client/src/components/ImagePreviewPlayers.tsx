@@ -27,7 +27,7 @@ function ImagePreviewPlayers({ id }: { id: string | null }) {
             style={{ textShadow: "0 0 15px #FFE30A" }}
             className="font-bold text-secondary text-xl"
           >
-            {getPlayerProfile.profileId?.ign}&apos;s
+            {getPlayerProfile?.profileId?.ign}&apos;s
           </span>{" "}
           <span
             style={{ textShadow: "0 0 15px white" }}
@@ -39,7 +39,7 @@ function ImagePreviewPlayers({ id }: { id: string | null }) {
         </div>
         <div className="flex-grow flex justify-center items-center w-full">
           <Image
-            src={getPlayerProfile.profileId?.profilePic?.secure_url ?? ""}
+            src={getPlayerProfile?.profileId?.profilePic?.secure_url ?? ""}
             alt="profile-pic"
             priority
             width={500}

@@ -42,6 +42,7 @@ interface AccountDetails {
   _id: string;
   profileId: Profile;
   userId: User;
+  rank: number;
 }
 function AccountDetails() {
   const axiosInterceptor = useAxiosInterceptor();
@@ -65,6 +66,7 @@ function AccountDetails() {
   const formatNum = new Intl.NumberFormat("en-US").format(
     getAccountDetails.data?.bestScore ?? 0
   );
+
   return (
     <div className="py-5 flex flex-col w-full justify-center h-full items-center">
       <h2
@@ -111,7 +113,7 @@ function AccountDetails() {
                         width={20}
                         priority
                       />
-                      <span>5</span>
+                      <span>{getAccountDetails.data?.rank}</span>
                     </div>
                     <div className="h-[30px] w-[210px] flex items-center space-x-2 p-2 bg-primary text-secondary rounded-lg text-[0.7rem]">
                       <Image
@@ -220,7 +222,7 @@ function AccountDetails() {
               <div className="flex-grow flex items-center justify-center w-full">
                 {" "}
                 <button
-                  onClick={() => router.back()}
+                  onClick={() => router.push("/")}
                   className="bg-secondary text-primary px-5 py-2.5 rounded-sm flex items-center space-x-2"
                 >
                   <span>
