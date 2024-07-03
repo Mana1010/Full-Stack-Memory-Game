@@ -14,7 +14,11 @@ const sound = new Howl({
 });
 
 const store = () => ({
-  playSound: () => sound.play(),
+  playSound: () => {
+    if (!sound.playing()) {
+      sound.play();
+    }
+  },
   pauseSound: () => sound.pause(),
   stopSound: () => sound.stop(),
 });

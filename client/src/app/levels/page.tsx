@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IoIosLock } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
-
+import { useAudioStore } from "@/utils/store/audio.store";
 function Levels() {
+  const { stopSound } = useAudioStore();
   const router = useRouter();
-  const myObj = JSON.parse(localStorage.getItem("info") || "{}");
   const levels = [
     {
       difficulty: "EASY",
@@ -36,7 +36,7 @@ function Levels() {
       >
         <header className="w-full flex justify-between items-center py-3 px-3">
           <span className="text-white font-semibold text-[1.3rem] p-1 rounded-md">
-            {myObj.name}
+            Helo
           </span>
           <button className="px-2.5 py-1.5 text-[0.93rem] bg-[#3da9fc] rounded-md text-white">
             RECORDS
@@ -75,6 +75,7 @@ function Levels() {
           </div>
           <button
             onClick={() => {
+              stopSound();
               router.push("/");
             }}
             className="bg-[#3DA9FC] text-white py-2.5 text-lg w-[200px] rounded-md cursor-pointer"

@@ -75,16 +75,28 @@ export const profileUpload = asyncHandler(
 );
 
 export const getProfile = asyncHandler(async (req: Request, res: Response) => {
-  const getProfile = await Profile.findOne({
+  const getProfile = await Leaderboard.findOne({
     userId: req.user?._id,
   })
+    .populate({
+      path: "profileId",
+      select: ["profilePic.secure_url", "ign"],
+    })
     .select(["-__v", "-updatedAt"])
     .lean();
   if (!getProfile) {
-    res.status(400);
-    throw new Error("User is not defined yet");
+    res.status(404);
+    throw new Error("User not found");
   }
-  res.status(200).json({ message: getProfile });
+  const getAllPlayers = await Leaderboard.find()
+    .sort({ bestScore: -1 })
+    .limit(50)
+    .select(["userId"]);
+  const getIndex = getAllPlayers.findIndex((player) =>
+    player.userId?.equals(req.user?._id)
+  );
+  console.log(getIndex);
+  res.status(200).json({ message: { ...getProfile, rank: getIndex + 1 } });
 });
 export const getAccountDetails = asyncHandler(
   async (req: Request, res: Response) => {
@@ -138,7 +150,6 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
     if (req.file) {
       upload = await uploadFileCloudinary(req.file.path);
     } else {
-      console.log("Running the randomIcon");
       const randomIcon = path.join(
         __dirname,
         "..",

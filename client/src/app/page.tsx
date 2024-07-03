@@ -17,6 +17,11 @@ export default function Home() {
   const { playSound } = useAudioStore();
   const { isAuthenticated } = useUserStore();
   const router = useRouter();
+
+  function enterGame() {
+    router.push("/levels");
+    playSound();
+  }
   return (
     <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
       <div className={`h-full w-full relative sm:rounded-md`}>
@@ -37,7 +42,7 @@ export default function Home() {
             }}
             onClick={() => {
               isAuthenticated
-                ? router.push("/levels")
+                ? enterGame()
                 : router.push("/auth/login?message=You have not log in yet!");
             }}
             className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"

@@ -24,7 +24,8 @@ const schema = z
   .object({
     username: string()
       .min(1, "This field is required")
-      .max(15, "The username you entered is too long."),
+      .max(15, "The username you entered is too long.")
+      .regex(/^\w$/, "Don't put space"),
     password: string()
       .min(1, "This field is required")
       .min(7, "Password must be at least 7 characters long."),

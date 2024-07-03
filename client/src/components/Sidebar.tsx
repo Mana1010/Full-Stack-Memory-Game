@@ -25,10 +25,12 @@ import { IoIosLogOut } from "react-icons/io";
 import Loading from "./Loading";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import trophyTopPlace from "../components/images/trophies/top-star-trophy.png";
+import totalScoreStar from "../components/images/trophies/total-score-star.png";
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, setIsAuthenticated } = useUserStore();
+  const { isAuthenticated } = useUserStore();
   const axiosInterceptor = useAxiosInterceptor();
   // const [openSidebar, setOpenSidebar] = useState(() => {
   //   const storedValue = localStorage.getItem("openSidebar");
@@ -38,11 +40,9 @@ function Sidebar() {
   const {
     openAuthMenu,
     openDevSocial,
-    openEditModal,
     openSidebar,
     setOpenAuthMenu,
     setOpenDevSocial,
-    setOpenEditModal,
     setOpenSidebar,
   } = useModalStore();
   const navAuth = [
@@ -96,6 +96,7 @@ function Sidebar() {
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
   });
+
   const queryClient = useQueryClient();
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -112,7 +113,6 @@ function Sidebar() {
       return response.data;
     },
     onSuccess: (data) => {
-      getUser.refetch();
       queryClient.invalidateQueries();
       toast.success(data.message);
       localStorage.removeItem("token");
@@ -132,8 +132,8 @@ function Sidebar() {
   };
   const formSideDesignWidthVariants = {
     visible: {
-      boxShadow: openEditModal ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
-      width: openEditModal ? "100%" : "20px",
+      boxShadow: "0 0 10px #FFE30A",
+      width: "20px",
       transition: {
         duration: 0.7,
         ease: "easeOut",
@@ -142,8 +142,8 @@ function Sidebar() {
   };
   const formSideDesignHeightVariants = {
     visible: {
-      boxShadow: openEditModal ? "0 0 25px #FFE30A" : "0 0 10px #FFE30A",
-      height: openEditModal ? "100%" : "20px",
+      boxShadow: "0 0 10px #FFE30A",
+      height: "20px",
       transition: {
         duration: 0.7,
         ease: "easeOut",
@@ -189,7 +189,9 @@ function Sidebar() {
                   <div className="space-y-2 py-5 px-2">
                     <div
                       className={`flex ${
-                        openSidebar ? "justify-between" : "justify-center"
+                        openSidebar
+                          ? "justify-between space-x-2"
+                          : "justify-center"
                       } items-center spce-x-2`}
                     >
                       <div
@@ -200,8 +202,8 @@ function Sidebar() {
                       >
                         <Image
                           src={
-                            getUser.data?.profilePic?.secure_url &&
-                            getUser.data?.profilePic.secure_url
+                            getUser.data?.profileId?.profilePic?.secure_url &&
+                            getUser.data?.profileId?.profilePic.secure_url
                           }
                           width={150}
                           height={150}
@@ -227,16 +229,44 @@ function Sidebar() {
 
                       {/* For the records */}
                       <div
-                        className={`w-full flex justify-center ${
+                        className={`w-full flex justify-center flex-col space-y-4 ${
                           !openSidebar && "hidden"
                         }`}
                       >
-                        <Image
+                        {/* <Image
                           src={firstTop}
                           alt="first-top"
                           width={70}
                           priority
-                        />
+                        /> */}
+                        <div className="flex space-x-2 items-center">
+                          <Image
+                            width={20}
+                            src={trophyTopPlace}
+                            alt="rank"
+                            priority
+                          />
+                          <small
+                            style={{ textShadow: "0 0 15px #FFE30A" }}
+                            className="text-secondary"
+                          >
+                            {getUser.data.rank}
+                          </small>
+                        </div>
+                        <div className="flex space-x-2 items-center">
+                          <Image
+                            width={20}
+                            src={totalScoreStar}
+                            alt="score-star"
+                            priority
+                          />
+                          <small
+                            style={{ textShadow: "0 0 15px #FFE30A" }}
+                            className="text-secondary"
+                          >
+                            {getUser.data.bestScore}
+                          </small>
+                        </div>
                       </div>
                     </div>
                     <div
@@ -249,7 +279,7 @@ function Sidebar() {
                         style={{ textShadow: "0 0 10px #FFE30A" }}
                         className="text-secondary"
                       >
-                        {getUser.data?.ign}
+                        {getUser.data?.profileId?.ign}
                       </h5>
                     </div>
                   </div>

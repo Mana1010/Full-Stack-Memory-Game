@@ -1,16 +1,12 @@
 "use client";
 import { baseUrl } from "@/utils/baseUrl";
-import axios from "axios";
 import React, { useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
-import icon from "../../components/images/vampire.png";
 import Image from "next/image";
-import cards from "../../components/images/cards.png";
 import { MdOutlineEditNote } from "react-icons/md";
 import trophyTopPlace from "../../components/images/trophies/top-star-trophy.png";
 import totalScoreStar from "../../components/images/trophies/total-score-star.png";
 import userIdIcon from "../../components/images/face-recognition.png";
-import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";

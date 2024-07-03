@@ -8,8 +8,8 @@ export const getLeaderboard = asyncHandler(
       .populate({ path: "userId", select: "_id" })
       .sort({ bestScore: -1 })
       .limit(50)
-      .lean()
-      .select("-username");
+      .select("-username")
+      .lean();
     if (!getPlayer) {
       res.status(200).json({ message: "No Player yet" });
       return;
