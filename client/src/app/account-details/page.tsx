@@ -14,6 +14,7 @@ import SideDesignNoFM from "@/components/SideDesignNoFM";
 import ImagePreview from "@/components/ImagePreview";
 import { useModalStore } from "@/utils/store/modal.store";
 import { IoReturnDownBack } from "react-icons/io5";
+import { useUserStore } from "@/utils/store/user.store";
 
 export interface Profile {
   _id: string;
@@ -42,6 +43,7 @@ interface AccountDetails {
 }
 function AccountDetails() {
   const axiosInterceptor = useAxiosInterceptor();
+  const { isAuthenticated } = useUserStore();
   const { openImagePreview, setOpenImagePreview } = useModalStore();
   const router = useRouter();
   const getAccountDetails: UseQueryResult<AccountDetails | null> = useQuery({
@@ -58,6 +60,7 @@ function AccountDetails() {
       );
       return response.data.message;
     },
+    enabled: isAuthenticated != null,
   });
   const formatNum = new Intl.NumberFormat("en-US").format(
     getAccountDetails.data?.bestScore ?? 0

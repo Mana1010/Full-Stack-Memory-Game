@@ -136,7 +136,7 @@ export const verifyOldUser = asyncHandler(
     const findUser = await User.findById(req.user._id).select(
       "username isOldUser"
     );
-
+    console.log(findUser);
     if (!findUser) {
       res.status(401);
       throw new Error("Unathorized");
@@ -147,7 +147,6 @@ export const verifyOldUser = asyncHandler(
 );
 //For logout
 export const logOut = asyncHandler(async (req: Request, res: Response) => {
-  // res.clearCookie("refreshToken");
   const refreshToken = req.cookies?.refresh_token;
   if (!refreshToken) {
     res.status(403);

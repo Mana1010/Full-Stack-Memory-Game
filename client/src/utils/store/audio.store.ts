@@ -9,7 +9,7 @@ interface AudioStore {
 }
 const sound = new Howl({
   src: [bgSound],
-  volume: 0.3,
+  volume: 0,
   loop: true,
 });
 

@@ -113,6 +113,7 @@ function Sidebar() {
       return response.data;
     },
     onSuccess: (data) => {
+      getUser.refetch();
       queryClient.invalidateQueries();
       toast.success(data.message);
       localStorage.removeItem("token");
@@ -173,7 +174,7 @@ function Sidebar() {
             openSidebar ? "flex" : "hidden"
           }`}
         >
-          <header className={`pr-3 `}>
+          <header className={`pr-3`}>
             <Link href={"/"}>
               {" "}
               <Image src={icon} alt="icon" width={130} priority />

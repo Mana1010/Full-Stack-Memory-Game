@@ -25,7 +25,7 @@ const schema = z
     username: string()
       .min(1, "This field is required")
       .max(15, "The username you entered is too long.")
-      .regex(/^\w$/, "Don't put space"),
+      .regex(/^\w+$/, "Don't put space"),
     password: string()
       .min(1, "This field is required")
       .min(7, "Password must be at least 7 characters long."),
@@ -272,9 +272,7 @@ function Signup() {
             <p className="text-white">
               Already have an account?{" "}
               <span className="text-[#EBD30C] underline-offset-2 underline">
-                <Link href={"/auth/login"} className="">
-                  login here
-                </Link>
+                <Link href={"/auth/login"}>login here</Link>
               </span>
             </p>
           </div>

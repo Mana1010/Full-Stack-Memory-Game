@@ -54,6 +54,11 @@ export const profileUpload = asyncHandler(
         res.status(401);
         throw new Error("Unauthorized");
       }
+      getUser.levels = [
+        { level: "EASY", isUnlock: true },
+        { level: "MEDIUM", isUnlock: false },
+        { level: "HARD", isUnlock: false },
+      ] as any;
       getUser.isOldUser = !getUser.isOldUser;
       createProfile.userId = req.user?._id;
       createLeaderBoard.userId = req.user?._id;

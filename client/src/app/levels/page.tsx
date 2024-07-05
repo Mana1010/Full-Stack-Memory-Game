@@ -2,88 +2,85 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { IoIosLock } from "react-icons/io";
-import { FaStar } from "react-icons/fa6";
 import { useAudioStore } from "@/utils/store/audio.store";
+import levelsTitle from "../../components/images/titles/levels.png";
+import { FaShuffle } from "react-icons/fa6";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "@/utils/baseUrl";
+import { motion } from "framer-motion";
+import Loading from "@/components/Loading";
 function Levels() {
-  const { stopSound } = useAudioStore();
+  const { stopSound, playSound } = useAudioStore();
   const router = useRouter();
-  const levels = [
-    {
-      difficulty: "EASY",
-      score: null,
-      color: "#81F612",
-      stars: [4],
+  const getLevel = useQuery({
+    queryKey: ["level"],
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}/feature/levels`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+      return response.data.message;
     },
-    {
-      difficulty: "MEDIUM",
-      score: null,
-      color: "#FEC81D",
-      stars: [4, 12],
-    },
-    {
-      difficulty: "HARD",
-      score: null,
-      color: "#F0442E",
-      stars: [4, 12, 20],
-    },
-  ];
+  });
+  useEffect(() => {
+    playSound();
+    return () => stopSound();
+  }, [playSound, stopSound]);
   return (
-    <main className="h-screen w-full flex items-center justify-center bg-[#fffffe] sm:py-7 py-0">
-      <div
-        id="bg"
-        className={`h-full items-center flex-col space-y-3 flex sm:w-[350px] w-full sm:rounded-md`}
-      >
-        <header className="w-full flex justify-between items-center py-3 px-3">
-          <span className="text-white font-semibold text-[1.3rem] p-1 rounded-md">
-            Helo
-          </span>
-          <button className="px-2.5 py-1.5 text-[0.93rem] bg-[#3da9fc] rounded-md text-white">
-            RECORDS
-          </button>
-        </header>
-        <div className="w-full flex flex-col items-center justify-center">
-          <div className="py-2 space-y-3 w-full h-[300px] flex flex-col justify-center items-center">
-            {levels.map((level, index) => (
-              <div key={level.difficulty} className="relative">
-                <button
-                  onClick={() =>
-                    router.push(`/levels/${level.difficulty.toLowerCase()}`)
-                  }
-                  style={{
-                    color: level.color,
-                  }}
-                  className={`w-[200px] py-3 rounded-md bg-[#293133] relative`}
-                >
-                  {level.difficulty}
-                </button>
-                {level.stars.map((star, index) => (
-                  <span
-                    style={{ left: `${star}px` }}
-                    id="star"
-                    key={index}
-                    className="absolute top-[-10px] text-[#FFFF00]"
-                  >
-                    <FaStar />
-                  </span>
-                ))}
-              </div>
+    <main className="h-full w-full md:pl-[5rem] px-5 flex flex-col py-3">
+      <header className="flex justify-between items-center">
+        <div>
+          <Image src={levelsTitle} alt="levels-title" priority />
+        </div>
+        <button>RATE US</button>
+      </header>
+      {getLevel.isLoading ? (
+        <Loading />
+      ) : (
+        <div className="flex-grow flex justify-center items-center pt-5 w-full">
+          <div className="flex flex-col space-y-3">
+            {getLevel.data?.levels.map((level: any, index: number) => (
+              <motion.button
+                key={level._id}
+                disabled={!level.isDone}
+                style={{
+                  boxShadow: level.isDone ? "0 0 15px #FFE30A" : "none",
+                }}
+                className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
+              >
+                {level.level}
+                <div className="absolute right-[20px] bottom-[5px] flex space-x-1">
+                  {new Array(index + 1).fill(0).map((_, index) => (
+                    <span
+                      key={index}
+                      className="h-[35px] w-2 bg-primary/50"
+                    ></span>
+                  ))}
+                </div>
+              </motion.button>
             ))}
-            <div>
-              <p>GAME MODE</p>
+            <div className="flex flex-col pt-5">
+              <small className="text-secondary text-sm font-bold">
+                Game Mode
+              </small>
+              <button
+                style={{ boxShadow: "0 0 15px #FFE30A" }}
+                className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
+              >
+                RESHUFFLE
+                <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
+                  <span className=" text-primary/50 font-semibold">
+                    <FaShuffle />
+                  </span>
+                </div>
+              </button>
             </div>
           </div>
-          <button
-            onClick={() => {
-              stopSound();
-              router.push("/");
-            }}
-            className="bg-[#3DA9FC] text-white py-2.5 text-lg w-[200px] rounded-md cursor-pointer"
-          >
-            BACK
-          </button>
         </div>
-      </div>
+      )}
     </main>
   );
 }

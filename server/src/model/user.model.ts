@@ -1,5 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
+import { Schema } from "mongoose";
 
+interface ILevel {
+  level: string;
+  isUnlock: boolean;
+  highScore: number;
+}
+const LevelSchema = new Schema({
+  level: { type: String, required: true },
+  isUnlock: { type: Boolean, required: true },
+  highScore: { type: Number, default: 0 },
+});
 const schema = new mongoose.Schema(
   {
     username: {
@@ -25,6 +36,7 @@ const schema = new mongoose.Schema(
         default: "",
       },
     },
+    levels: [LevelSchema],
   },
   {
     timestamps: true,

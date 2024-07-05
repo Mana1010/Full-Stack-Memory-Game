@@ -20,7 +20,6 @@ export default function Home() {
 
   function enterGame() {
     router.push("/levels");
-    playSound();
   }
   return (
     <main className="h-full w-full grid sm:grid-cols-2 grid-cols-1 items-center justify-center">
