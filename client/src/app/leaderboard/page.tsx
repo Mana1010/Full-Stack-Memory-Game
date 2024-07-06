@@ -13,6 +13,7 @@ import ImagePreviewPlayers from "@/components/ImagePreviewPlayers";
 import firstPlace from "../../components/images/trophies/1st-prize.png";
 import secondPlace from "../../components/images/trophies/2nd-place.png";
 import thirdPlace from "../../components/images/trophies/3rd-place.png";
+import { IoReturnDownBack } from "react-icons/io5";
 function Leaderboard() {
   const router = useRouter();
   const { openImagePreviewPlayer, setOpenImagePreviewPlayer } = useModalStore();
@@ -41,8 +42,8 @@ function Leaderboard() {
         <Image src={leaderboard} alt="leaderboard" priority />
       </header>
       <div className="flex-grow grid items-center grid-cols-1 lg:grid-cols-2 w-full px-5">
-        <div className="w-full justify-center items-center flex">
-          <div className="leaderboard-bg w-[400px] rounded-md h-[500px] relative">
+        <div className="w-full justify-center items-center flex flex-col space-y-2">
+          <div className="leaderboard-bg w-[400px] rounded-md h-[470px] relative">
             <div
               style={{ backdropFilter: "blur(1.5px)" }}
               className="leaderboard-scroll-design absolute inset-0 h-full w-full px-3 py-2 overflow-y-auto"
@@ -172,16 +173,18 @@ function Leaderboard() {
                     }
                   )}
                 </tbody>
-                {/* <tfoot className="absolute bottom-0 py-3 left-0 right-0 w-full">
-                  <colgroup>
-                    <col style={{ width: "10%" }} />
-                    <col style={{ width: "80%" }} />
-                    <col style={{ width: "10%" }} />
-                  </colgroup>
-                </tfoot> */}
               </table>
             </div>
           </div>
+          <button
+            onClick={() => router.back()}
+            className="bg-secondary text-primary px-5 py-2.5 rounded-sm flex items-center space-x-2"
+          >
+            <span>
+              <IoReturnDownBack />
+            </span>
+            <span>BACK</span>
+          </button>
         </div>
         <div className="w-full hidden lg:flex justify-center items-center">
           <Image src={leaderboardImg} alt="leaderboardImg" priority />

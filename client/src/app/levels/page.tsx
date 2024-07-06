@@ -10,6 +10,14 @@ import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
+import { MdLeaderboard, MdOutlineSettings } from "react-icons/md";
+import { GoCommentDiscussion } from "react-icons/go";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 function Levels() {
   const { stopSound, playSound } = useAudioStore();
   const router = useRouter();
@@ -35,7 +43,56 @@ function Levels() {
         <div>
           <Image src={levelsTitle} alt="levels-title" priority />
         </div>
-        <button>RATE US</button>
+        <div className="flex space-x-2 items-center">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                onClick={() => router.push("/setting")}
+                style={{ boxShadow: " 0 0 10px #FFE30A" }}
+                className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
+              >
+                <span>
+                  <MdOutlineSettings />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-zinc-300/40 border-none text-white">
+                <small>Setting</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                onClick={() => router.push("/feedback")}
+                style={{ boxShadow: " 0 0 10px #FFE30A" }}
+                className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
+              >
+                <span>
+                  <GoCommentDiscussion />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-zinc-300/40 border-none text-white">
+                <small>Rate Us</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                onClick={() => router.push("/leaderboard")}
+                style={{ boxShadow: " 0 0 10px #FFE30A" }}
+                className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
+              >
+                <span>
+                  <MdLeaderboard />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-zinc-300/40 border-none text-white">
+                <small>Leaderboard</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </header>
       {getLevel.isLoading ? (
         <Loading />
