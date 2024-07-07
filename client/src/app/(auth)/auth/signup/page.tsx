@@ -193,6 +193,9 @@ function Signup() {
                   })
                 }
                 type="button"
+                aria-label={
+                  showPassword.password ? "Hide password" : "Show password"
+                }
                 className="text-yellow-200 text-2xl"
                 name="password"
               >
@@ -235,6 +238,11 @@ function Signup() {
                   })
                 }
                 type="button"
+                aria-label={
+                  showPassword["confirm-password"]
+                    ? "Hide password"
+                    : "Show password"
+                }
                 className="text-yellow-200 text-2xl"
               >
                 {showPassword["confirm-password"] ? (

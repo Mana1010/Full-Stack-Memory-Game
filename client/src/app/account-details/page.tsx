@@ -108,7 +108,7 @@ function AccountDetails() {
                     <div className="h-[30px] w-[90px] flex items-center space-x-2 p-2 bg-primary text-secondary rounded-lg text-[0.7rem]">
                       <Image
                         src={trophyTopPlace}
-                        alt="top-place"
+                        alt="top-place-icon"
                         width={20}
                         priority
                       />
@@ -117,13 +117,16 @@ function AccountDetails() {
                     <div className="h-[30px] w-[210px] flex items-center space-x-2 p-2 bg-primary text-secondary rounded-lg text-[0.7rem]">
                       <Image
                         src={totalScoreStar}
-                        alt="total-score"
+                        alt="total-score-icon"
                         width={20}
                         priority
                       />
                       <span>{formatNum}</span>
                     </div>
-                    <div className="h-[30px] w-[210px] flex items-center space-x-2 p-2 bg-primary text-secondary rounded-lg text-[0.7rem]">
+                    <div
+                      aria-label="Your user id"
+                      className="h-[30px] w-[210px] flex items-center space-x-2 p-2 bg-primary text-secondary rounded-lg text-[0.7rem]"
+                    >
                       <Image
                         src={userIdIcon}
                         alt="user-id-icon"

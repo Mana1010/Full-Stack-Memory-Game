@@ -130,7 +130,8 @@ function ProfileSetup() {
                 boxShadow: gender.value ? "0 0 8px #ffe30a" : "none",
               }}
               id="button-submit"
-              disabled={gender.value === null}
+              disabled={!gender.value}
+              aria-label="Next to age setup"
               className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in disabled:bg-zinc-700 disabled:text-zinc-400 font-bold"
               onClick={() => {
                 const boyProfilePic = [
@@ -168,6 +169,7 @@ function ProfileSetup() {
             <button
               style={{ boxShadow: "0 0 8px #ffe30a" }}
               id="button-submit"
+              aria-label="Next to the last part which is the ign setup"
               disabled={age.value === null}
               className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in font-bold"
               onClick={() => {

@@ -34,7 +34,6 @@ function Leaderboard() {
     },
     refetchOnWindowFocus: false,
   });
-  console.log(getAllPlayers.data);
   const trophies = [firstPlace, secondPlace, thirdPlace];
   return (
     <div className="py-2.5 flex flex-col w-full h-full relative">
@@ -140,7 +139,7 @@ function Leaderboard() {
                             >
                               <Image
                                 src={player.profileId.profilePic.secure_url}
-                                alt="profile-pic"
+                                alt={`${player.profileId.ign}'s profile pic`}
                                 fill
                                 sizes="100%"
                                 priority
@@ -159,6 +158,7 @@ function Leaderboard() {
                             </span>
                           </td>
                           <td
+                            aria-label={`${player.profileId.ign}'s points is ${player.bestScore}`}
                             style={{ textShadow: "0 0 15px white" }}
                             className={`text-[0.8rem] text-center  ${
                               player?.userId._id === userId

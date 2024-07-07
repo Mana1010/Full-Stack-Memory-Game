@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import { Leaderboard } from "../model/leaderboard.model";
 import { Response, Request } from "express";
 import { User } from "../model/user.model";
+import { Feedback } from "../model/feedback.model";
 export const getLeaderboard = asyncHandler(
   async (req: Request, res: Response) => {
     const getPlayer = await Leaderboard.find()
@@ -33,6 +34,12 @@ export const getLevels = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({ message: getLevels });
 });
 
-// export const creatingFeedback = asyncHandler(async(req: Request, res: Response) => {
-//   const
-// })
+export const createFeedback = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { name, improvement, bugs, scale } = req.body;
+    // const checkUserRating = await Feedback.findOne({ userId: req.user?._id });
+    // if (!checkUserRating) {
+    //   await Feedback.create({});
+    // }
+  }
+);

@@ -41,6 +41,7 @@ function Gender() {
           <button
             onClick={() => setGender("male")}
             type="button"
+            aria-label="You set your gender to male"
             id="male"
             className="text-[#ffe30a] text-3xl"
           >
@@ -57,6 +58,7 @@ function Gender() {
             onClick={() => setGender("female")}
             type="button"
             id="female"
+            aria-label="You set your gender to female"
             className="text-[#ffe30a] text-3xl"
           >
             {gender.value === "female" ? (

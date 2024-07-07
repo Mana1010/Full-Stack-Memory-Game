@@ -162,6 +162,7 @@ function Sidebar() {
         {/* For Sidebar's Header */}
         <motion.button
           variants={arrowRightVariant}
+          aria-label={openSidebar ? "Close Sidebar" : "Open Sidebar"}
           animate="visible"
           onClick={setOpenSidebar}
           type="button"
@@ -292,6 +293,7 @@ function Sidebar() {
                       <div className="space-y-1">
                         <motion.button
                           onClick={setOpenAuthMenu}
+                          aria-label="Authentication"
                           style={{ boxShadow: "-1px -1px 5px black" }}
                           className="flex items-center text-white justify-between w-full py-2 px-1 relative overflow-hidden hover:bg-secondary hover:shadow-none"
                         >
@@ -330,7 +332,11 @@ function Sidebar() {
                           } transition-all duration-200 flex-col`}
                         >
                           {navAuth.map((nav) => (
-                            <Link href={nav.route} key={nav.name}>
+                            <Link
+                              aria-label={nav.name}
+                              href={nav.route}
+                              key={nav.name}
+                            >
                               <li
                                 style={{ boxShadow: "-1px -1px 3px black" }}
                                 className={`flex space-x-2 text-[#EBD30C] text-[0.82rem] items-center p-2 m-1 ${
@@ -354,6 +360,7 @@ function Sidebar() {
                     <div>
                       <button
                         onClick={setOpenDevSocial}
+                        aria-label="Dev Social"
                         style={{ boxShadow: "-1px -1px 5px black" }}
                         className={`flex items-center text-white justify-between w-full py-2 px-1 `}
                       >
@@ -388,7 +395,12 @@ function Sidebar() {
                         } transition-all duration-200 flex-col`}
                       >
                         {devSocials.map((dev) => (
-                          <Link href={dev.link} key={dev.name} target="_blank">
+                          <Link
+                            aria-label={dev.name}
+                            href={dev.link}
+                            key={dev.name}
+                            target="_blank"
+                          >
                             <li
                               style={{ boxShadow: "-1px -1px 3px black" }}
                               className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
@@ -420,6 +432,7 @@ function Sidebar() {
           >
             <button
               onClick={() => router.push("/account-details")}
+              aria-label="account-details-button"
               style={{ boxShadow: "-1px -1px 3px black" }}
               className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center"
             >
@@ -427,6 +440,7 @@ function Sidebar() {
             </button>
             <button
               onClick={() => logoutMutation.mutate()}
+              aria-label="logout-button"
               style={{ boxShadow: "-1px -1px 3px black" }}
               className="py-2.5 w-full text-red-400 rounded-sm text-[0.89rem] flex justify-center items-center"
             >

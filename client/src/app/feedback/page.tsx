@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
 import { GoStar, GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import feedback from "../../components/images/feedback.png";
-import { MdFeedback } from "react-icons/md";
 import feedbackTitle from "../../components/images/titles/feedback.png";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 interface Rating {
   ui: number;
   ux: number;
@@ -18,14 +16,33 @@ interface Rating {
 interface Feeback {
   name: string;
   rating: Rating;
+  improvement: string;
+  bugs: string;
+  scale: string;
 }
+// const feedbackSchema = z.object({
+//   name: z.string().min(1),
+//   rating: z.object({
+//     ui: z.number().min(1).max(5),
+//     ux: z.number().min(1).max(5),
+//     performance: z.number().min(1).max(5),
+//   }),
+//   improvement: z.string().optional(),
+//   bugs: z.string().optional(),
+//   scale: z.string().min(1),
+// });
 const reference = Array.from({ length: 5 }, () => false);
 function Feedback() {
   const router = useRouter();
   const [uiRating, setUiRating] = useState(reference);
   const [uxRating, setUxRating] = useState(reference);
   const [performanceRating, setPerformanceRating] = useState(reference);
-  const { register, reset, control } = useForm({
+  const [rating, setRating] = useState<Rating>({
+    ui: 0,
+    ux: 0,
+    performance: 0,
+  });
+  const { register, reset, watch } = useForm({
     defaultValues: {
       name: "",
       improvement: "",
@@ -33,6 +50,7 @@ function Feedback() {
       scale: "",
     },
   });
+  const checkRating = Object.values(rating).some((rate) => rate === 0);
   function handleUiRating(count: number) {
     const updatedUiRating = reference.map((rating, index) => {
       if (count >= index) {
@@ -41,6 +59,7 @@ function Feedback() {
         return rating;
       }
     });
+    setRating({ ...rating, ui: count + 1 });
     setUiRating(updatedUiRating);
   }
   function handleUxRating(count: number) {
@@ -51,6 +70,7 @@ function Feedback() {
         return rating;
       }
     });
+    setRating({ ...rating, ux: count + 1 });
     setUxRating(updatedUxRating);
   }
   function handlePerformanceRating(count: number) {
@@ -61,6 +81,7 @@ function Feedback() {
         return rating;
       }
     });
+    setRating({ ...rating, performance: count + 1 });
     setPerformanceRating(updatedPerformanceRating);
   }
   return (
@@ -98,6 +119,7 @@ function Feedback() {
                   type="button"
                   key={index}
                   className="text-secondary text-lg"
+                  aria-label={`You rate UI ${index + 1} out of 5 stars`}
                 >
                   {ui ? <GoStarFill /> : <GoStar />}
                 </button>
@@ -116,6 +138,7 @@ function Feedback() {
                   type="button"
                   key={index}
                   className="text-secondary text-lg"
+                  aria-label={`You rate UX ${index + 1} out of 5 stars`}
                 >
                   {" "}
                   {ux ? <GoStarFill /> : <GoStar />}
@@ -135,6 +158,9 @@ function Feedback() {
                   type="button"
                   key={index}
                   className="text-secondary text-lg"
+                  aria-label={`You rate Performance ${
+                    index + 1
+                  } out of 5 stars`}
                 >
                   {" "}
                   {performance ? <GoStarFill /> : <GoStar />}
@@ -145,7 +171,7 @@ function Feedback() {
           <div className="space-y-2">
             <div className="flex flex-col space-y-1">
               <label
-                htmlFor="name"
+                htmlFor="improvement"
                 className="text-[0.7rem] text-secondary italic"
               >
                 What features or improvements would you most like to see added
@@ -153,7 +179,7 @@ function Feedback() {
                 <em className="text-[0.58rem]">(optional)</em>
               </label>
               <textarea
-                id="name"
+                id="improvement"
                 {...register("improvement")}
                 name="improvement"
                 placeholder="Your comment here"
@@ -162,7 +188,7 @@ function Feedback() {
             </div>
             <div className="flex flex-col space-y-1">
               <label
-                htmlFor="name"
+                htmlFor="bugs"
                 className="text-[0.7rem] text-secondary italic"
               >
                 Have you noticed any bugs or errors in app? If so, what were
@@ -178,7 +204,7 @@ function Feedback() {
             </div>
             <div className="flex flex-col space-y-1">
               <label
-                htmlFor="name"
+                htmlFor="scale"
                 className="text-[0.7rem] text-secondary italic"
               >
                 On a scale of 1 to 10, how would you rate your experience with
@@ -203,8 +229,10 @@ function Feedback() {
               BACK
             </button>
             <button
-              // style={{ boxShadow: "0 0 15px #FFE30A" }}
-              className="text-primary bg-secondary px-5 py-2 rounded-sm"
+              disabled={
+                checkRating || !watch("name").trim() || !watch("scale").trim()
+              }
+              className="text-primary bg-secondary px-5 py-2 rounded-sm disabled:bg-zinc-700 disabled:text-zinc-400"
             >
               SUBMIT
             </button>
@@ -213,7 +241,6 @@ function Feedback() {
         <div className="opacity-30 absolute bottom-5 right-5 ">
           <Image width={200} src={feedback} alt="feedback-pic" priority />
         </div>
-        {/* <DevTool control={control} /> */}
       </form>
     </div>
   );

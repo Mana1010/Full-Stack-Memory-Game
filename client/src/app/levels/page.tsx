@@ -47,6 +47,7 @@ function Levels() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger
+                aria-label="setting-button"
                 onClick={() => router.push("/setting")}
                 style={{ boxShadow: " 0 0 10px #FFE30A" }}
                 className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
@@ -63,6 +64,7 @@ function Levels() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger
+                aria-label="Rate us button"
                 onClick={() => router.push("/feedback")}
                 style={{ boxShadow: " 0 0 10px #FFE30A" }}
                 className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
@@ -79,6 +81,7 @@ function Levels() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger
+                aria-label="Leaderboard button"
                 onClick={() => router.push("/leaderboard")}
                 style={{ boxShadow: " 0 0 10px #FFE30A" }}
                 className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
@@ -102,9 +105,9 @@ function Levels() {
             {getLevel.data?.levels.map((level: any, index: number) => (
               <motion.button
                 key={level._id}
-                disabled={!level.isDone}
+                disabled={!level.isUnlock}
                 style={{
-                  boxShadow: level.isDone ? "0 0 15px #FFE30A" : "none",
+                  boxShadow: level.isUnlock ? "0 0 15px #FFE30A" : "none",
                 }}
                 className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
               >
