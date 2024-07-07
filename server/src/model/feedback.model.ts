@@ -1,7 +1,47 @@
 import mongoose from "mongoose";
-
-const feedbackSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
+import { Schema } from "mongoose";
+import { InferSchemaType } from "mongoose";
+const feedbackSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    ign: String,
+    feedback: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          ui: Number,
+          ux: Number,
+          performance: Number,
+        },
+        improvement: {
+          type: String,
+          default: "",
+        },
+        bugs: {
+          type: String,
+          default: "",
+        },
+        experience: {
+          type: String,
+          default: "",
+        },
+        dateCreated: new Date(),
+      },
+    ],
   },
-});
+  {
+    timestamps: true,
+  }
+);
+
+type FeedbackSchema = mongoose.InferSchemaType<typeof feedbackSchema>;
+export const Feedback = mongoose.model<FeedbackSchema>(
+  "Feedback",
+  feedbackSchema
+);
