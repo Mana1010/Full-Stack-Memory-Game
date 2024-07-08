@@ -1,23 +1,18 @@
 import axios from "axios";
-import { create } from "zustand";
-
-// interface Profile {
-//   age: number;
-//   ign: string;
-//   gender: string;
-// }
+import { create, StoreApi } from "zustand";
 
 interface UserState {
   isAuthenticated: boolean;
 }
-interface UserSetState extends UserState {
+interface UserActions {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
-const store = (set: any) => ({
+type UserStore = UserState & UserActions;
+const store = (set: StoreApi<UserStore>["setState"]) => ({
   isAuthenticated: true,
   setIsAuthenticated: async (isAuthenticated: boolean) => {
     set({ isAuthenticated });
   },
 });
 
-export const useUserStore = create<UserSetState>(store);
+export const useUserStore = create<UserStore>(store);

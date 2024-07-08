@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StoreApi } from "zustand";
 
 interface ModalState {
   openSidebar: boolean;
@@ -10,7 +10,7 @@ interface ModalState {
   openImagePreviewPlayer: boolean;
 }
 
-interface ModalStoreSchema extends ModalState {
+interface ModalActions {
   setOpenSidebar: () => void;
   setOpenAuthMenu: () => void;
   setOpenDevSocial: () => void;
@@ -19,7 +19,9 @@ interface ModalStoreSchema extends ModalState {
   setOpenImagePreview: () => void;
   setOpenImagePreviewPlayer: () => void;
 }
-const store = (set: any) => ({
+
+type ModalStore = ModalState & ModalActions;
+const store = (set: StoreApi<ModalStore>["setState"]) => ({
   openSidebar: false,
   openAuthMenu: true,
   openDevSocial: false,
@@ -65,4 +67,4 @@ const store = (set: any) => ({
   },
 });
 
-export const useModalStore = create<ModalStoreSchema>(store);
+export const useModalStore = create<ModalStore>(store);

@@ -8,7 +8,9 @@ function Setting() {
       <header className="md:px-[5rem] px-5">
         <Image src={setting} alt="setting" priority />
       </header>
-      <div className="flex-grow flex-col justify-center items-center flex w-full"></div>
+      <div className="flex-grow flex-col justify-center items-center flex w-full">
+        <h1></h1>
+      </div>
     </div>
   );
 }

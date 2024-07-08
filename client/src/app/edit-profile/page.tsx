@@ -240,13 +240,12 @@ function EditProfile() {
               <div>
                 {/* <label className="text-secondary text-[0.7rem]">AGE</label> */}
                 <div className="space-y-2">
-                  <h4
-                    aria-label={`You set your age to ${payload.age[0]}`}
+                  <h1
                     style={{ textShadow: "0 0 15px #ffe30a" }}
                     className=" text-2xl font-semibold text-[#ffe30a] text-center"
                   >
                     {payload?.age ?? 0}
-                  </h4>
+                  </h1>
                   <Slider
                     disabled={editProfile.isLoading}
                     value={payload?.age}

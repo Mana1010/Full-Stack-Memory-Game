@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StoreApi } from "zustand";
 
 //This store is for the step profile verification.
 export interface ProfileState {
@@ -16,7 +16,7 @@ export interface ProfileState {
   };
   profilePic: string | null;
 }
-interface ProfileStoreSchema extends ProfileState {
+interface ProfileActions {
   currentStep: string;
   setIgn: (value: string | null) => void;
   setGender: (value: string | null) => void;
@@ -27,7 +27,8 @@ interface ProfileStoreSchema extends ProfileState {
   setProfilePic: (value: string | null) => void;
   setCurrentStep: (value: string) => void;
 }
-const store = (set: any) => ({
+type ProfileStore = ProfileState & ProfileActions;
+const store = (set: StoreApi<ProfileStore>["setState"]) => ({
   gender: {
     value: null,
     isDone: false,
@@ -98,4 +99,4 @@ const store = (set: any) => ({
   },
 });
 
-export const useProfileStore = create<ProfileStoreSchema>(store);
+export const useProfileStore = create<ProfileStore>(store);

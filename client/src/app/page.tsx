@@ -13,8 +13,9 @@ import { useUserStore } from "@/utils/store/user.store";
 import { useRouter } from "next/navigation";
 import bgMusic from "../resources/bgSound.mp3";
 import { useAudioStore } from "@/utils/store/audio.store";
+import { GoCommentDiscussion } from "react-icons/go";
 export default function Home() {
-  const { playSound } = useAudioStore();
+  const { playSound, playClickSound } = useAudioStore();
   const { isAuthenticated } = useUserStore();
   const router = useRouter();
 
@@ -43,6 +44,7 @@ export default function Home() {
               isAuthenticated
                 ? enterGame()
                 : router.push("/auth/login?message=You have not log in yet!");
+              playClickSound();
             }}
             className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
           >
@@ -52,7 +54,10 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
-            onClick={() => router.push("/leaderboard")}
+            onClick={() => {
+              router.push("/leaderboard");
+              playClickSound();
+            }}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",
@@ -71,6 +76,10 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
+            onClick={() => {
+              router.push("/about");
+              playClickSound();
+            }}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",
@@ -89,7 +98,10 @@ export default function Home() {
             </motion.span>
           </motion.button>
           <motion.button
-            onClick={() => router.push("/setting")}
+            onClick={() => {
+              router.push("/setting");
+              playClickSound();
+            }}
             whileHover={{
               backgroundColor: "#FFE30A",
               color: "#293133",
@@ -105,6 +117,28 @@ export default function Home() {
             SETTING
             <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
               <MdOutlineSettings />
+            </motion.span>
+          </motion.button>
+          <motion.button
+            onClick={() => {
+              router.push("/feedback");
+              playClickSound();
+            }}
+            whileHover={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            whileTap={{
+              backgroundColor: "#FFE30A",
+              color: "#293133",
+              boxShadow: "0 0 25px #FFE30A",
+            }}
+            className="bg-primary text-white md:w-1/2 w-full py-2.5 text-lg font-bold rounded-md relative overflow-hidden"
+          >
+            FEEDBACK
+            <motion.span className="absolute text-primary/45 text-[3.5rem] right-[30px] top-0">
+              <GoCommentDiscussion />
             </motion.span>
           </motion.button>
         </div>

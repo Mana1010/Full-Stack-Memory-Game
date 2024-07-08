@@ -19,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 function Levels() {
-  const { stopSound, playSound } = useAudioStore();
+  const { stopSound, playSound, playClickSound } = useAudioStore();
   const router = useRouter();
   const getLevel = useQuery({
     queryKey: ["level"],
@@ -104,6 +104,7 @@ function Levels() {
           <div className="flex flex-col space-y-3">
             {getLevel.data?.levels.map((level: any, index: number) => (
               <motion.button
+                onClick={() => playClickSound()}
                 key={level._id}
                 disabled={!level.isUnlock}
                 style={{

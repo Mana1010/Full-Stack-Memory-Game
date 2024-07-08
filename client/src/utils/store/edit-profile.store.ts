@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StoreApi } from "zustand";
 import boy1 from "../../components/images/images/boy1.png";
 import boy2 from "../../components/images/images/boy2.png";
 import boy3 from "../../components/images/images/boy3.png";
@@ -22,7 +22,7 @@ export interface Profiles {
   avatar: StaticImageData;
   name: string;
 }
-const profile = [
+const profile: Profiles[] = [
   {
     avatar: boy1,
     name: "boy1",
@@ -98,12 +98,14 @@ interface EditProfileState {
   selectedPreviewCustomProfile: string | null; //For previewing or showing a custom profile no the ready made avatar only and it formats from FileReader
   selectedCustomProfile: File | null; //This is the one who is sent to the backend and it is File type
 }
-interface EditProfileStoreSchema extends EditProfileState {
+interface EditProfileActions {
   setSelectedProfile: (data: Profiles | null) => void;
   setSelectedPreviewCustomProfile: (data: string | null) => void;
   setSelectedCustomProfile: (data: File | null) => void;
 }
-const store = (set: any) => ({
+
+type EditProfileStore = EditProfileState & EditProfileActions;
+const store = (set: StoreApi<EditProfileStore>["setState"]) => ({
   profileSelection: profile,
   selectedProfile: null,
   selectedPreviewCustomProfile: null,
@@ -119,4 +121,4 @@ const store = (set: any) => ({
   },
 });
 
-export const useEditProfileStore = create<EditProfileStoreSchema>(store);
+export const useEditProfileStore = create<EditProfileStore>(store);
