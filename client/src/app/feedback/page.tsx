@@ -8,31 +8,26 @@ import feedback from "../../components/images/feedback.png";
 import feedbackTitle from "../../components/images/titles/feedback.png";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { baseUrl } from "@/utils/baseUrl";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
+import { toast } from "sonner";
 interface Rating {
   ui: number;
   ux: number;
   performance: number;
 }
-interface Feeback {
+interface Feedback {
   name: string;
-  rating: Rating;
+  rating?: Rating;
   improvement: string;
   bugs: string;
   scale: string;
 }
-// const feedbackSchema = z.object({
-//   name: z.string().min(1),
-//   rating: z.object({
-//     ui: z.number().min(1).max(5),
-//     ux: z.number().min(1).max(5),
-//     performance: z.number().min(1).max(5),
-//   }),
-//   improvement: z.string().optional(),
-//   bugs: z.string().optional(),
-//   scale: z.string().min(1),
-// });
+
 const reference = Array.from({ length: 5 }, () => false);
 function Feedback() {
+  const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const [uiRating, setUiRating] = useState(reference);
   const [uxRating, setUxRating] = useState(reference);
@@ -42,12 +37,34 @@ function Feedback() {
     ux: 0,
     performance: 0,
   });
-  const { register, reset, watch } = useForm({
+  const { register, reset, watch, handleSubmit } = useForm({
     defaultValues: {
       name: "",
       improvement: "",
       bugs: "",
       scale: "",
+    },
+  });
+  const submitFeedback = useMutation({
+    mutationFn: async (data: Feedback) => {
+      const response = await axiosInterceptor.post(
+        `${baseUrl}/feature/feedback`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data.message;
+    },
+    onSuccess: (data) => {
+      reset();
+      toast.message("Thank you for your feedback");
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
   const checkRating = Object.values(rating).some((rate) => rate === 0);
@@ -86,7 +103,13 @@ function Feedback() {
   }
   return (
     <div className="flex px-5 justify-center items-center h-full w-full">
-      <form className="w-[95%] sm:w-[90%] bg-primary rounded-sm py-4 px-2 relative flex flex-col h-[570px]">
+      <form
+        onSubmit={handleSubmit((data: Feedback) => {
+          const updatedFeedbackData = { ...data, rating };
+          submitFeedback.mutate(updatedFeedbackData);
+        })}
+        className="w-[95%] sm:w-[90%] bg-primary rounded-sm py-4 px-2 relative flex flex-col h-[570px]"
+      >
         <header>
           <Image src={feedbackTitle} alt="feedback-title" priority />
         </header>

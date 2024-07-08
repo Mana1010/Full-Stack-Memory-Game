@@ -132,17 +132,7 @@ export const verifyOldUser = asyncHandler(
       res.status(401);
       throw new Error("Unauthorized");
     }
-
-    const findUser = await User.findById(req.user._id).select(
-      "username isOldUser"
-    );
-    console.log(findUser);
-    if (!findUser) {
-      res.status(401);
-      throw new Error("Unathorized");
-    }
-
-    res.status(200).json({ message: findUser });
+    res.status(200).json({ message: req.user });
   }
 );
 //For logout

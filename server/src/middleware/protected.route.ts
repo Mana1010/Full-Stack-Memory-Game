@@ -21,7 +21,10 @@ export const protectedRoutes = asyncHandler(
           return res.status(403).json({ message: "Forbidden" });
         } else {
           const decodedToken = decode as JwtPayload;
-          req.user = await User.findById(decodedToken.id).select("-password");
+          req.user = await User.findById(decodedToken.id).select([
+            "username",
+            "isOldUser",
+          ]);
           next();
         }
       }

@@ -4,24 +4,24 @@ import leaderboard from "../../components/images/titles/leaderboard.png";
 import leaderboardImg from "../../components/images/leaderboard-image.png";
 import Image, { StaticImageData } from "next/image";
 import { useQuery, UseQueryResult } from "react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/utils/baseUrl";
-import { Profile } from "../account-details/page";
 import { useModalStore } from "@/utils/store/modal.store";
 import ImagePreviewPlayers from "@/components/ImagePreviewPlayers";
 import firstPlace from "../../components/images/trophies/1st-prize.png";
 import secondPlace from "../../components/images/trophies/2nd-place.png";
 import thirdPlace from "../../components/images/trophies/3rd-place.png";
 import { IoReturnDownBack } from "react-icons/io5";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 function Leaderboard() {
+  const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const { openImagePreviewPlayer, setOpenImagePreviewPlayer } = useModalStore();
   const [profileId, setProfileId] = useState<string | null>(null);
   const getAllPlayers = useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
-      const response: UseQueryResult<any> = await axios.get(
+      const response: UseQueryResult<any> = await axiosInterceptor.get(
         `${baseUrl}/feature/leaderboard`,
         {
           headers: {

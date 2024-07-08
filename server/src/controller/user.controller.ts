@@ -59,7 +59,7 @@ export const profileUpload = asyncHandler(
         { level: "MEDIUM", isUnlock: false },
         { level: "HARD", isUnlock: false },
       ] as any;
-      getUser.isOldUser = !getUser.isOldUser;
+      getUser.isOldUser = !req.user?.isOldUser;
       createProfile.userId = req.user?._id;
       createLeaderBoard.userId = req.user?._id;
       createLeaderBoard.profileId = createProfile.id;

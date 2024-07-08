@@ -7,33 +7,28 @@ const feedbackSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    ign: String,
-    feedback: [
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        rating: {
-          ui: Number,
-          ux: Number,
-          performance: Number,
-        },
-        improvement: {
-          type: String,
-          default: "",
-        },
-        bugs: {
-          type: String,
-          default: "",
-        },
-        experience: {
-          type: String,
-          default: "",
-        },
-        dateCreated: new Date(),
-      },
-    ],
+    username: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      ui: Number,
+      ux: Number,
+      performance: Number,
+    },
+    improvement: {
+      type: String,
+      default: "",
+    },
+    bugs: {
+      type: String,
+      default: "",
+    },
+    experience: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

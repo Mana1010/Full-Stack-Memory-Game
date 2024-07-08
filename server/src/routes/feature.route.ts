@@ -10,4 +10,4 @@ export const router = express.Router();
 
 router.get("/leaderboard", protectedRoutes, getLeaderboard);
 router.get("/levels", protectedRoutes, getLevels);
-router.get("/feedback", protectedRoutes, createFeedback);
+router.post("/feedback", protectedRoutes, createFeedback);
