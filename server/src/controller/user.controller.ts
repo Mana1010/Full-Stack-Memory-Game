@@ -46,8 +46,10 @@ export const profileUpload = asyncHandler(
           public_id: uploadResponse.public_id,
         },
       });
-      const createLeaderBoard = await Leaderboard.create({
+      await Leaderboard.create({
         bestScore: 0,
+        userId: req.user?._id,
+        profileId: createProfile.id,
       });
       const getUser = await User.findById(req.user?._id);
       if (!getUser) {
@@ -61,11 +63,8 @@ export const profileUpload = asyncHandler(
       ] as any;
       getUser.isOldUser = !req.user?.isOldUser;
       createProfile.userId = req.user?._id;
-      createLeaderBoard.userId = req.user?._id;
-      createLeaderBoard.profileId = createProfile.id;
       await createProfile.save();
       await getUser?.save();
-      await createLeaderBoard.save();
       if (!createProfile) {
         res.status(400);
         throw new Error("Error!!");
@@ -100,7 +99,6 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
   const getIndex = getAllPlayers.findIndex((player) =>
     player.userId?.equals(req.user?._id)
   );
-  console.log(getIndex);
   res.status(200).json({ message: { ...getProfile, rank: getIndex + 1 } });
 });
 export const getAccountDetails = asyncHandler(

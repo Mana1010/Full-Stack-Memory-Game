@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { z } from "zod";
-import bcrpyt from "bcrypt";
+import bcrypt from "bcrypt";
 import { User } from "../model/user.model";
 import { Request, Response } from "express";
 import { accessToken, refreshToken } from "../utils/token.utils";
@@ -31,7 +31,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("Please check your field and try again");
   }
   try {
-    const hashedPassword = await bcrpyt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const createUser = await User.create({
       username,
       password: hashedPassword,
@@ -74,7 +74,7 @@ export const logIn = asyncHandler(async (req: Request, res: Response) => {
     res.status(401);
     throw new Error("Wrong Credentials");
   }
-  const passwordCompare = await bcrpyt.compare(
+  const passwordCompare = await bcrypt.compare(
     password,
     authenticateUser.password
   );
