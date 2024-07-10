@@ -95,7 +95,7 @@ function EditProfile() {
       return response.data.message;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(["user-profile"]);
       toast.success(data);
       router.push("/account-details");
       setSelectedCustomProfile(null); //To reset the previewed image

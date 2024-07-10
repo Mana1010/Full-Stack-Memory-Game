@@ -14,8 +14,10 @@ interface AudioActions {
   pauseSound: () => void;
   stopSound: () => void;
   playClickSound: () => void;
+  clickSoundSetting: () => void;
 }
 type AudioStore = AudioState & AudioActions;
+
 const store = (
   set: StoreApi<AudioStore>["setState"],
   get: StoreApi<AudioStore>["getState"]
@@ -26,6 +28,7 @@ const store = (
   }),
   clickSound: new Howl({
     src: [click_Sound],
+    volume: 0,
   }),
   cardSound: new Howl({
     src: [card_Sound],
@@ -40,6 +43,19 @@ const store = (
   pauseSound: () => get().bgSound.pause(),
   stopSound: () => get().bgSound.stop(),
   playClickSound: () => get().clickSound.play(),
+  clickSoundSetting: () => {
+    const getSound = get().clickSound;
+    const defaultSetting = { playMusic: true, playSound: true };
+    let setting;
+    const storage = localStorage.getItem("setting");
+    if (storage) {
+      setting = JSON.parse(storage);
+    } else {
+      localStorage.setItem("setting", JSON.stringify(defaultSetting));
+      setting = defaultSetting;
+    }
+    getSound.volume(setting.playSound ? 0.3 : 0);
+  },
 });
 
 export const useAudioStore = create<AudioStore>(store);

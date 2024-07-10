@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
@@ -27,7 +27,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import trophyTopPlace from "../components/images/trophies/top-star-trophy.png";
 import totalScoreStar from "../components/images/trophies/total-score-star.png";
+import { useAudioStore } from "@/utils/store/audio.store";
 function Sidebar() {
+  const { clickSoundSetting } = useAudioStore();
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated } = useUserStore();
@@ -95,6 +97,7 @@ function Sidebar() {
       return response.data.message;
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
+    refetchOnWindowFocus: false,
   });
 
   const queryClient = useQueryClient();
@@ -113,8 +116,7 @@ function Sidebar() {
       return response.data;
     },
     onSuccess: (data) => {
-      getUser.refetch();
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(["user-profile"]);
       toast.success(data.message);
       localStorage.removeItem("token");
       router.push("/auth/login");
@@ -151,6 +153,9 @@ function Sidebar() {
       },
     },
   };
+  useEffect(() => {
+    clickSoundSetting();
+  }, [clickSoundSetting]);
   if (pathname === "/profile-setup") return;
   return (
     <div

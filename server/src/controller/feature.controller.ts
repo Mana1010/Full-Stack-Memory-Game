@@ -65,6 +65,7 @@ export const createFeedback = asyncHandler(
 export const changeSetting = asyncHandler(
   async (req: Request, res: Response) => {
     const [key, value] = Object.entries(req.body)[0];
+    console.log(key);
     const updateUser = await User.findByIdAndUpdate(
       req.user?._id,
       {
@@ -78,7 +79,6 @@ export const changeSetting = asyncHandler(
       res.status(404);
       throw new Error("User not found");
     }
-    console.log(key);
     res.status(202);
   }
 );

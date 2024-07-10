@@ -27,14 +27,6 @@ const schema = new mongoose.Schema(
       default: false,
     },
     setting: {
-      playMusic: {
-        type: Boolean,
-        default: true,
-      },
-      playSound: {
-        type: Boolean,
-        default: true,
-      },
       selectMusic: {
         type: String,
         default: "",

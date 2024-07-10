@@ -15,7 +15,7 @@ import bgMusic from "../resources/bgSound.mp3";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { GoCommentDiscussion } from "react-icons/go";
 export default function Home() {
-  const { playSound, playClickSound } = useAudioStore();
+  const { playClickSound } = useAudioStore();
   const { isAuthenticated } = useUserStore();
   const router = useRouter();
 

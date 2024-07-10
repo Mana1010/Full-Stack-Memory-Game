@@ -5,6 +5,7 @@ import Provider from "./Provider";
 import { Toaster } from "sonner";
 import { lazy } from "react";
 import Sidebar from "@/components/Sidebar";
+import Sound from "@/components/Sound";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
 export const metadata: Metadata = {

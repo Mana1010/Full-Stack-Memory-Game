@@ -1,84 +1,60 @@
 "use client";
-import React, { useState } from "react";
-import setting from "../../components/images/titles/setting.png";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
-import { baseUrl } from "@/utils/baseUrl";
-import { toast } from "sonner";
+import settingBg from "../../components/images/titles/setting.png";
+import Sound from "@/components/Sound";
+import { useAudioStore } from "@/utils/store/audio.store";
 
 function Setting() {
+  const { clickSoundSetting } = useAudioStore();
   const axiosInterceptor = useAxiosInterceptor();
-  const [touchedSetting, setTouchedSetting] = useState("");
-  const getSetting = useQuery({
-    queryKey: ["setting"],
-    queryFn: async () => {
-      const response = await axiosInterceptor.get(
-        `${baseUrl}/feature/setting`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
-      return response.data.message;
-    },
-    refetchOnMount: false,
-  });
-  const queryClient = useQueryClient();
-  const changeSetting = useMutation({
-    mutationFn: async (data: boolean) => {
-      await axiosInterceptor.patch(
-        `${baseUrl}/feature/setting`,
-        { [touchedSetting]: data },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
-      return null;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries("setting");
-    },
-    onError: (err) => {
-      toast.error(JSON.stringify(err));
-    },
-  });
-
+  const [setting, setSetting] = useState({ playMusic: true, playSound: true });
+  useEffect(() => {
+    // Initialize setting from localStorage or use default values
+    const storedSetting = localStorage.getItem("setting");
+    if (storedSetting) {
+      setSetting(JSON.parse(storedSetting));
+    } else {
+      const defaultSetting = { playMusic: true, playSound: true };
+      localStorage.setItem("setting", JSON.stringify(defaultSetting));
+    }
+  }, []);
   return (
     <div className="py-2.5 flex flex-col w-full h-full">
       <header className="md:px-[5rem] px-5">
-        <Image src={setting} alt="setting" priority />
+        <Image src={settingBg} alt="setting" priority />
       </header>
       <div className="flex-grow flex-col justify-center items-center flex w-full px-5">
         <div className=" w-full md:w-[450px] h-[400px] rounded-md space-y-5 p-7">
           <div className="flex items-center w-full justify-between">
             <h1 className="text-secondary">MUSIC</h1>
             <Switch
-              checked={getSetting?.data?.setting?.playMusic ?? false}
+              checked={setting.playMusic}
               onCheckedChange={(value) => {
-                changeSetting.mutate(value);
+                const data = { ...setting, playMusic: value };
+                localStorage.setItem("setting", JSON.stringify(data));
+                setSetting(data);
               }}
-              onClick={() => setTouchedSetting("playMusic")}
             />
           </div>
           <div className="flex items-center w-full justify-between">
             <h1 className="text-secondary">SOUND</h1>
             <Switch
-              checked={getSetting?.data?.setting?.playSound ?? false}
+              checked={setting.playSound}
               onCheckedChange={(value) => {
-                changeSetting.mutate(value);
+                const data = { ...setting, playSound: value };
+                localStorage.setItem("setting", JSON.stringify(data));
+                setSetting(data);
+                clickSoundSetting();
               }}
-              onClick={() => setTouchedSetting("playSound")}
             />
           </div>
         </div>
       </div>
+      {/* To automatically turn off or turn on the sound based on the setting */}
+      {/* <Sound /> */}
     </div>
   );
 }
