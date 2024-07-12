@@ -103,6 +103,7 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
 });
 export const getAccountDetails = asyncHandler(
   async (req: Request, res: Response) => {
+    console.log("Running");
     const getAccountDetails = await Leaderboard.findOne({
       userId: req.user?._id,
     })

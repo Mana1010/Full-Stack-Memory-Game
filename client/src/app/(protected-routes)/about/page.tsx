@@ -1,7 +1,15 @@
 import React from "react";
 import About from "./_components/About";
+
+export const metadata = {
+  title: "About",
+};
 function Page() {
-  return <div>About</div>;
+  return (
+    <>
+      <About />
+    </>
+  );
 }
 
 export default Page;

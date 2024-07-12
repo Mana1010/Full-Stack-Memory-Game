@@ -1,7 +1,6 @@
 import express from "express";
 import { protectedRoutes } from "../middleware/protected.route";
 import multer from "multer";
-import { FileFilterCallback } from "multer";
 import {
   profileUpload,
   getProfile,
@@ -14,16 +13,6 @@ interface CB {
   error: Error;
   acceptFile: boolean;
 }
-
-// const fileFilter = (
-//   req: Request,
-//   file: Express.Multer.File,
-//   cb: FileFilterCallback
-// ) => {
-//   console.log(req.body);
-//   cb(null, false);
-// };
-// (error: Error | null, acceptFile: boolean) => void
 const fileFilter = (
   req: Express.Request,
   file: Express.Multer.File,

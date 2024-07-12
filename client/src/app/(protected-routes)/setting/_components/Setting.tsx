@@ -6,7 +6,6 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import settingBg from "../../../../components/images/titles/setting.png";
 import Sound from "@/components/Sound";
 import { useAudioStore } from "@/utils/store/audio.store";
-import PageTitle from "@/components/PageTitle";
 function Setting() {
   const { clickSoundSetting, playClickSound } = useAudioStore();
   const axiosInterceptor = useAxiosInterceptor();
@@ -23,7 +22,6 @@ function Setting() {
   }, []);
   return (
     <div className="py-2.5 flex flex-col w-full h-full">
-      <PageTitle pathname="Setting" />
       <header className="md:px-[5rem] px-5">
         <Image src={settingBg} alt="setting" priority />
       </header>

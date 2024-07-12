@@ -7,7 +7,10 @@ import { lazy } from "react";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
 export const metadata: Metadata = {
-  title: "Memory Game",
+  title: {
+    default: "Memory Game",
+    template: "%s | Memory Game",
+  },
   description:
     "A simple online memory game that you can play for both desktop and mobile.",
   keywords: [

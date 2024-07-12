@@ -11,7 +11,6 @@ import {
 } from "react-icons/md";
 import { useUserStore } from "@/utils/store/user.store";
 import { useRouter } from "next/navigation";
-import bgMusic from "../resources/bgSound.mp3";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { GoCommentDiscussion } from "react-icons/go";
 export default function Home() {
