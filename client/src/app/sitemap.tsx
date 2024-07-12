@@ -15,5 +15,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE_URL}/setting`,
       lastModified: new Date(),
     },
+    {
+      url: `${BASE_URL}/auth/login`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${BASE_URL}/auth/signup`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${BASE_URL}/leaderboard`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${BASE_URL}/account-details`,
+      lastModified: new Date(),
+    },
   ];
 }
