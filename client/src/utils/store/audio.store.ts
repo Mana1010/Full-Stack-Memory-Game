@@ -28,7 +28,6 @@ const store = (
   }),
   clickSound: new Howl({
     src: [click_Sound],
-    volume: 0,
   }),
   cardSound: new Howl({
     src: [card_Sound],
@@ -54,7 +53,13 @@ const store = (
       localStorage.setItem("setting", JSON.stringify(defaultSetting));
       setting = defaultSetting;
     }
-    getSound.volume(setting.playSound ? 0.3 : 0);
+    if (setting.playSound) {
+      getSound.volume(0.3);
+    } else {
+      getSound.stop(); //To automatically stop the sound
+      getSound.volume(0);
+    }
+    // getSound.volume(setting.playSound ? 0.3 : 0);
   },
 });
 

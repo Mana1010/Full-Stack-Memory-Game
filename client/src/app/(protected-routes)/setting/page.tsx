@@ -6,9 +6,9 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import settingBg from "../../components/images/titles/setting.png";
 import Sound from "@/components/Sound";
 import { useAudioStore } from "@/utils/store/audio.store";
-
+import PageTitle from "@/components/PageTitle";
 function Setting() {
-  const { clickSoundSetting } = useAudioStore();
+  const { clickSoundSetting, playClickSound } = useAudioStore();
   const axiosInterceptor = useAxiosInterceptor();
   const [setting, setSetting] = useState({ playMusic: true, playSound: true });
   useEffect(() => {
@@ -23,6 +23,7 @@ function Setting() {
   }, []);
   return (
     <div className="py-2.5 flex flex-col w-full h-full">
+      <PageTitle pathname="Setting" />
       <header className="md:px-[5rem] px-5">
         <Image src={settingBg} alt="setting" priority />
       </header>
@@ -37,6 +38,7 @@ function Setting() {
                 localStorage.setItem("setting", JSON.stringify(data));
                 setSetting(data);
               }}
+              onClick={() => playClickSound()}
             />
           </div>
           <div className="flex items-center w-full justify-between">
@@ -49,6 +51,7 @@ function Setting() {
                 setSetting(data);
                 clickSoundSetting();
               }}
+              onClick={() => playClickSound()}
             />
           </div>
         </div>

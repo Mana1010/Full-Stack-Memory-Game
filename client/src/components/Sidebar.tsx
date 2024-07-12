@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
@@ -17,7 +17,6 @@ import SideDesign from "./SideDesign";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { baseUrl } from "@/utils/baseUrl";
 import { usePathname } from "next/navigation";
-import firstTop from "../components/images/trophies/1st-prize.png";
 import { useUserStore } from "@/utils/store/user.store";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { CgDetailsLess } from "react-icons/cg";
@@ -27,9 +26,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import trophyTopPlace from "../components/images/trophies/top-star-trophy.png";
 import totalScoreStar from "../components/images/trophies/total-score-star.png";
-import { useAudioStore } from "@/utils/store/audio.store";
 function Sidebar() {
-  const { clickSoundSetting } = useAudioStore();
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated } = useUserStore();
@@ -153,9 +150,7 @@ function Sidebar() {
       },
     },
   };
-  useEffect(() => {
-    clickSoundSetting();
-  }, [clickSoundSetting]);
+
   if (pathname === "/profile-setup") return;
   return (
     <div
@@ -240,12 +235,6 @@ function Sidebar() {
                           !openSidebar && "hidden"
                         }`}
                       >
-                        {/* <Image
-                          src={firstTop}
-                          alt="first-top"
-                          width={70}
-                          priority
-                        /> */}
                         <div className="flex space-x-2 items-center">
                           <Image
                             width={20}

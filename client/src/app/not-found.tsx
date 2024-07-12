@@ -9,6 +9,7 @@ function NotFound() {
     <div className="flex justify-center items-center w-full h-full space-y-2 flex-col">
       <Image src={noResult} alt="no-result" width={400} priority />
       <button
+      onClick={() => router.back()}
         style={{ boxShadow: "0 0 15px #FFE30A" }}
         className="bg-secondary rounded-md py-2.5 px-5 text-primary"
       >

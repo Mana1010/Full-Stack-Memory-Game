@@ -18,13 +18,14 @@ function useAxiosInterceptor() {
   const router = useRouter();
   const getToken =
     typeof window !== "undefined" && localStorage.getItem("token");
-  const unprotectedRoute = ["/", "/auth/signup", "/about"];
-  const protectedRoutes = ["/profile-setup"];
+  const UNPROTECTED_ROUTES = ["/", "/auth/signup", "/about"];
+  const PROTECTED_ROUTES = ["/profile-setup"];
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
       async (config) => {
         if (!getToken) {
-          if (!unprotectedRoute.includes(pathname)) router.push("/auth/login");
+          if (!UNPROTECTED_ROUTES.includes(pathname))
+            router.push("/auth/login");
           setIsAuthenticated(false);
           return Promise.reject("No token available");
         }
@@ -56,7 +57,7 @@ function useAxiosInterceptor() {
         } catch (err) {
           console.log(err);
           setIsAuthenticated(false);
-          if (!unprotectedRoute.includes(pathname)) {
+          if (!UNPROTECTED_ROUTES.includes(pathname)) {
             router.push("/auth/login");
           }
           localStorage.removeItem("token");
@@ -73,7 +74,7 @@ function useAxiosInterceptor() {
           const status = err?.response.status;
           if (status === 401 || status === 403) {
             setIsAuthenticated(false);
-            if (!unprotectedRoute.includes(pathname)) {
+            if (!UNPROTECTED_ROUTES.includes(pathname)) {
               router.push("/auth/login");
             }
             return;
