@@ -46,4 +46,6 @@ router
   .get(protectedRoutes, getProfile)
   .post(protectedRoutes, profileUpload);
 router.route("/edit-profile").get(protectedRoutes, showEditProfile);
-router.route("/account-details").get(protectedRoutes, getAccountDetails);
+router
+  .route("/account-details/:username")
+  .get(protectedRoutes, getAccountDetails);

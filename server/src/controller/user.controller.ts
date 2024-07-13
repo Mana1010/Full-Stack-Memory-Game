@@ -86,6 +86,10 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
       path: "profileId",
       select: ["profilePic.secure_url", "ign"],
     })
+    .populate({
+      path: "userId",
+      select: ["username"],
+    })
     .select(["-__v", "-updatedAt"])
     .lean();
   if (!getProfile) {
@@ -103,9 +107,14 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
 });
 export const getAccountDetails = asyncHandler(
   async (req: Request, res: Response) => {
-    console.log("Running");
+    const { username } = req.params;
+    const findUser = await User.findOne({ username: username }).select("id");
+    if (!findUser) {
+      res.status(404);
+      throw new Error("Username not found");
+    }
     const getAccountDetails = await Leaderboard.findOne({
-      userId: req.user?._id,
+      userId: findUser?.id,
     })
       .populate("userId")
       .populate("profileId")
@@ -129,11 +138,9 @@ export const getAccountDetails = asyncHandler(
 );
 export const showEditProfile = asyncHandler(
   async (req: Request, res: Response) => {
-    const getProfile = await Profile.findOne({ userId: req.user?._id }).select([
-      "ign",
-      "age",
-      "profilePic.secure_url",
-    ]);
+    const getProfile = await Profile.findOne({ userId: req.user?._id })
+      .populate({ path: "userId", select: "username" })
+      .select(["ign", "age", "profilePic.secure_url"]);
     if (!getProfile) {
       res.status(404);
       throw new Error("User not found");
@@ -144,7 +151,10 @@ export const showEditProfile = asyncHandler(
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { age, ign, file } = req.body;
-  const getProfile = await Profile.findById(id);
+  const getProfile = (await Profile.findById(id).populate({
+    path: "userId",
+    select: "username",
+  })) as any;
   if (!getProfile) {
     res.status(404);
     throw new Error("User not found");
@@ -173,5 +183,10 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   if (age && getProfile.age !== age) getProfile.age = age;
   if (ign && getProfile.ign !== ign) getProfile.ign = ign;
   await getProfile.save();
-  res.status(201).json({ message: "Profile updated successfully." });
+  res.status(201).json({
+    message: {
+      content: "Profile updated successfully.",
+      username: getProfile?.userId,
+    },
+  });
 });

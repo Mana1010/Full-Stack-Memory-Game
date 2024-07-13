@@ -41,7 +41,7 @@ interface AccountDetails {
   userId: User;
   rank: number;
 }
-function AccountDetails() {
+function AccountDetails({ username }: { username: string }) {
   const axiosInterceptor = useAxiosInterceptor();
   const { isAuthenticated } = useUserStore();
   const { openImagePreview, setOpenImagePreview } = useModalStore();
@@ -50,7 +50,7 @@ function AccountDetails() {
     queryKey: ["account-details"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(
-        `${baseUrl}/user/account-details`,
+        `${baseUrl}/user/account-details/${username}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,6 +58,7 @@ function AccountDetails() {
           withCredentials: true,
         }
       );
+      console.log(response.data.message);
       return response.data.message;
     },
     enabled: isAuthenticated != null,

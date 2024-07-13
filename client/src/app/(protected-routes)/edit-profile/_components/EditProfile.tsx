@@ -28,6 +28,10 @@ interface EditProfileSchema {
   profilePic: {
     secure_url: string;
   };
+  userId: {
+    _id: string;
+    username: string;
+  };
 }
 const editSchema = z.object({
   ign: z
@@ -95,8 +99,8 @@ function EditProfile() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
-      toast.success(data);
-      router.push("/account-details");
+      toast.success(data.content);
+      router.push(`/${data.username.username}`);
       setSelectedCustomProfile(null); //To reset the previewed image
       setSelectedProfile(null); //To reset the previewed image
     },
@@ -259,7 +263,9 @@ function EditProfile() {
             </div>
             <div className="flex-grow flex justify-between items-end w-full pb-3">
               <button
-                onClick={() => router.push("/account-details")}
+                onClick={() =>
+                  router.push(`/${getProfile.data?.userId?.username}`)
+                }
                 type="button"
                 className="bg-secondary text-primary py-2.5 px-5 text-[0.8rem] rounded-sm"
               >

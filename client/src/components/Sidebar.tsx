@@ -96,7 +96,6 @@ function Sidebar() {
     enabled: isAuthenticated && pathname !== "/profile-setup",
     refetchOnWindowFocus: false,
   });
-
   const queryClient = useQueryClient();
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -269,7 +268,7 @@ function Sidebar() {
                       className={`pt-1 ${openSidebar ? "initial" : "hidden"}`}
                     >
                       <small className="text-white break-all">
-                        {getUser.data?.userId}
+                        {getUser.data?.userId._id}
                       </small>
                       <h5
                         style={{ textShadow: "0 0 10px #FFE30A" }}
@@ -425,7 +424,7 @@ function Sidebar() {
             } sm:flex w-full p-1.5 flex-col justify-center items-center space-y-2`}
           >
             <button
-              onClick={() => router.push("/account-details")}
+              onClick={() => router.push(`/${getUser.data?.userId.username}`)}
               aria-label="account-details-button"
               style={{ boxShadow: "-1px -1px 3px black" }}
               className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center"
