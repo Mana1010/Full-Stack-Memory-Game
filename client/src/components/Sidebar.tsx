@@ -117,7 +117,7 @@ function Sidebar() {
       localStorage.removeItem("token");
       router.push("/auth/login");
     },
-    onError: (err) => {
+    onError: () => {
       toast.success("Failed to logout");
     },
   });
@@ -198,26 +198,32 @@ function Sidebar() {
                       <div
                         style={{
                           boxShadow: "-1px -1px 5px black",
+                          transition: "height 0.3s ease-in-out",
                         }}
-                        className=" bg-[#191F23] max-w-[110px] pt-2 rounded-sm relative"
+                        className={` bg-[#191F23] pt-2 rounded-sm relative w-[150px] ${
+                          openSidebar ? "h-[100px]" : "h-[60px]"
+                        }`}
                       >
-                        <Image
-                          src={
-                            getUser.data?.profileId?.profilePic?.secure_url &&
-                            getUser.data?.profileId?.profilePic.secure_url
-                          }
-                          width={150}
-                          height={150}
-                          alt="icon"
-                          priority
-                        />
-                        <Image
-                          src={card}
-                          alt="cards"
-                          width={50}
-                          priority
-                          className="absolute top-[-18px] right-0 z-[-1]"
-                        />
+                        <div className="w-full h-full overflow-hidden relative">
+                          <Image
+                            src={
+                              getUser.data?.profileId?.profilePic?.secure_url &&
+                              getUser.data?.profileId?.profilePic.secure_url
+                            }
+                            fill
+                            sizes="100%"
+                            alt="icon"
+                            priority
+                            className="object-cover object-center"
+                          />
+                          <Image
+                            src={card}
+                            alt="cards"
+                            width={50}
+                            priority
+                            className="absolute top-[-18px] right-0 z-[-1]"
+                          />
+                        </div>
                         <SideDesign
                           formSideDesignWidthVariants={
                             formSideDesignWidthVariants
@@ -355,7 +361,7 @@ function Sidebar() {
                         onClick={setOpenDevSocial}
                         aria-label="Dev Social"
                         style={{ boxShadow: "-1px -1px 5px black" }}
-                        className={`flex items-center text-white justify-between w-full py-2 px-1 `}
+                        className={`flex items-center text-white justify-between w-full py-2 px-1 overflow-hidden`}
                       >
                         <div className="flex space-x-1 items-center">
                           <span className="text-xl">
@@ -426,8 +432,11 @@ function Sidebar() {
             <button
               onClick={() => router.push(`/${getUser.data?.userId.username}`)}
               aria-label="account-details-button"
-              style={{ boxShadow: "-1px -1px 3px black" }}
-              className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center"
+              style={{
+                boxShadow: "-1px -1px 3px black",
+                transition: "all 0.3s ease-in-out",
+              }}
+              className="py-2.5 w-full text-white rounded-sm text-[0.89rem] flex justify-center items-center overflow-hidden"
             >
               {openSidebar ? "ACCOUNT DETAILS" : <CgDetailsLess />}
             </button>

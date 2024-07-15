@@ -17,7 +17,6 @@ export default function Home() {
   const { playClickSound } = useAudioStore();
   const { isAuthenticated } = useUserStore();
   const router = useRouter();
-
   function enterGame() {
     router.push("/levels");
   }

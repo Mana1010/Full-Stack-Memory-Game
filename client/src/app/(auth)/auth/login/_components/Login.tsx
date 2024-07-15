@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
@@ -54,8 +54,8 @@ function Login() {
       router.push(data.isOldUser ? "/levels" : "/profile-setup");
       reset();
     },
-    onError: (err: any) => {
-      toast.error(err.response.data.message);
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast.error(err.response?.data.message);
     },
   });
   const formSideDesignWidthVariants = {
@@ -91,7 +91,6 @@ function Login() {
     window.addEventListener("beforeunload", load);
     return () => window.removeEventListener("beforeunload", load);
   }, []);
-
   return (
     <motion.main
       initial={{ x: -700, opacity: 0 }}

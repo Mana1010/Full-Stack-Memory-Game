@@ -17,6 +17,7 @@ import { QueryClient } from "react-query";
 import loading from "../../../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
+import { AxiosError } from "axios";
 
 interface Profile {
   age: number;
@@ -43,7 +44,7 @@ function ProfileSetup() {
   } = useProfileStore();
   const router = useRouter();
   const queryClient = new QueryClient();
-  useQuery({
+  const { isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
@@ -83,8 +84,8 @@ function ProfileSetup() {
       setIgn(null);
       setProfilePic(null);
     },
-    onError: (err: any) => {
-      toast.error(err.response.data.message);
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {
@@ -94,6 +95,11 @@ function ProfileSetup() {
     window.addEventListener("beforeunload", load);
     return () => window.removeEventListener("beforeunload", load);
   }, []);
+
+  if (isError) {
+    const err = error as AxiosError<{ message: string }>;
+    throw new Error(err.response?.data.message);
+  }
   //For icons
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">

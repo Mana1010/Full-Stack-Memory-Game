@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { baseUrl } from "@/utils/baseUrl";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 interface Rating {
   ui: number;
   ux: number;
@@ -58,11 +59,14 @@ function Feedback() {
       return response.data.message;
     },
     onSuccess: () => {
+      setUiRating(reference);
+      setUxRating(reference);
+      setPerformanceRating(reference);
       reset();
       toast.message("Thank you for your feedback");
     },
-    onError: (err: any) => {
-      toast.error(err.response.data.message);
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast.error(err.response?.data.message);
     },
   });
   const checkRating = Object.values(rating).some((rate) => rate === 0);

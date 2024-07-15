@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
@@ -71,8 +71,8 @@ function Signup() {
       reset();
       router.push("/profile-setup");
     },
-    onError: (data: any) => {
-      toast.error(data.response.data.message);
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast.error(err.response?.data.message);
     },
   });
   const formSideDesignWidthVariants = {

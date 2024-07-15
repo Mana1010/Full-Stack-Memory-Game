@@ -13,6 +13,7 @@ import secondPlace from "../../../../components/images/trophies/2nd-place.png";
 import thirdPlace from "../../../../components/images/trophies/3rd-place.png";
 import { IoReturnDownBack } from "react-icons/io5";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
+import { AxiosError } from "axios";
 function Leaderboard() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
@@ -35,6 +36,11 @@ function Leaderboard() {
     refetchOnWindowFocus: false,
   });
   const trophies = [firstPlace, secondPlace, thirdPlace];
+
+  if (getAllPlayers.isError) {
+    const err = getAllPlayers.error as AxiosError<{ message: string }>;
+    throw new Error(err.response?.data.message);
+  }
   return (
     <div className="py-2.5 flex flex-col w-full h-full relative">
       <header className="md:px-[5rem] px-5">

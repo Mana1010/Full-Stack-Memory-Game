@@ -15,6 +15,7 @@ import ImagePreview from "@/components/ImagePreview";
 import { useModalStore } from "@/utils/store/modal.store";
 import { IoReturnDownBack } from "react-icons/io5";
 import { useUserStore } from "@/utils/store/user.store";
+import { AxiosError } from "axios";
 
 export interface Profile {
   _id: string;
@@ -58,7 +59,6 @@ function AccountDetails({ username }: { username: string }) {
           withCredentials: true,
         }
       );
-      console.log(response.data.message);
       return response.data.message;
     },
     enabled: isAuthenticated != null,
@@ -66,7 +66,14 @@ function AccountDetails({ username }: { username: string }) {
   const formatNum = new Intl.NumberFormat("en-US").format(
     getAccountDetails.data?.bestScore ?? 0
   );
-
+  if (getAccountDetails.isError) {
+    const err = getAccountDetails.error as AxiosError<{ message: string }>;
+    const customError = {
+      message: err.response?.data.message || "An Error occured",
+      status: err.response?.status,
+    };
+    throw customError;
+  }
   return (
     <div className="py-5 flex flex-col w-full justify-center h-full items-center">
       <h2
@@ -99,6 +106,7 @@ function AccountDetails({ username }: { username: string }) {
                     }
                     alt="profile-pic"
                     fill
+                    sizes="100%"
                     priority
                     objectFit="cover"
                     objectPosition="center"

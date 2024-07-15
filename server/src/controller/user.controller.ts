@@ -111,7 +111,7 @@ export const getAccountDetails = asyncHandler(
     const findUser = await User.findOne({ username: username }).select("id");
     if (!findUser) {
       res.status(404);
-      throw new Error("Username not found");
+      throw new Error("username not found");
     }
     const getAccountDetails = await Leaderboard.findOne({
       userId: findUser?.id,

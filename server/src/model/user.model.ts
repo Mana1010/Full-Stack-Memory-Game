@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 interface ILevel {
   level: string;
   isUnlock: boolean;
-  highScore: number;
+  highScore?: number;
 }
 const LevelSchema = new Schema({
   level: { type: String, required: true },

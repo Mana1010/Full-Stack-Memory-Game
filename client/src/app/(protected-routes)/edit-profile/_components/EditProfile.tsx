@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import { FaMask } from "react-icons/fa";
 import loading from "../../../../components/images/loading.gif";
 import Loading from "@/components/Loading";
+import { AxiosError } from "axios";
 interface EditProfileSchema {
   _id: string;
   ign: string;
@@ -104,8 +105,8 @@ function EditProfile() {
       setSelectedCustomProfile(null); //To reset the previewed image
       setSelectedProfile(null); //To reset the previewed image
     },
-    onError: (err: any) => {
-      toast.error(err.response.data.message);
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast.error(err.response?.data.message);
     },
   });
   function handleAgeChange(value: number[]) {
