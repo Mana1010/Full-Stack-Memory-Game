@@ -144,14 +144,6 @@ export default function Home() {
       <div className="w-full hidden sm:block">
         <Image className="mx-auto" src={icon} width={466} alt="img" priority />
       </div>
-      <footer className="absolute bottom-3 left-0 right-0">
-        <p className="text-center text-white text-[1rem]">
-          Made by: TRISTAN VIC CLARITO
-        </p>
-        <p className="text-[0.7rem] text-center text-white">
-          All Right Reserved 2024
-        </p>
-      </footer>
     </main>
   );
 }

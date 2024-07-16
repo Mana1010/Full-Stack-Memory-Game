@@ -17,7 +17,7 @@ function ErrorBoundary({ error }: ErrorBoundary) {
       {error.status === 404 ? (
         <ErrorUserNotFound message={error.message} />
       ) : (
-        <ErrorUnauthorized />
+        <ErrorUnauthorized message={error.message} />
       )}
       <div className="flex items-center justify-center pt-5 w-full absolute bottom-[60px]">
         <button
