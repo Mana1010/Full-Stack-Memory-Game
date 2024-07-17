@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "./Provider";
 import { Toaster } from "sonner";
 import { lazy } from "react";
+import Sidebar from "@/components/Sidebar";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
 export const metadata: Metadata = {
@@ -24,7 +25,6 @@ export const metadata: Metadata = {
     "profile",
   ],
 };
-const Sidebar = lazy(() => import("@/components/Sidebar"));
 
 export default function RootLayout({
   children,

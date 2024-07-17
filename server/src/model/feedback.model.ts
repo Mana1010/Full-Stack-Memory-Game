@@ -25,7 +25,7 @@ const feedbackSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    experience: {
+    scale: {
       type: String,
       default: "",
     },

@@ -149,7 +149,6 @@ function Sidebar() {
       },
     },
   };
-
   if (pathname === "/profile-setup") return;
   return (
     <div

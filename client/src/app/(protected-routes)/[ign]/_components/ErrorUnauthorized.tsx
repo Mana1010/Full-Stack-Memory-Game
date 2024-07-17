@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import errorImg from "../components/images/error-img.png";
+import errorImg from "../../../../components/images/error-img.png";
 interface ErrorBoundary {
   message: string;
 }

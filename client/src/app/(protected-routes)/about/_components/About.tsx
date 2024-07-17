@@ -4,6 +4,8 @@ import Image from "next/image";
 import aboutTittle from "../../../../components/images/titles/about.png";
 import { useRouter } from "next/navigation";
 import { IoReturnDownBack } from "react-icons/io5";
+import Link from "next/link";
+import buyMeCoffee from "../../../../components/images/buy-me-coffee.png";
 function About() {
   const router = useRouter();
   return (
@@ -75,6 +77,22 @@ function About() {
               <span className="text-secondary">Designed by:</span> Tristan Vic
               T. Clarito
             </p>
+          </div>
+          <div className="flex space-y-2 items-center pt-4">
+            <Link
+              href={"https://www.buymeacoffee.com/tristanvic9"}
+              target="_blank"
+            >
+              <div className="px-2 py-1.5 flex items-center space-x-2 bg-zinc-500 rounded-xl">
+                <Image
+                  src={buyMeCoffee}
+                  alt="buy-me-coffee-icon"
+                  width={20}
+                  priority
+                />
+                <span className="text-white text-sm">Buy Me Coffee</span>
+              </div>
+            </Link>
           </div>
           <div className="flex-grow flex w-full justify-center items-center flex-col space-y-2 pt-10">
             <h4 className="text-white">ALL RIGHT RESERVED</h4>
