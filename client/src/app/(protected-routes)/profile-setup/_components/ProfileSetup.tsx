@@ -18,7 +18,7 @@ import loading from "../../../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
-
+import { useAudioStore } from "@/utils/store/audio.store";
 interface Profile {
   age: number;
   gender: string | null;
@@ -28,6 +28,7 @@ interface Profile {
 function ProfileSetup() {
   const axiosInterceptor = useAxiosInterceptor();
   const { setIsAuthenticated } = useUserStore();
+  const { playClickSound } = useAudioStore();
   const {
     setCurrentStep,
     currentStep,
@@ -114,6 +115,7 @@ function ProfileSetup() {
           {currentStep === "gender" || (
             <button
               onClick={() => {
+                playClickSound();
                 setCurrentStep(currentStep === "age" ? "gender" : "age");
                 {
                   currentStep === "age"
@@ -163,6 +165,7 @@ function ProfileSetup() {
                 const randomize = Math.floor(
                   Math.random() * checkGender.length
                 );
+                playClickSound();
                 setProfilePic(checkGender[randomize]);
                 setCurrentStep("age");
                 setGenderIsDone(true);
@@ -179,6 +182,7 @@ function ProfileSetup() {
               disabled={age.value === null}
               className="w-[150px] py-2.5 bg-secondary text-primary rounded-md transition-all duration-200 ease-in font-bold"
               onClick={() => {
+                playClickSound();
                 setCurrentStep("ign");
                 setAgeIsDone(true);
               }}
@@ -195,6 +199,7 @@ function ProfileSetup() {
                   profilePic,
                   ign: ign.value,
                 };
+                playClickSound();
                 profileMutation.mutate(data);
               }}
               style={{

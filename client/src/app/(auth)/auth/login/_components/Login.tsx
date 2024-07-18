@@ -9,19 +9,22 @@ import { motion } from "framer-motion";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "react-query";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import SideDesign from "@/components/SideDesign";
 import loading from "../../../../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
+import { useSearchParams } from "next/navigation";
+
 const schema = z.object({
   username: string().min(1, "This field is required"),
   password: string().min(1, "This field is required"),
 });
 type LoginForm = z.infer<typeof schema>;
 function Login() {
+  const params = useSearchParams();
   const { setIsAuthenticated } = useUserStore();
   const {
     handleSubmit,
@@ -87,10 +90,10 @@ function Login() {
     function load(e: BeforeUnloadEvent) {
       e.preventDefault();
     }
-
     window.addEventListener("beforeunload", load);
+
     return () => window.removeEventListener("beforeunload", load);
-  }, []);
+  }, [params]);
   return (
     <motion.main
       initial={{ x: -700, opacity: 0 }}
@@ -109,11 +112,21 @@ function Login() {
           formSideDesignWidthVariants={formSideDesignWidthVariants}
           formSideDesignHeightVariants={formSideDesignHeightVariants}
         />
-        <header className="w-full flex justify-between items-center">
-          <h1 className="text-white text-xl">SIGN IN</h1>
-          <span className="text-[#FFE30A] text-3xl">
-            <FaStar />
-          </span>
+        <header className="w-full flex flex-col">
+          <div className="flex w-full justify-between items-center">
+            <h1 className="text-white text-xl">SIGN IN</h1>
+            <span className="text-[#FFE30A] text-3xl">
+              <FaStar />
+            </span>
+          </div>
+          {params.has("message") && (
+            <small
+              style={{ textShadow: "0 0 10px #FFE30A" }}
+              className="text-secondary"
+            >
+              {params.get("message")}
+            </small>
+          )}
         </header>
         <div className="w-full pt-10 flex space-y-4 flex-col">
           <div className="space-y-1 flex flex-col">

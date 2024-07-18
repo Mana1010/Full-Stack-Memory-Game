@@ -53,7 +53,9 @@ export default function Home() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/leaderboard");
+              isAuthenticated
+                ? router.push("/leaderboard")
+                : router.push("/auth/login?message=You have not log in yet!");
               playClickSound();
             }}
             whileHover={{
@@ -119,7 +121,9 @@ export default function Home() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/feedback");
+              isAuthenticated
+                ? router.push("/feedback")
+                : router.push("/auth/login?message=You have not log in yet!");
               playClickSound();
             }}
             whileHover={{

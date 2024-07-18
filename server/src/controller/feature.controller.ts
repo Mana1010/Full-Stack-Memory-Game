@@ -48,6 +48,10 @@ export const getLevels = asyncHandler(async (req: Request, res: Response) => {
 
 export const createFeedback = asyncHandler(
   async (req: Request, res: Response) => {
+    if (!req.user) {
+      res.status(401);
+      throw new Error("Unauthorized");
+    }
     const validateFeedback = feedbackSchema.safeParse(req.body);
     if (!validateFeedback.success) {
       res.status(400);
@@ -60,36 +64,4 @@ export const createFeedback = asyncHandler(
     });
     res.status(201).json({ message: "Thank you for your feedback" });
   }
-);
-
-export const changeSetting = asyncHandler(
-  async (req: Request, res: Response) => {
-    const [key, value] = Object.entries(req.body)[0];
-    console.log(key);
-    const updateUser = await User.findByIdAndUpdate(
-      req.user?._id,
-      {
-        $set: {
-          [`setting.${key}`]: value,
-        },
-      },
-      { new: true }
-    );
-    if (!updateUser) {
-      res.status(404);
-      throw new Error("User not found");
-    }
-    res.status(202);
-  }
-);
-export const getSetting = asyncHandler(
-  asyncHandler(async (req: Request, res: Response) => {
-    const getSetting = await User.findById(req.user?._id).select("setting");
-    if (!getSetting) {
-      res.status(404);
-      throw new Error("User not found!");
-    }
-
-    res.status(200).json({ message: getSetting });
-  })
 );

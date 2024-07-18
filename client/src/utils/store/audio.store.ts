@@ -14,6 +14,7 @@ interface AudioActions {
   pauseSound: () => void;
   stopSound: () => void;
   playClickSound: () => void;
+  bgSoundSetting: () => void;
   clickSoundSetting: () => void;
 }
 type AudioStore = AudioState & AudioActions;
@@ -42,6 +43,19 @@ const store = (
   pauseSound: () => get().bgSound.pause(),
   stopSound: () => get().bgSound.stop(),
   playClickSound: () => get().clickSound.play(),
+  bgSoundSetting: () => {
+    const getBgSound = get().bgSound;
+    const defaultSetting = { playMusic: true, playSound: true };
+    let setting;
+    const storage = localStorage.getItem("setting");
+    if (storage) {
+      setting = JSON.parse(storage);
+    } else {
+      localStorage.setItem("setting", JSON.stringify(defaultSetting));
+      setting = defaultSetting;
+    }
+    getBgSound.volume(setting.playMusic ? 0.3 : 0);
+  },
   clickSoundSetting: () => {
     const getSound = get().clickSound;
     const defaultSetting = { playMusic: true, playSound: true };
@@ -59,7 +73,6 @@ const store = (
       getSound.stop(); //To automatically stop the sound
       getSound.volume(0);
     }
-    // getSound.volume(setting.playSound ? 0.3 : 0);
   },
 });
 

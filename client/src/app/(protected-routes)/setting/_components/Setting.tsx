@@ -4,10 +4,12 @@ import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import settingBg from "../../../../components/images/titles/setting.png";
-import Sound from "@/components/Sound";
+import { useRouter } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
+import { IoReturnDownBack } from "react-icons/io5";
 function Setting() {
-  const { clickSoundSetting, playClickSound } = useAudioStore();
+  const { clickSoundSetting, playClickSound, bgSoundSetting } = useAudioStore();
+  const router = useRouter();
   const axiosInterceptor = useAxiosInterceptor();
   const [setting, setSetting] = useState({ playMusic: true, playSound: true });
   useEffect(() => {
@@ -35,6 +37,7 @@ function Setting() {
                 const data = { ...setting, playMusic: value };
                 localStorage.setItem("setting", JSON.stringify(data));
                 setSetting(data);
+                bgSoundSetting();
               }}
               onClick={() => playClickSound()}
             />
@@ -53,9 +56,16 @@ function Setting() {
             />
           </div>
         </div>
+        <button
+          onClick={() => router.back()}
+          className="bg-secondary text-primary px-5 py-2.5 rounded-sm flex items-center space-x-2"
+        >
+          <span>
+            <IoReturnDownBack />
+          </span>
+          <span>BACK</span>
+        </button>
       </div>
-      {/* To automatically turn off or turn on the sound based on the setting */}
-      {/* <Sound /> */}
     </div>
   );
 }

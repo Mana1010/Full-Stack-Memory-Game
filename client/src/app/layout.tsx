@@ -3,7 +3,7 @@ import { Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
 import Provider from "./Provider";
 import { Toaster } from "sonner";
-import { lazy } from "react";
+import React, { lazy } from "react";
 import Sidebar from "@/components/Sidebar";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 

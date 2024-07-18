@@ -11,6 +11,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import axios from "axios";
 interface Rating {
   ui: number;
   ux: number;
@@ -26,7 +27,7 @@ interface Feedback {
 
 const reference = Array.from({ length: 5 }, () => false);
 function Feedback() {
-  const axiosInterceptor = useAxiosInterceptor();
+  // const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const [uiRating, setUiRating] = useState(reference);
   const [uxRating, setUxRating] = useState(reference);
@@ -46,16 +47,13 @@ function Feedback() {
   });
   const submitFeedback = useMutation({
     mutationFn: async (data: Feedback) => {
-      const response = await axiosInterceptor.post(
-        `${baseUrl}/feature/feedback`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
+      console.log(data);
+      const response = await axios.post(`${baseUrl}/feature/feedback`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
       return response.data.message;
     },
     onSuccess: () => {
@@ -66,7 +64,11 @@ function Feedback() {
       toast.message("Thank you for your feedback");
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      toast.error(err.response?.data.message);
+      if (err.response?.status === 403 || err.response?.status === 401) {
+        router.push("/auth/login?message=You have not log in yet!");
+      } else {
+        toast.error(err.response?.data.message);
+      }
     },
   });
   const checkRating = Object.values(rating).some((rate) => rate === 0);

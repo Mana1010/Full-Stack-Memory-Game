@@ -89,7 +89,7 @@ const profile: Profiles[] = [
   },
   {
     avatar: frankestein,
-    name: "frankestein",
+    name: "frankenstein",
   },
 ];
 interface EditProfileState {

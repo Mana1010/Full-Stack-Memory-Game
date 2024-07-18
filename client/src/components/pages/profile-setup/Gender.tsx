@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IoRadioButtonOffSharp, IoRadioButtonOnSharp } from "react-icons/io5";
 import { useProfileStore } from "@/utils/store/profile.store";
-import { animate, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useAudioStore } from "@/utils/store/audio.store";
 function Gender() {
   const { setGender, gender } = useProfileStore();
-
+  const { playClickSound } = useAudioStore();
   const pageTransitionVariant = {
     hidden: {
       x: -300,
@@ -39,7 +40,10 @@ function Gender() {
       <div className="flex gap-5 flex-col justify-center pt-10">
         <div className="space-x-2 flex items-center">
           <button
-            onClick={() => setGender("male")}
+            onClick={() => {
+              playClickSound();
+              setGender("male");
+            }}
             type="button"
             aria-label="You set your gender to male"
             id="male"
@@ -55,7 +59,10 @@ function Gender() {
         </div>
         <div className="space-x-2 flex items-center">
           <button
-            onClick={() => setGender("female")}
+            onClick={() => {
+              playClickSound();
+              setGender("female");
+            }}
             type="button"
             id="female"
             aria-label="You set your gender to female"

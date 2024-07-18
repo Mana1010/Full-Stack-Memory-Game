@@ -18,7 +18,13 @@ function useAxiosInterceptor() {
   const router = useRouter();
   const getToken =
     typeof window !== "undefined" && localStorage.getItem("token");
-  const UNPROTECTED_ROUTES = ["/", "/auth/signup", "/about"];
+  const UNPROTECTED_ROUTES = [
+    "/",
+    "/auth/signup",
+    "/about",
+    "/setting",
+    "/about",
+  ];
   const PROTECTED_ROUTES = ["/profile-setup"];
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
@@ -55,7 +61,6 @@ function useAxiosInterceptor() {
           setIsAuthenticated(true);
           return config;
         } catch (err) {
-          console.log(err);
           setIsAuthenticated(false);
           if (!UNPROTECTED_ROUTES.includes(pathname)) {
             router.push("/auth/login");

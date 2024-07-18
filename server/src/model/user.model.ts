@@ -26,12 +26,6 @@ const schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    setting: {
-      selectMusic: {
-        type: String,
-        default: "",
-      },
-    },
     levels: [LevelSchema],
   },
   {

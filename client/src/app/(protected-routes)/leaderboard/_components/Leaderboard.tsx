@@ -14,6 +14,7 @@ import thirdPlace from "../../../../components/images/trophies/3rd-place.png";
 import { IoReturnDownBack } from "react-icons/io5";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { AxiosError } from "axios";
+import { useUserStore } from "@/utils/store/user.store";
 function Leaderboard() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
