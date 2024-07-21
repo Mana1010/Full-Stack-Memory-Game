@@ -65,3 +65,45 @@ export const createFeedback = asyncHandler(
     res.status(201).json({ message: "Thank you for your feedback" });
   }
 );
+
+export const getEasyScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .sort({ "levels.highScore": -1 })
+      .limit(1)
+      .select("levels.highScore");
+
+    const getEasyScore = await User.findById(req.user?._id).select([
+      "levels.highScore",
+      "levels.totalScore",
+      "-_id",
+    ]);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].levels[0].highScore,
+        personalEasyScore: getEasyScore?.levels[0],
+      },
+    });
+  }
+);
+
+export const getMediumScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .sort({ "levels.highScore": -1 })
+      .limit(1)
+      .select("levels.highScore");
+
+    const getMediumScore = await User.findById(req.user?._id).select([
+      "levels.highScore",
+      "levels.totalScore",
+      "-_id",
+    ]);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].levels[1].highScore,
+        personalMediumScore: getMediumScore?.levels[1],
+      },
+    });
+  }
+);

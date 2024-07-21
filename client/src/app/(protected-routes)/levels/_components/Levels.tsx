@@ -19,8 +19,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+interface Levels {
+  level: string;
+  isUnlock: boolean;
+  highScore: number;
+  _id: string;
+}
 function Levels() {
-  const { stopSound, playSound, playClickSound } = useAudioStore();
+  const { stopSound, playSound, playClickSound, bgSoundSetting } =
+    useAudioStore();
   const router = useRouter();
   const getLevel = useQuery({
     queryKey: ["level"],
@@ -35,9 +42,10 @@ function Levels() {
     },
   });
   useEffect(() => {
+    bgSoundSetting();
     playSound();
     return () => stopSound();
-  }, [playSound, stopSound]);
+  }, [playSound, stopSound, bgSoundSetting]);
   return (
     <main className="h-full w-full md:pl-[5rem] px-5 flex flex-col py-3">
       <header className="flex justify-between items-center">
@@ -103,9 +111,12 @@ function Levels() {
       ) : (
         <div className="flex-grow flex justify-center items-center pt-5 w-full">
           <div className="flex flex-col space-y-3">
-            {getLevel.data?.levels.map((level: any, index: number) => (
+            {getLevel.data?.levels.map((level: Levels, index: number) => (
               <motion.button
-                onClick={() => playClickSound()}
+                onClick={() => {
+                  playClickSound();
+                  router.push(`/levels/${level.level.toLowerCase()}`);
+                }}
                 key={level._id}
                 disabled={!level.isUnlock}
                 style={{

@@ -10,6 +10,7 @@ const LevelSchema = new Schema({
   level: { type: String, required: true },
   isUnlock: { type: Boolean, required: true },
   highScore: { type: Number, default: 0 },
+  totalScore: { type: Number, default: 0 },
 });
 const schema = new mongoose.Schema(
   {

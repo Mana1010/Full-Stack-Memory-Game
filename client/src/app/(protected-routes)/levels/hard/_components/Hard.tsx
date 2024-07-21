@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import easyTitle from "../../../../../components/images/titles/easy.png";
+import mediumTitle from "../../../../../components/images/titles/medium.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -15,12 +15,12 @@ import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
 interface ScoreData {
   allTimeBest: number;
-  personalEasyScore: {
+  personalMediumScore: {
     totalScore: number;
     highScore: number;
   };
 }
-function Easy() {
+function Hard() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const { playClickSound } = useAudioStore();
@@ -28,10 +28,10 @@ function Easy() {
     ScoreData,
     AxiosError<{ message: string }>
   > = useQuery({
-    queryKey: ["easy-level-score"],
+    queryKey: ["medium-level-score"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(
-        `${baseUrl}/feature/easy-score`,
+        `${baseUrl}/feature/medium-score`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -52,7 +52,7 @@ function Easy() {
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">
         <SideDesignNoFM size={270} />
         <header className="pl-5">
-          <Image src={easyTitle} alt="title-image" priority />
+          <Image src={mediumTitle} alt="title-image" priority />
         </header>
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col pt-5">
@@ -63,7 +63,7 @@ function Easy() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalEasyScore.highScore}
+              {getScore.data?.personalMediumScore.highScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -74,7 +74,7 @@ function Easy() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalEasyScore.totalScore}
+              {getScore.data?.personalMediumScore.totalScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -114,7 +114,7 @@ function Easy() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/levels/easy/play");
+              router.push("/levels/medium/play");
               playClickSound();
             }}
             whileHover={{
@@ -140,4 +140,4 @@ function Easy() {
   );
 }
 
-export default Easy;
+export default Hard;
