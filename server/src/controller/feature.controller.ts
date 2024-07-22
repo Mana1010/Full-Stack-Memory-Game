@@ -69,11 +69,12 @@ export const createFeedback = asyncHandler(
 export const getEasyScore = asyncHandler(
   async (req: Request, res: Response) => {
     const getAllTimeBest = await User.find()
+      .select({
+        levels: { $slice: [0, 1] }, //Filtering only the easy mode object
+      })
       .sort({ "levels.highScore": -1 })
-      .limit(1)
-      .select("levels.highScore");
-
-    const getEasyScore = await User.findById(req.user?._id).select([
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
       "levels.highScore",
       "levels.totalScore",
       "-_id",
@@ -81,7 +82,7 @@ export const getEasyScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[0].highScore,
-        personalEasyScore: getEasyScore?.levels[0],
+        personalEasyScore: getPersonalScore?.levels[0],
       },
     });
   }
@@ -90,11 +91,12 @@ export const getEasyScore = asyncHandler(
 export const getMediumScore = asyncHandler(
   async (req: Request, res: Response) => {
     const getAllTimeBest = await User.find()
+      .select({
+        levels: { $slice: [1, 2] }, //Filtering only the medium mode object
+      })
       .sort({ "levels.highScore": -1 })
-      .limit(1)
-      .select("levels.highScore");
-
-    const getMediumScore = await User.findById(req.user?._id).select([
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
       "levels.highScore",
       "levels.totalScore",
       "-_id",
@@ -102,7 +104,29 @@ export const getMediumScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[1].highScore,
-        personalMediumScore: getMediumScore?.levels[1],
+        personalMediumScore: getPersonalScore?.levels[1],
+      },
+    });
+  }
+);
+
+export const getHardScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .select({
+        levels: { $slice: [2, 3] }, //Filtering only the hard mode object
+      })
+      .sort({ "levels.highScore": -1 })
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
+      "levels.highScore",
+      "levels.totalScore",
+      "-_id",
+    ]);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].levels[2].highScore,
+        personalEasyScore: getPersonalScore?.levels[2],
       },
     });
   }
