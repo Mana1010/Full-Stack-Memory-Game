@@ -6,7 +6,7 @@
   background: url("../components/images/bg-two.png");
 }
 .card {
-  height: 120px;
+  height: 100px;
   position: relative;
   transform-style: preserve-3d;
   cursor: pointer;

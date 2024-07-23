@@ -8,6 +8,7 @@ interface ModalState {
   openSelectProfile: boolean;
   openImagePreview: boolean;
   openImagePreviewPlayer: boolean;
+  openGameMenu: boolean;
 }
 
 interface ModalActions {
@@ -18,6 +19,7 @@ interface ModalActions {
   setOpenSelectProfile: () => void;
   setOpenImagePreview: () => void;
   setOpenImagePreviewPlayer: () => void;
+  setOpenGameMenu: () => void;
 }
 
 type ModalStore = ModalState & ModalActions;
@@ -29,6 +31,7 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
   openSelectProfile: false,
   openImagePreview: false,
   openImagePreviewPlayer: false,
+  openGameMenu: false,
 
   setOpenSidebar: () => {
     set((state: ModalState) => ({
@@ -63,6 +66,11 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
   setOpenImagePreviewPlayer: () => {
     set((state: ModalState) => ({
       openImagePreviewPlayer: !state.openImagePreviewPlayer,
+    }));
+  },
+  setOpenGameMenu: () => {
+    set((state: ModalState) => ({
+      openGameMenu: !state.openGameMenu,
     }));
   },
 });

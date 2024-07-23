@@ -16,6 +16,7 @@ interface AudioActions {
   playClickSound: () => void;
   bgSoundSetting: () => void;
   clickSoundSetting: () => void;
+  playCardSound: () => void;
 }
 type AudioStore = AudioState & AudioActions;
 
@@ -43,6 +44,7 @@ const store = (
   pauseSound: () => get().bgSound.pause(),
   stopSound: () => get().bgSound.stop(),
   playClickSound: () => get().clickSound.play(),
+  playCardSound: () => get().cardSound.play(),
   bgSoundSetting: () => {
     const getBgSound = get().bgSound;
     const defaultSetting = { playMusic: true, playSound: true };

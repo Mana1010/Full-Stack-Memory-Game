@@ -1,5 +1,5 @@
 import React from "react";
-import EasyPlay from "./_components/Play";
+import EasyPlay from "./_components/EasyPlay";
 function Page() {
   return (
     <>
