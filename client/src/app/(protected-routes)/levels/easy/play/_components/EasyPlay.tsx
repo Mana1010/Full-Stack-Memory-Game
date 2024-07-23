@@ -22,7 +22,8 @@ import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
-
+import GameOverModal from "@/components/GameOverModal";
+import GameVictoryModal from "@/components/GameVictoryModal";
 interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -165,13 +166,15 @@ const hiddenCard = [
 function EasyPlay() {
   const pathname = usePathname();
   const { openGameMenu, setOpenGameMenu } = useModalStore();
-  const { playCardSound } = useAudioStore();
+  const { playCardSound, playClickSound } = useAudioStore();
   const [finish, setFinish] = useState<boolean>(false);
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(30);
+  const [playMoves, setPlayMoves] = useState<number>(50);
   const [toggleMenu, setToggleMenu] = useState<boolean>(false);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
+
+  //For shuffling the cards when the component first to mount
   useEffect(() => {
     if (isMount) {
       for (let i = cards.length - 1; i > 0; i--) {
@@ -197,6 +200,7 @@ function EasyPlay() {
                 slicedFilteredCard[0].id === card.id ||
                 slicedFilteredCard[1].id === card.id
               ) {
+                setStarPoints(starPoints + 50);
                 return { ...card, isDone: true, isPick: true };
               } else {
                 return card;
@@ -214,9 +218,10 @@ function EasyPlay() {
             });
           });
         }
-      }, 500);
+      }, 600);
     }
-  }, [cards]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards, starPoints]);
   useEffect(() => {
     const completeCards = cards.every((card) => card.isDone);
     if (completeCards) {
@@ -271,7 +276,9 @@ function EasyPlay() {
               style={{ boxShadow: "0 0 10px #FFE30A" }}
               className="w-[100px] h-6 rounded-3xl bg-secondary flex justify-center items-center"
             >
-              <small className="text-primary text-[0.7rem]">{`${getMatchedCards.length}/${hiddenCard.length}`}</small>
+              <small className="text-primary text-[0.7rem]">{`${
+                getMatchedCards.length / 2
+              }/${hiddenCard.length / 2}`}</small>
             </div>
           </div>
           <div className="relative">
@@ -313,7 +320,11 @@ function EasyPlay() {
                 }}
               >
                 {" "}
-                <button className="back">
+                <button
+                  onClick={() => setPlayMoves((prev) => prev - 1)}
+                  disabled={playMoves <= 0}
+                  className="back"
+                >
                   <span className="text-[#fce878] text-[1.46rem]">
                     <FaStar />
                   </span>
@@ -331,6 +342,8 @@ function EasyPlay() {
         </div>
       </div>
       {openGameMenu && <GameMenuModal />}
+      {finish && <GameVictoryModal />}
+      {!finish && playMoves <= 0 && <GameOverModal />}
     </main>
   );
 }

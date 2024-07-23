@@ -9,6 +9,8 @@ interface ModalState {
   openImagePreview: boolean;
   openImagePreviewPlayer: boolean;
   openGameMenu: boolean;
+  openGameOverModal: boolean;
+  openVictoryModal: boolean;
 }
 
 interface ModalActions {
@@ -20,6 +22,8 @@ interface ModalActions {
   setOpenImagePreview: () => void;
   setOpenImagePreviewPlayer: () => void;
   setOpenGameMenu: () => void;
+  setOpenGameOverModal: (value: boolean) => void;
+  setOpenVictoryModal: (value: boolean) => void;
 }
 
 type ModalStore = ModalState & ModalActions;
@@ -32,6 +36,8 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
   openImagePreview: false,
   openImagePreviewPlayer: false,
   openGameMenu: false,
+  openGameOverModal: false,
+  openVictoryModal: false,
 
   setOpenSidebar: () => {
     set((state: ModalState) => ({
@@ -72,6 +78,12 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
     set((state: ModalState) => ({
       openGameMenu: !state.openGameMenu,
     }));
+  },
+  setOpenGameOverModal: (value: boolean) => {
+    set({ openGameOverModal: value });
+  },
+  setOpenVictoryModal: (value: boolean) => {
+    set({ openVictoryModal: value });
   },
 });
 
