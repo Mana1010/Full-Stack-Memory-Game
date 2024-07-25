@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useAudioStore } from "@/utils/store/audio.store";
@@ -78,6 +78,7 @@ function GameMenuModal() {
           <motion.button
             onClick={() => {
               router.push("/levels");
+              setOpenGameMenu();
               playClickSound();
             }}
             whileHover={{

@@ -3,11 +3,14 @@ import { Howl } from "howler";
 import bgSound from "../../assets/bgSound.mp3";
 import card_Sound from "../../assets/card-sound.mp3";
 import click_Sound from "../../assets/click-sound.mp3";
-
+import gameOverSound from "../../assets/game-over.mp3";
+import gameVictorySound from "../../assets/victory.mp3";
 interface AudioState {
   bgSound: Howl;
   clickSound: Howl;
   cardSound: Howl;
+  gameOverSound: Howl;
+  gameVictorySound: Howl;
 }
 interface AudioActions {
   playSound: () => void;
@@ -17,6 +20,8 @@ interface AudioActions {
   bgSoundSetting: () => void;
   clickSoundSetting: () => void;
   playCardSound: () => void;
+  playGameOverSound: () => void;
+  playGameVictorySound: () => void;
 }
 type AudioStore = AudioState & AudioActions;
 
@@ -33,6 +38,14 @@ const store = (
   }),
   cardSound: new Howl({
     src: [card_Sound],
+    volume: 0.2,
+  }),
+  gameOverSound: new Howl({
+    src: [gameOverSound],
+    volume: 0.2,
+  }),
+  gameVictorySound: new Howl({
+    src: [gameVictorySound],
     volume: 0.2,
   }),
   playSound: () => {
@@ -76,6 +89,8 @@ const store = (
       getSound.volume(0);
     }
   },
+  playGameOverSound: () => get().gameOverSound.play(),
+  playGameVictorySound: () => get().gameVictorySound.play(),
 });
 
 export const useAudioStore = create<AudioStore>(store);

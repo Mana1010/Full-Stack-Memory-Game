@@ -11,6 +11,7 @@ function Setting() {
   const { clickSoundSetting, playClickSound, bgSoundSetting } = useAudioStore();
   const router = useRouter();
   const axiosInterceptor = useAxiosInterceptor();
+  const [buley, bulit] = useState("");
   const [setting, setSetting] = useState({ playMusic: true, playSound: true });
   useEffect(() => {
     // Initialize setting from localStorage or use default values
@@ -22,6 +23,7 @@ function Setting() {
       localStorage.setItem("setting", JSON.stringify(defaultSetting));
     }
   }, []);
+
   return (
     <div className="py-2.5 flex flex-col w-full h-full">
       <header className="md:px-[5rem] px-5">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { motion } from "framer-motion";
@@ -168,12 +168,12 @@ function EasyPlay() {
   const { openGameMenu, setOpenGameMenu } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [finish, setFinish] = useState<boolean>(false);
+  const [gameOver, setGameOver] = useState<boolean>(false);
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
   const [playMoves, setPlayMoves] = useState<number>(50);
-  const [toggleMenu, setToggleMenu] = useState<boolean>(false);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
-
+  const [renderMe, setRenderMe] = useState(false);
   //For shuffling the cards when the component first to mount
   useEffect(() => {
     if (isMount) {
@@ -226,15 +226,25 @@ function EasyPlay() {
     const completeCards = cards.every((card) => card.isDone);
     if (completeCards) {
       setFinish(true);
+    } else if (!completeCards && playMoves <= 0) {
+      setRenderMe(true); //This is to render the component once more to update and make sure that the cards are all updated
+      if (renderMe) {
+        setGameOver(true);
+      }
     }
-    return () => setFinish(false);
-  }, [cards]);
+
+    return () => {
+      setFinish(false);
+      setRenderMe(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards, playMoves]);
   function playCardSoundFunc(card: boolean) {
     if (!card) {
       playCardSound();
     }
   }
-  const getMatchedCards = cards.filter((card) => card.isDone === true);
+  const getMatchedCards = cards.filter((card) => card.isDone);
   return (
     <main className="h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
@@ -343,7 +353,7 @@ function EasyPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {finish && <GameVictoryModal />}
-      {!finish && playMoves <= 0 && <GameOverModal />}
+      {gameOver && <GameOverModal />}
     </main>
   );
 }
