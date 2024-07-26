@@ -39,6 +39,7 @@ const hiddenCard = [
     name: "apple",
     isPick: false,
     isDone: false,
+
     color: "#ED483B",
   },
   {
@@ -47,6 +48,7 @@ const hiddenCard = [
     name: "lemon",
     isPick: false,
     isDone: false,
+
     color: "#F7D931",
   },
   {
@@ -167,13 +169,13 @@ function EasyPlay() {
   const pathname = usePathname();
   const { openGameMenu, setOpenGameMenu } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
-  const [finish, setFinish] = useState<boolean>(false);
-  const [gameOver, setGameOver] = useState<boolean>(false);
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
   const [playMoves, setPlayMoves] = useState<number>(50);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
-  const [renderMe, setRenderMe] = useState(false);
+  const [renderMe, setRenderMe] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameComplete, setGameComplete] = useState(false);
   //For shuffling the cards when the component first to mount
   useEffect(() => {
     if (isMount) {
@@ -201,7 +203,11 @@ function EasyPlay() {
                 slicedFilteredCard[1].id === card.id
               ) {
                 setStarPoints(starPoints + 50);
-                return { ...card, isDone: true, isPick: true };
+                return {
+                  ...card,
+                  isDone: true,
+                  isPick: true,
+                };
               } else {
                 return card;
               }
@@ -222,35 +228,34 @@ function EasyPlay() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, starPoints]);
+  const getMatchedCards = cards.filter((card) => card.isDone);
   useEffect(() => {
-    const completeCards = cards.every((card) => card.isDone);
-    if (completeCards) {
-      setFinish(true);
-    } else if (!completeCards && playMoves <= 0) {
-      setRenderMe(true); //This is to render the component once more to update and make sure that the cards are all updated
-      if (renderMe) {
+    const completedCards = cards.every((card) => card.isDone);
+    if (completedCards) {
+      setGameComplete(true);
+    } else if (
+      !completedCards &&
+      playMoves <= 0 &&
+      getMatchedCards.length + 2 !== cards.length
+    ) {
+      setTimeout(() => {
         setGameOver(true);
-      }
+      }, 500);
     }
-
-    return () => {
-      setFinish(false);
-      setRenderMe(false);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cards, playMoves]);
+  }, [cards, getMatchedCards.length, playMoves]);
   function playCardSoundFunc(card: boolean) {
     if (!card) {
       playCardSound();
     }
   }
-  const getMatchedCards = cards.filter((card) => card.isDone);
   return (
     <main className="h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
         <div className="pl-10 sm:pl-[6rem]">
           <button
-            onClick={() => setOpenGameMenu()}
+            onClick={() => {
+              setOpenGameMenu();
+            }}
             className="text-secondary text-2xl relative"
           >
             <div className="w-9 h-9 rounded-full bg-primary absolute left-[-20px] top-[-6px] flex justify-center items-center">
@@ -266,6 +271,7 @@ function EasyPlay() {
             </div>
           </button>
         </div>
+
         <div className="flex-col flex space-y-4 pr-6">
           <div className="relative">
             <div className="w-9 h-9 rounded-full bg-primary absolute left-[-20px] top-[-6px] flex justify-center items-center">
@@ -321,7 +327,10 @@ function EasyPlay() {
                   setCards((prev) =>
                     prev.map((cardsMap) => {
                       if (card.id === cardsMap.id) {
-                        return { ...cardsMap, isPick: !cardsMap.isPick };
+                        return {
+                          ...cardsMap,
+                          isPick: !cardsMap.isPick,
+                        };
                       } else {
                         return cardsMap;
                       }
@@ -352,8 +361,8 @@ function EasyPlay() {
         </div>
       </div>
       {openGameMenu && <GameMenuModal />}
-      {finish && <GameVictoryModal />}
-      {gameOver && <GameOverModal />}
+      {gameComplete && <GameVictoryModal />}
+      {gameOver && <GameOverModal totalPoints={starPoints} />}
     </main>
   );
 }
