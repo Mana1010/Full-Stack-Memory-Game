@@ -1,17 +1,78 @@
 "use client";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
 import skullImg from "../components/images/skull.png";
 import star from "../components/images/trophies/total-score-star.png";
 import { MdInfoOutline } from "react-icons/md";
-function GameOverModal({ totalPoints }: { totalPoints: number }) {
-  const { playGameOverSound } = useAudioStore();
+import { useMutation, useQueryClient, UseQueryResult } from "react-query";
+import useAxiosInterceptor from "@/api/useAxiosInterceptor";
+import { baseUrl } from "@/utils/baseUrl";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/utils/store/user.store";
+import { AxiosError } from "axios";
+import { useModalStore } from "@/utils/store/modal.store";
+import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
+import { Cards } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
+interface GamePlaySchema {
+  totalPoints: number;
+  setPlayMoves: Dispatch<SetStateAction<number>>;
+  setStarPoints: Dispatch<SetStateAction<number>>;
+  setCards: Dispatch<SetStateAction<Cards[]>>;
+  setIsMount: Dispatch<SetStateAction<boolean>>;
+}
+function GameOverModal({
+  totalPoints,
+  setPlayMoves,
+  setStarPoints,
+  setCards,
+  setIsMount,
+}: GamePlaySchema) {
+  const axiosInterceptor = useAxiosInterceptor();
+  const { playGameOverSound, playClaimingSound } = useAudioStore();
+  const { setOpenGameOverModal } = useModalStore();
+  const { userId } = useUserStore();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const claimPrize = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        points: totalPoints,
+      };
+      const response = await axiosInterceptor.patch(
+        `${baseUrl}/feature/easy/claim-prize/${userId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data.message;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["user-profile"]);
+      playClaimingSound();
+      router.push("/levels/easy");
+      toast.success(data);
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      console.log(err.response?.data);
+    },
+  });
   useEffect(() => {
     playGameOverSound();
   }, [playGameOverSound]);
 
+  function resetGame() {
+    setIsMount(true);
+    setPlayMoves(10);
+    setStarPoints(0);
+    setCards(hiddenCard);
+  }
   return (
     <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center w-full h-screen px-5">
       <div className="bg-primary p-4 w-[95%] sm:w-[400px] rounded-sm flex flex-col space-y-3 min-h-[500px]">
@@ -37,8 +98,16 @@ function GameOverModal({ totalPoints }: { totalPoints: number }) {
             <Image src={star} alt="star-image" width={15} priority />
           </div>
         </div>
-        <div className="pt-5 flex justify-center items-center flex-col">
+        <div
+          className={`pt-5 justify-center items-center flex-col ${
+            totalPoints === 0 ? "hidden" : "flex"
+          }`}
+        >
           <button
+            onClick={() => {
+              claimPrize.mutate();
+              setOpenGameOverModal(false);
+            }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
           >
@@ -53,7 +122,22 @@ function GameOverModal({ totalPoints }: { totalPoints: number }) {
             </p>
           </div>
         </div>
-        <div></div>
+        <div
+          className={`pt-5 justify-center items-center flex-col ${
+            totalPoints === 0 ? "flex" : "hidden"
+          }`}
+        >
+          <button
+            onClick={() => {
+              resetGame();
+              setOpenGameOverModal(false);
+            }}
+            style={{ boxShadow: "0 0 15px #FFE30A" }}
+            className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
+          >
+            TRY AGAIN
+          </button>
+        </div>
       </div>
     </div>
   );

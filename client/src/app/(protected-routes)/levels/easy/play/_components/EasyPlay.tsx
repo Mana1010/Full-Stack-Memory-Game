@@ -24,7 +24,7 @@ import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
 import GameOverModal from "@/components/GameOverModal";
 import GameVictoryModal from "@/components/GameVictoryModal";
-interface Cards {
+export interface Cards {
   id: string;
   sticker: React.JSX.Element;
   name: string;
@@ -32,7 +32,7 @@ interface Cards {
   isDone: boolean;
   color: string;
 }
-const hiddenCard = [
+export const hiddenCard = [
   {
     id: nanoid(),
     sticker: <FaAppleAlt />,
@@ -167,15 +167,21 @@ const hiddenCard = [
 ];
 function EasyPlay() {
   const pathname = usePathname();
-  const { openGameMenu, setOpenGameMenu } = useModalStore();
+  const {
+    openGameMenu,
+    setOpenGameMenu,
+    setOpenGameOverModal,
+    setOpenVictoryModal,
+    openGameOverModal,
+    openVictoryModal,
+  } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(50);
+  const [playMoves, setPlayMoves] = useState<number>(10);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
-  const [renderMe, setRenderMe] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-  const [gameComplete, setGameComplete] = useState(false);
+  // const [gameOver, setGameOver] = useState(false);
+  // const [gameComplete, setGameComplete] = useState(false);
   //For shuffling the cards when the component first to mount
   useEffect(() => {
     if (isMount) {
@@ -185,10 +191,9 @@ function EasyPlay() {
       }
       setIsMount(false);
     }
-    return () => setIsMount(true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, openGameOverModal]);
   useEffect(() => {
     const slicedFilteredCard = cards.filter(
       (card) => card.isPick && !card.isDone
@@ -232,17 +237,23 @@ function EasyPlay() {
   useEffect(() => {
     const completedCards = cards.every((card) => card.isDone);
     if (completedCards) {
-      setGameComplete(true);
+      setOpenVictoryModal(true);
     } else if (
       !completedCards &&
       playMoves <= 0 &&
       getMatchedCards.length + 2 !== cards.length
     ) {
       setTimeout(() => {
-        setGameOver(true);
+        setOpenGameOverModal(true);
       }, 500);
     }
-  }, [cards, getMatchedCards.length, playMoves]);
+  }, [
+    cards,
+    getMatchedCards.length,
+    playMoves,
+    setOpenGameOverModal,
+    setOpenVictoryModal,
+  ]);
   function playCardSoundFunc(card: boolean) {
     if (!card) {
       playCardSound();
@@ -317,6 +328,7 @@ function EasyPlay() {
           <div className="grid grid-cols-4 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
               <motion.div
+                layout
                 key={card.id}
                 initial={false}
                 animate={{ rotateY: !card.isPick ? 180 : 0 }}
@@ -361,8 +373,16 @@ function EasyPlay() {
         </div>
       </div>
       {openGameMenu && <GameMenuModal />}
-      {gameComplete && <GameVictoryModal />}
-      {gameOver && <GameOverModal totalPoints={starPoints} />}
+      {openVictoryModal && <GameVictoryModal />}
+      {openGameOverModal && (
+        <GameOverModal
+          totalPoints={starPoints}
+          setPlayMoves={setPlayMoves}
+          setStarPoints={setStarPoints}
+          setCards={setCards}
+          setIsMount={setIsMount}
+        />
+      )}
     </main>
   );
 }

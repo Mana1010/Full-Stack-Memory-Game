@@ -44,6 +44,7 @@ function Sidebar() {
     setOpenDevSocial,
     setOpenSidebar,
   } = useModalStore();
+  const { setUserId } = useUserStore();
   const navAuth = [
     {
       name: "REGISTER",
@@ -91,7 +92,9 @@ function Sidebar() {
         },
         withCredentials: true,
       });
-      return response.data.message;
+      const data = response.data.message;
+      setUserId(data?.userId._id);
+      return data;
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
     refetchOnWindowFocus: false,

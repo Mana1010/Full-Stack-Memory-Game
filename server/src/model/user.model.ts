@@ -1,11 +1,6 @@
 import mongoose, { Types } from "mongoose";
 import { Schema } from "mongoose";
 
-interface ILevel {
-  level: string;
-  isUnlock: boolean;
-  highScore?: number;
-}
 const LevelSchema = new Schema({
   level: { type: String, required: true },
   isUnlock: { type: Boolean, required: true },
@@ -33,5 +28,5 @@ const schema = new mongoose.Schema(
     timestamps: true,
   }
 );
-type UserSchema = mongoose.InferSchemaType<typeof schema>;
+export type UserSchema = mongoose.InferSchemaType<typeof schema>;
 export const User = mongoose.model<UserSchema>("User", schema);

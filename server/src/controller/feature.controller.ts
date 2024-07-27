@@ -131,3 +131,23 @@ export const getHardScore = asyncHandler(
     });
   }
 );
+
+export const claimEasyPoints = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { points } = req.body;
+    const { id } = req.params;
+    const getUser = await Leaderboard.findOne({ userId: id }).populate({
+      path: "userId",
+      select: ["levels", "username"],
+    });
+    if (!getUser) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    // getUser.userId?.levels[0].totalScore += +points;
+    getUser.bestScore = (getUser.bestScore ?? 0) + +points;
+    await getUser.save();
+    res.status(200).json({ message: "Successfully claimed your prize" });
+  }
+);
