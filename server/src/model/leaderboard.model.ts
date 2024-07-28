@@ -1,6 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
 import { Schema } from "mongoose";
-import { UserSchema } from "./user.model";
 const schema = new mongoose.Schema({
   bestScore: {
     type: Number,

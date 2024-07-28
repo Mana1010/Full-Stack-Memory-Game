@@ -4,6 +4,9 @@ import { Response, Request } from "express";
 import { User } from "../model/user.model";
 import { Feedback } from "../model/feedback.model";
 import { z } from "zod";
+import { UserSchema } from "../model/user.model";
+
+type UserIdSchema = Pick<UserSchema, "levels">;
 const feedbackSchema = z.object({
   name: z.string().min(1),
   rating: z.object({
@@ -136,18 +139,23 @@ export const claimEasyPoints = asyncHandler(
   async (req: Request, res: Response) => {
     const { points } = req.body;
     const { id } = req.params;
-    const getUser = await Leaderboard.findOne({ userId: id }).populate({
-      path: "userId",
-      select: ["levels", "username"],
+    const getUserLeaderboard = await Leaderboard.findOne({
+      userId: id,
     });
-    if (!getUser) {
+    const getUser = await User.findById(req.user?._id);
+    if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
     }
-
-    // getUser.userId?.levels[0].totalScore += +points;
-    getUser.bestScore = (getUser.bestScore ?? 0) + +points;
+    if (getUser) {
+      getUser.levels[0].totalScore += points;
+    }
+    if (points > getUser.levels[0].highScore) {
+      getUser.levels[0].highScore = points;
+    }
+    getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();
+    await getUserLeaderboard?.save();
     res.status(200).json({ message: "Successfully claimed your prize" });
   }
 );

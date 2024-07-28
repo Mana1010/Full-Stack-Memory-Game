@@ -13,7 +13,9 @@ import { useUserStore } from "@/utils/store/user.store";
 import { useRouter } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { GoCommentDiscussion } from "react-icons/go";
+import { useSearchParams } from "next/navigation";
 export default function Home() {
+  const search = useSearchParams();
   const { playClickSound } = useAudioStore();
   const { isAuthenticated } = useUserStore();
   const router = useRouter();

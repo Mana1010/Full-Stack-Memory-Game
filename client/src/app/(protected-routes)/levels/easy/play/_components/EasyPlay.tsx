@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FaAppleAlt } from "react-icons/fa";
 import {
   GiOrange,
@@ -31,6 +31,8 @@ export interface Cards {
   isPick: boolean;
   isDone: boolean;
   color: string;
+  isShowAddPoints: boolean;
+  cardModified: number;
 }
 export const hiddenCard = [
   {
@@ -39,17 +41,9 @@ export const hiddenCard = [
     name: "apple",
     isPick: false,
     isDone: false,
-
     color: "#ED483B",
-  },
-  {
-    id: nanoid(),
-    sticker: <FaLemon />,
-    name: "lemon",
-    isPick: false,
-    isDone: false,
-
-    color: "#F7D931",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -58,6 +52,18 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#F7D931",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <FaLemon />,
+    name: "lemon",
+    isPick: false,
+    isDone: false,
+    color: "#F7D931",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -66,6 +72,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#FF8508",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -74,15 +82,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#392A63",
-  },
-
-  {
-    id: nanoid(),
-    sticker: <GiBanana />,
-    name: "banana",
-    isPick: false,
-    isDone: false,
-    color: "#FED602",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -91,6 +92,18 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#FED602",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiBanana />,
+    name: "banana",
+    isPick: false,
+    isDone: false,
+    color: "#FED602",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -99,6 +112,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#FF8508",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -107,6 +122,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#ED483B",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -115,6 +132,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#392A63",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -123,6 +142,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#719A26",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -131,6 +152,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#719A26",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -139,6 +162,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#F55454",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -147,6 +172,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#F55454",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -155,6 +182,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#E3E54D",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
   {
     id: nanoid(),
@@ -163,6 +192,8 @@ export const hiddenCard = [
     isPick: false,
     isDone: false,
     color: "#E3E54D",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
   },
 ];
 function EasyPlay() {
@@ -177,9 +208,10 @@ function EasyPlay() {
   } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(10);
+  const [playMoves, setPlayMoves] = useState<number>(50);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
+  const [showAddPoints, setShowAddPoints] = useState(false);
   // const [gameOver, setGameOver] = useState(false);
   // const [gameComplete, setGameComplete] = useState(false);
   //For shuffling the cards when the component first to mount
@@ -212,6 +244,7 @@ function EasyPlay() {
                   ...card,
                   isDone: true,
                   isPick: true,
+                  cardModified: Date.now(),
                 };
               } else {
                 return card;
@@ -254,11 +287,41 @@ function EasyPlay() {
     setOpenGameOverModal,
     setOpenVictoryModal,
   ]);
+  useEffect(() => {
+    const sortedArr = cards
+      .toSorted((a, b) => b.cardModified - a.cardModified)
+      .slice(0, 2);
+    const checkDoneCards = cards.some((card) => card.isDone);
+    const dateTime = Date.now() - sortedArr[0].cardModified <= 100;
+    if (checkDoneCards && dateTime) {
+      setCards((prev) => {
+        return prev.map((card) => {
+          if (sortedArr[0].id === card.id || sortedArr[1].id === card.id) {
+            return { ...card, isShowAddPoints: true };
+          } else {
+            return card;
+          }
+        });
+      });
+      setTimeout(() => {
+        setCards((prev) => {
+          return prev.map((card) => {
+            if (card.isShowAddPoints) {
+              return { ...card, isShowAddPoints: false };
+            } else {
+              return card;
+            }
+          });
+        });
+      }, 800);
+    }
+  }, [cards]);
   function playCardSoundFunc(card: boolean) {
     if (!card) {
       playCardSound();
     }
   }
+
   return (
     <main className="h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
@@ -282,7 +345,6 @@ function EasyPlay() {
             </div>
           </button>
         </div>
-
         <div className="flex-col flex space-y-4 pr-6">
           <div className="relative">
             <div className="w-9 h-9 rounded-full bg-primary absolute left-[-20px] top-[-6px] flex justify-center items-center">
@@ -367,6 +429,20 @@ function EasyPlay() {
                 >
                   <span className="text-4xl">{card.sticker}</span>
                 </button>
+                <AnimatePresence mode="wait">
+                  {card.isShowAddPoints && (
+                    <motion.span
+                      style={{ textShadow: "0 0 15px #FFE30A" }}
+                      initial={{ opacity: 0, y: 0 }}
+                      animate={{ opacity: 1, y: -30 }}
+                      transition={{ duration: 0.5, ease: "easeIn" }}
+                      exit={{ opacity: 0 }}
+                      className="absolute text-secondary top-0 z-[99]"
+                    >
+                      +25
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
