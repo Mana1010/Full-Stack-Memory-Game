@@ -11,7 +11,11 @@ import { VscDebugContinueSmall } from "react-icons/vsc";
 import { useModalStore } from "@/utils/store/modal.store";
 function GameMenuModal() {
   const { playClickSound } = useAudioStore();
-  const { setOpenGameMenu } = useModalStore();
+  const {
+    setOpenGameMenu,
+    setOpenConfirmationRetryModal,
+    setOpenConfirmationQuitModal,
+  } = useModalStore();
   const router = useRouter();
   return (
     <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center w-full h-screen px-5">
@@ -57,6 +61,8 @@ function GameMenuModal() {
           <motion.button
             onClick={() => {
               playClickSound();
+              setOpenConfirmationRetryModal(true);
+              setOpenGameMenu();
             }}
             whileHover={{
               backgroundColor: "#FFE30A",
@@ -77,9 +83,9 @@ function GameMenuModal() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/levels");
-              setOpenGameMenu();
               playClickSound();
+              setOpenGameMenu();
+              setOpenConfirmationQuitModal(true);
             }}
             whileHover={{
               backgroundColor: "#FFE30A",

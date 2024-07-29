@@ -6,7 +6,6 @@ import { Feedback } from "../model/feedback.model";
 import { z } from "zod";
 import { UserSchema } from "../model/user.model";
 
-type UserIdSchema = Pick<UserSchema, "levels">;
 const feedbackSchema = z.object({
   name: z.string().min(1),
   rating: z.object({
@@ -75,7 +74,7 @@ export const getEasyScore = asyncHandler(
       .select({
         levels: { $slice: [0, 1] }, //Filtering only the easy mode object
       })
-      .sort({ "levels.highScore": -1 })
+      .sort({ "levels.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
       "levels.highScore",
@@ -84,7 +83,7 @@ export const getEasyScore = asyncHandler(
     ]);
     res.status(200).json({
       message: {
-        allTimeBest: getAllTimeBest[0].levels[0].highScore,
+        allTimeBest: getAllTimeBest[0].levels[0].totalScore,
         personalEasyScore: getPersonalScore?.levels[0],
       },
     });
@@ -97,7 +96,7 @@ export const getMediumScore = asyncHandler(
       .select({
         levels: { $slice: [1, 2] }, //Filtering only the medium mode object
       })
-      .sort({ "levels.highScore": -1 })
+      .sort({ "levels.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
       "levels.highScore",
@@ -106,7 +105,7 @@ export const getMediumScore = asyncHandler(
     ]);
     res.status(200).json({
       message: {
-        allTimeBest: getAllTimeBest[0].levels[1].highScore,
+        allTimeBest: getAllTimeBest[0].levels[1].totalScore,
         personalMediumScore: getPersonalScore?.levels[1],
       },
     });
@@ -119,7 +118,7 @@ export const getHardScore = asyncHandler(
       .select({
         levels: { $slice: [2, 3] }, //Filtering only the hard mode object
       })
-      .sort({ "levels.highScore": -1 })
+      .sort({ "levels.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
       "levels.highScore",
@@ -128,7 +127,7 @@ export const getHardScore = asyncHandler(
     ]);
     res.status(200).json({
       message: {
-        allTimeBest: getAllTimeBest[0].levels[2].highScore,
+        allTimeBest: getAllTimeBest[0].levels[2].totalScore,
         personalEasyScore: getPersonalScore?.levels[2],
       },
     });

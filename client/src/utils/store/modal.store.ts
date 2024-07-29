@@ -11,6 +11,8 @@ interface ModalState {
   openGameMenu: boolean;
   openGameOverModal: boolean;
   openVictoryModal: boolean;
+  openConfirmationRetryModal: boolean;
+  openConfirmationQuitModal: boolean;
 }
 
 interface ModalActions {
@@ -24,6 +26,8 @@ interface ModalActions {
   setOpenGameMenu: () => void;
   setOpenGameOverModal: (value: boolean) => void;
   setOpenVictoryModal: (value: boolean) => void;
+  setOpenConfirmationRetryModal: (value: boolean) => void;
+  setOpenConfirmationQuitModal: (value: boolean) => void;
 }
 
 type ModalStore = ModalState & ModalActions;
@@ -38,6 +42,8 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
   openGameMenu: false,
   openGameOverModal: false,
   openVictoryModal: false,
+  openConfirmationRetryModal: false,
+  openConfirmationQuitModal: false,
 
   setOpenSidebar: () => {
     set((state: ModalState) => ({
@@ -84,6 +90,12 @@ const store = (set: StoreApi<ModalStore>["setState"]) => ({
   },
   setOpenVictoryModal: (value: boolean) => {
     set({ openVictoryModal: value });
+  },
+  setOpenConfirmationRetryModal: (value: boolean) => {
+    set({ openConfirmationRetryModal: value });
+  },
+  setOpenConfirmationQuitModal: (value: boolean) => {
+    set({ openConfirmationQuitModal: value });
   },
 });
 

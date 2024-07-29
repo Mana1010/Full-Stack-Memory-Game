@@ -24,6 +24,8 @@ import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
 import GameOverModal from "@/components/GameOverModal";
 import GameVictoryModal from "@/components/GameVictoryModal";
+import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
+import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -203,15 +205,16 @@ function EasyPlay() {
     setOpenGameMenu,
     setOpenGameOverModal,
     setOpenVictoryModal,
+    openConfirmationRetryModal,
     openGameOverModal,
     openVictoryModal,
+    openConfirmationQuitModal,
   } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
   const [playMoves, setPlayMoves] = useState<number>(50);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
-  const [showAddPoints, setShowAddPoints] = useState(false);
   // const [gameOver, setGameOver] = useState(false);
   // const [gameComplete, setGameComplete] = useState(false);
   //For shuffling the cards when the component first to mount
@@ -225,7 +228,7 @@ function EasyPlay() {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, openGameOverModal]);
+  }, [pathname, openGameOverModal, openConfirmationRetryModal]);
   useEffect(() => {
     const slicedFilteredCard = cards.filter(
       (card) => card.isPick && !card.isDone
@@ -287,12 +290,14 @@ function EasyPlay() {
     setOpenGameOverModal,
     setOpenVictoryModal,
   ]);
+
   useEffect(() => {
     const sortedArr = cards
       .toSorted((a, b) => b.cardModified - a.cardModified)
       .slice(0, 2);
     const checkDoneCards = cards.some((card) => card.isDone);
-    const dateTime = Date.now() - sortedArr[0].cardModified <= 100;
+    const threshold = 100; //Means the time limit.
+    const dateTime = Date.now() - sortedArr[0].cardModified <= threshold; //Para icheck ang nabilin nga time by milliseconds from the current date to the time of when user matched the cards kay its because of how the execution and rendering time works, there is a slight delayed by milliseconds.
     if (checkDoneCards && dateTime) {
       setCards((prev) => {
         return prev.map((card) => {
@@ -385,7 +390,7 @@ function EasyPlay() {
       </header>
       <div className="h-full w-full flex items-center justify-center flex-grow">
         <div
-          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[70%]`}
+          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%]`}
         >
           <div className="grid grid-cols-4 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
@@ -459,6 +464,15 @@ function EasyPlay() {
           setIsMount={setIsMount}
         />
       )}
+      {openConfirmationRetryModal && (
+        <ConfirmationRetryModal
+          setPlayMoves={setPlayMoves}
+          setStarPoints={setStarPoints}
+          setCards={setCards}
+          setIsMount={setIsMount}
+        />
+      )}
+      {openConfirmationQuitModal && <ConfirmationQuitModal />}
     </main>
   );
 }
