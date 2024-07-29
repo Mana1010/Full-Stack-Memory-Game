@@ -265,7 +265,7 @@ function EasyPlay() {
             });
           });
         }
-      }, 600);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, starPoints]);
@@ -274,22 +274,13 @@ function EasyPlay() {
     const completedCards = cards.every((card) => card.isDone);
     if (completedCards) {
       setOpenVictoryModal(true);
-    } else if (
-      !completedCards &&
-      playMoves <= 0 &&
-      getMatchedCards.length + 2 !== cards.length
-    ) {
+      setOpenGameOverModal(false);
+    } else if (!completedCards && playMoves <= 0) {
       setTimeout(() => {
         setOpenGameOverModal(true);
       }, 500);
     }
-  }, [
-    cards,
-    getMatchedCards.length,
-    playMoves,
-    setOpenGameOverModal,
-    setOpenVictoryModal,
-  ]);
+  }, [cards, playMoves, setOpenGameOverModal, setOpenVictoryModal]);
 
   useEffect(() => {
     const sortedArr = cards

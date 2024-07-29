@@ -135,9 +135,9 @@ function Levels() {
                 </div>
               </motion.button>
             ))}
-            <div className="flex flex-col pt-5">
+            <div className="flex flex-col pt-5 space-y-2">
               <small className="text-secondary text-sm font-bold">
-                Game Mode
+                Challenges
               </small>
               <button
                 style={{ boxShadow: "0 0 15px #FFE30A" }}

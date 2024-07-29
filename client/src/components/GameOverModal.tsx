@@ -75,7 +75,18 @@ function GameOverModal({
   }
   return (
     <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center w-full h-screen px-5">
-      <div className="bg-primary p-4 w-[95%] sm:w-[400px] rounded-sm flex flex-col space-y-3 min-h-[500px]">
+      <div className="bg-primary p-4 w-[95%] sm:w-[400px] rounded-sm flex flex-col space-y-3 min-h-[500px] relative">
+        <div className="absolute top-[-25px] w-full flex justify-center items-center bg-transparent left-0 right-0">
+          <div
+            style={{ boxShadow: "0 0 20px #FFE30A" }}
+            className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
+          >
+            <span className="text-primary"> EASY LEVEL</span>
+            <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
+              <span className="h-[35px] w-2 bg-primary/50"></span>
+            </div>
+          </div>
+        </div>
         <div className="flex items-center justify-center w-full">
           <Image src={skullImg} alt="skull-image" width={200} priority />
         </div>
