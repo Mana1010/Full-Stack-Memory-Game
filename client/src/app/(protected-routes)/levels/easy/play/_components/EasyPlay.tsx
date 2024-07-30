@@ -445,7 +445,9 @@ function EasyPlay() {
         </div>
       </div>
       {openGameMenu && <GameMenuModal />}
-      {openVictoryModal && <GameVictoryModal />}
+      {openVictoryModal && (
+        <GameVictoryModal totalPoints={starPoints} playMoves={playMoves} />
+      )}
       {openGameOverModal && (
         <GameOverModal
           totalPoints={starPoints}

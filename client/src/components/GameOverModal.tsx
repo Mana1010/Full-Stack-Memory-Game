@@ -40,6 +40,7 @@ function GameOverModal({
     mutationFn: async () => {
       const payload = {
         points: totalPoints,
+        isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
         `${baseUrl}/feature/easy/claim-prize/${userId}`,

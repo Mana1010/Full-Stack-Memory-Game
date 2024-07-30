@@ -136,12 +136,13 @@ export const getHardScore = asyncHandler(
 
 export const claimEasyPoints = asyncHandler(
   async (req: Request, res: Response) => {
-    const { points } = req.body;
+    const { points, isGameComplete } = req.body;
     const { id } = req.params;
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    const isAlreadyUnlockMedium = getUser?.levels[1].isUnlock; //Checking if the medium level is already unlock
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -153,6 +154,9 @@ export const claimEasyPoints = asyncHandler(
       getUser.levels[0].highScore = points;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
+    if (isGameComplete && !isAlreadyUnlockMedium) {
+      getUser.levels[1].isUnlock = true;
+    }
     await getUser.save();
     await getUserLeaderboard?.save();
     res.status(200).json({ message: "Successfully claimed your prize" });
