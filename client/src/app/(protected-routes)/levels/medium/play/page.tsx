@@ -1,7 +1,7 @@
 import React from "react";
-
+import MediumPlay from "./_components/MediumPlay";
 function Play() {
-  return <div>Play Medium</div>;
+  return <><MediumPlay/></>;
 }
 
 export default Play;
