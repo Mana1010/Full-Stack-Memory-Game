@@ -22,8 +22,8 @@ import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
-import GameOverModal from "@/components/GameOverModal";
-import GameVictoryModal from "@/components/GameVictoryModal";
+import GameOverModal from "./GameOverModal";
+import GameVictoryModal from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
 export interface Cards {
@@ -446,7 +446,11 @@ function EasyPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModal totalPoints={starPoints} playMoves={playMoves} />
+        <GameVictoryModal
+          totalPoints={
+            playMoves === 0 ? starPoints : starPoints + playMoves * 25
+          }
+        />
       )}
       {openGameOverModal && (
         <GameOverModal
@@ -463,6 +467,7 @@ function EasyPlay() {
           setStarPoints={setStarPoints}
           setCards={setCards}
           setIsMount={setIsMount}
+          hiddenCards={hiddenCard}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}

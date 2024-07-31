@@ -15,7 +15,6 @@ import {
   GiSandSnake,
 } from "react-icons/gi";
 import { LiaKiwiBirdSolid } from "react-icons/lia";
-import { TbMelon } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import timeMoves from "../../../../../../components/images/time-moves.png";
@@ -25,8 +24,8 @@ import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
-import GameOverModal from "@/components/GameOverModal";
-import GameVictoryModal from "@/components/GameVictoryModal";
+import GameVictoryModalMedium from "../GameVictoryModal";
+import GameOverModalMedium from "./GameOverModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
 export interface Cards {
@@ -487,10 +486,14 @@ function MediumPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModal totalPoints={starPoints} playMoves={playMoves} />
+        <GameVictoryModalMedium
+          totalPoints={
+            playMoves === 0 ? starPoints : starPoints + playMoves * 50
+          }
+        />
       )}
       {openGameOverModal && (
-        <GameOverModal
+        <GameOverModalMedium
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
@@ -504,6 +507,7 @@ function MediumPlay() {
           setStarPoints={setStarPoints}
           setCards={setCards}
           setIsMount={setIsMount}
+          hiddenCards={hiddenCard}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}

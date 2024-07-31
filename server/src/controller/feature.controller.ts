@@ -94,7 +94,7 @@ export const getMediumScore = asyncHandler(
   async (req: Request, res: Response) => {
     const getAllTimeBest = await User.find()
       .select({
-        levels: { $slice: [1, 2] }, //Filtering only the medium mode object
+        levels: { $slice: [1, 1] }, //Filtering only the easy mode object
       })
       .sort({ "levels.totalScore": -1 })
       .limit(1);
@@ -105,7 +105,7 @@ export const getMediumScore = asyncHandler(
     ]);
     res.status(200).json({
       message: {
-        allTimeBest: getAllTimeBest[0].levels[1].totalScore,
+        allTimeBest: getAllTimeBest[0].levels[0].totalScore,
         personalMediumScore: getPersonalScore?.levels[1],
       },
     });
@@ -116,7 +116,7 @@ export const getHardScore = asyncHandler(
   async (req: Request, res: Response) => {
     const getAllTimeBest = await User.find()
       .select({
-        levels: { $slice: [2, 3] }, //Filtering only the hard mode object
+        levels: { $slice: [2, 2] }, //Filtering only the hard mode object
       })
       .sort({ "levels.totalScore": -1 })
       .limit(1);
@@ -128,7 +128,7 @@ export const getHardScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[2].totalScore,
-        personalEasyScore: getPersonalScore?.levels[2],
+        personalHardScore: getPersonalScore?.levels[2],
       },
     });
   }
@@ -156,6 +156,35 @@ export const claimEasyPoints = asyncHandler(
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockMedium) {
       getUser.levels[1].isUnlock = true;
+    }
+    await getUser.save();
+    await getUserLeaderboard?.save();
+    res.status(200).json({ message: "Successfully claimed your prize" });
+  }
+);
+
+export const claimMediumPoints = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { points, isGameComplete } = req.body;
+    const { id } = req.params;
+    const getUserLeaderboard = await Leaderboard.findOne({
+      userId: id,
+    });
+    const getUser = await User.findById(req.user?._id);
+    const isAlreadyUnlockHard = getUser?.levels[2].isUnlock; //Checking if the hard level is already unlock
+    if (!getUser || !getUserLeaderboard) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    if (getUser) {
+      getUser.levels[1].totalScore += points;
+    }
+    if (points > getUser.levels[1].highScore) {
+      getUser.levels[1].highScore = points;
+    }
+    getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
+    if (isGameComplete && !isAlreadyUnlockHard) {
+      getUser.levels[2].isUnlock = true; // Will unlock the hard page
     }
     await getUser.save();
     await getUserLeaderboard?.save();

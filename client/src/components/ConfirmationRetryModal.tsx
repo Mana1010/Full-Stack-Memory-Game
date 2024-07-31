@@ -3,22 +3,34 @@ import React, { ReactNode } from "react";
 import { useModalStore } from "@/utils/store/modal.store";
 import cards from "../components/images/cards.png";
 import Image from "next/image";
-import { GamePlaySchema } from "./GameOverModal";
-import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
+import { GamePlaySchema } from "../app/(protected-routes)/levels/easy/play/_components/GameOverModal";
 
-type GameConfirmationModalSchema = Omit<GamePlaySchema, "totalPoints">;
+export interface Cards {
+  id: string;
+  sticker: React.JSX.Element;
+  name: string;
+  isPick: boolean;
+  isDone: boolean;
+  color: string;
+  isShowAddPoints: boolean;
+  cardModified: number;
+}
+type GameConfirmationModalSchema = Omit<GamePlaySchema, "totalPoints"> & {
+  hiddenCards: Cards[];
+};
 function ConfirmationRetryModal({
   setPlayMoves,
   setStarPoints,
   setCards,
   setIsMount,
+  hiddenCards,
 }: GameConfirmationModalSchema) {
   const { setOpenConfirmationRetryModal } = useModalStore();
   function resetGame() {
     setIsMount(true);
     setPlayMoves(50);
     setStarPoints(0);
-    setCards(hiddenCard);
+    setCards(hiddenCards);
     setOpenConfirmationRetryModal(false);
   }
   return (

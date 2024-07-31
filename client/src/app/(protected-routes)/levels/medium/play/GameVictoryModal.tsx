@@ -3,8 +3,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
-import victoryImg from "../components/images/victory.png";
-import star from "../components/images/trophies/total-score-star.png";
+import victoryImg from "../../../../../components/images/victory.png";
+import star from "../../../../../components/images/trophies/total-score-star.png";
 import { MdInfoOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
@@ -14,12 +14,10 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { GamePlaySchema } from "./GameOverModal";
+import { GamePlaySchema } from "./_components/GameOverModal";
 
-type GameVictorySchema = Pick<GamePlaySchema, "totalPoints"> & {
-  playMoves: number;
-};
-function GameVictoryModal({ totalPoints, playMoves }: GameVictorySchema) {
+type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
+function GameVictoryModal({ totalPoints }: GameVictorySchema) {
   const axiosInterceptor = useAxiosInterceptor();
   const { playGameVictorySound, playClaimingSound } = useAudioStore();
   const { setOpenVictoryModal } = useModalStore();
@@ -33,7 +31,7 @@ function GameVictoryModal({ totalPoints, playMoves }: GameVictorySchema) {
         isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/easy/claim-prize/${userId}`,
+        `${baseUrl}/feature/medium/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -66,8 +64,9 @@ function GameVictoryModal({ totalPoints, playMoves }: GameVictorySchema) {
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary"> EASY LEVEL</span>
+            <span className="text-primary"> MEDIUM LEVEL</span>
             <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
+              <span className="h-[35px] w-2 bg-primary/50"></span>
               <span className="h-[35px] w-2 bg-primary/50"></span>
             </div>
           </div>
@@ -92,9 +91,7 @@ function GameVictoryModal({ totalPoints, playMoves }: GameVictorySchema) {
             }}
             className="w-1/2 py-2 rounded-sm flex justify-center items-center text-white space-x-1"
           >
-            <span className="pt-0.5">
-              {playMoves === 0 ? totalPoints : totalPoints + playMoves * 25}
-            </span>
+            <span className="pt-0.5">{totalPoints}</span>
             <Image src={star} alt="star-image" width={15} priority />
           </div>
           <small className="text-center text-[0.6rem] text-secondary">
