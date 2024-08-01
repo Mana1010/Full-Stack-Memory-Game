@@ -28,16 +28,8 @@ import GameVictoryModalMedium from "../GameVictoryModal";
 import GameOverModalMedium from "./GameOverModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
-export interface Cards {
-  id: string;
-  sticker: React.JSX.Element;
-  name: string;
-  isPick: boolean;
-  isDone: boolean;
-  color: string;
-  isShowAddPoints: boolean;
-  cardModified: number;
-}
+import { Cards } from "@/types/game.types";
+
 export const hiddenCard = [
   {
     id: nanoid(),

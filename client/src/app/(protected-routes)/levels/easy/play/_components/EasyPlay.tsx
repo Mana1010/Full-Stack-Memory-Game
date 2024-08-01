@@ -32,7 +32,7 @@ export interface Cards {
   name: string;
   isPick: boolean;
   isDone: boolean;
-  color: string;
+  color?: string;
   isShowAddPoints: boolean;
   cardModified: number;
 }
@@ -210,9 +210,9 @@ function EasyPlay() {
     openVictoryModal,
     openConfirmationQuitModal,
   } = useModalStore();
-  const { playCardSound, playClickSound } = useAudioStore();
+  const { playCardSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(50);
+  const [playMoves, setPlayMoves] = useState<number>(40);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
   // const [gameOver, setGameOver] = useState(false);

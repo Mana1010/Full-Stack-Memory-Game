@@ -3,18 +3,8 @@ import React, { ReactNode } from "react";
 import { useModalStore } from "@/utils/store/modal.store";
 import cards from "../components/images/cards.png";
 import Image from "next/image";
-import { GamePlaySchema } from "../app/(protected-routes)/levels/easy/play/_components/GameOverModal";
-
-export interface Cards {
-  id: string;
-  sticker: React.JSX.Element;
-  name: string;
-  isPick: boolean;
-  isDone: boolean;
-  color: string;
-  isShowAddPoints: boolean;
-  cardModified: number;
-}
+import { GamePlaySchema } from "@/types/game.types";
+import { Cards } from "@/types/game.types";
 type GameConfirmationModalSchema = Omit<GamePlaySchema, "totalPoints"> & {
   hiddenCards: Cards[];
 };

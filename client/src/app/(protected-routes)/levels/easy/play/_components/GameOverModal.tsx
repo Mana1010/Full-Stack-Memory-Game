@@ -16,13 +16,8 @@ import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
 import { Cards } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
-export interface GamePlaySchema {
-  totalPoints: number;
-  setPlayMoves: Dispatch<SetStateAction<number>>;
-  setStarPoints: Dispatch<SetStateAction<number>>;
-  setCards: Dispatch<SetStateAction<Cards[]>>;
-  setIsMount: Dispatch<SetStateAction<boolean>>;
-}
+import { GamePlaySchema } from "@/types/game.types";
+
 function GameOverModal({
   totalPoints,
   setPlayMoves,
@@ -70,7 +65,7 @@ function GameOverModal({
 
   function resetGame() {
     setIsMount(true);
-    setPlayMoves(50);
+    setPlayMoves(40);
     setStarPoints(0);
     setCards(hiddenCard);
   }

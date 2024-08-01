@@ -15,14 +15,9 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { hiddenCard } from "./MediumPlay";
-import { Cards } from "./MediumPlay";
-export interface GamePlaySchema {
-  totalPoints: number;
-  setPlayMoves: Dispatch<SetStateAction<number>>;
-  setStarPoints: Dispatch<SetStateAction<number>>;
-  setCards: Dispatch<SetStateAction<Cards[]>>;
-  setIsMount: Dispatch<SetStateAction<boolean>>;
-}
+import { Cards } from "@/types/game.types";
+import { GamePlaySchema } from "@/types/game.types";
+
 function GameOverModalMedium({
   totalPoints,
   setPlayMoves,

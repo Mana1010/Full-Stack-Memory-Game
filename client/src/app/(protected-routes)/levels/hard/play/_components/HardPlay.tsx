@@ -14,6 +14,20 @@ import {
   GiElephant,
   GiSandSnake,
 } from "react-icons/gi";
+import {
+  TbZodiacAries,
+  TbZodiacCancer,
+  TbZodiacLibra,
+  TbZodiacCapricorn,
+  TbZodiacTaurus,
+  TbZodiacLeo,
+  TbZodiacScorpio,
+  TbZodiacAquarius,
+  TbZodiacGemini,
+  TbZodiacVirgo,
+  TbZodiacSagittarius,
+  TbZodiacPisces,
+} from "react-icons/tb";
 import { LiaKiwiBirdSolid } from "react-icons/lia";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
@@ -28,214 +42,222 @@ import GameOverModalHard from "./GameOverModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
 import GameVictoryModalHard from "./GameVictoryModal";
-export interface Cards {
-  id: string;
-  sticker: React.JSX.Element;
-  name: string;
-  isPick: boolean;
-  isDone: boolean;
-  color: string;
-  isShowAddPoints: boolean;
-  cardModified: number;
-}
+import { Cards } from "@/types/game.types";
+
 export const hiddenCard = [
   {
     id: nanoid(),
-    sticker: <GiBearFace />,
-    name: "bear",
+    sticker: <TbZodiacSagittarius />,
+    name: "sagittarius",
     isPick: false,
     isDone: false,
-    color: "#070707",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiLion />,
-    name: "lion",
+    sticker: <TbZodiacSagittarius />,
+    name: "sagittarius",
     isPick: false,
     isDone: false,
-    color: "#725A34",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiLion />,
-    name: "lion",
+    sticker: <TbZodiacPisces />,
+    name: "pisces",
     isPick: false,
     isDone: false,
-    color: "#725A34",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiTigerHead />,
-    name: "tiger",
+    sticker: <TbZodiacPisces />,
+    name: "pisces",
     isPick: false,
     isDone: false,
-    color: "#DB9F4F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <FaHippo />,
-    name: "hippo",
+    sticker: <TbZodiacAries />,
+    name: "aries",
     isPick: false,
     isDone: false,
-    color: "#4D3636",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <FaHippo />,
-    name: "hippo",
+    sticker: <TbZodiacAries />,
+    name: "aries",
     isPick: false,
     isDone: false,
-    color: "#4D3636",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <LiaKiwiBirdSolid />,
-    name: "kiwi",
+    sticker: <TbZodiacCancer />,
+    name: "cancer",
     isPick: false,
     isDone: false,
-    color: "#874D12",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <LiaKiwiBirdSolid />,
-    name: "kiwi",
+    sticker: <TbZodiacCancer />,
+    name: "cancer",
     isPick: false,
     isDone: false,
-    color: "#874D12",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiTigerHead />,
-    name: "tiger",
+    sticker: <TbZodiacCapricorn />,
+    name: "capricorn",
     isPick: false,
     isDone: false,
-    color: "#DB9F4F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiBearFace />,
-    name: "bear",
+    sticker: <TbZodiacCapricorn />,
+    name: "capricorn",
     isPick: false,
     isDone: false,
-    color: "#070707",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiEagleHead />,
-    name: "eagle",
+    sticker: <TbZodiacLibra />,
+    name: "libra",
     isPick: false,
     isDone: false,
-    color: "#DEAC54",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiEagleHead />,
-    name: "eagle",
+    sticker: <TbZodiacLibra />,
+    name: "libra",
     isPick: false,
     isDone: false,
-    color: "#DEAC54",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiMonkey />,
-    name: "monkey",
+    sticker: <TbZodiacTaurus />,
+    name: "taurus",
     isPick: false,
     isDone: false,
-    color: "#6A5344",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiMonkey />,
-    name: "monkey",
+    sticker: <TbZodiacTaurus />,
+    name: "taurus",
     isPick: false,
     isDone: false,
-    color: "#6A5344",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiParrotHead />,
-    name: "parrot",
+    sticker: <TbZodiacLeo />,
+    name: "leo",
     isPick: false,
     isDone: false,
-    color: "#F01C2F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiParrotHead />,
-    name: "parrot",
+    sticker: <TbZodiacLeo />,
+    name: "leo",
     isPick: false,
     isDone: false,
-    color: "#F01C2F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiElephant />,
-    name: "elephant",
+    sticker: <TbZodiacScorpio />,
+    name: "scorpio",
     isPick: false,
     isDone: false,
-    color: "#7F5942",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiElephant />,
-    name: "elephant",
+    sticker: <TbZodiacScorpio />,
+    name: "scorpio",
     isPick: false,
     isDone: false,
-    color: "#7F5942",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiSandSnake />,
-    name: "snake",
+    sticker: <TbZodiacVirgo />,
+    name: "virgo",
     isPick: false,
     isDone: false,
-    color: "#6DB51F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiSandSnake />,
-    name: "snake",
+    sticker: <TbZodiacVirgo />,
+    name: "virgo",
     isPick: false,
     isDone: false,
-    color: "#6DB51F",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <TbZodiacAquarius />,
+    name: "aquarius",
+    isPick: false,
+    isDone: false,
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <TbZodiacAquarius />,
+    name: "aquarius",
+    isPick: false,
+    isDone: false,
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <TbZodiacGemini />,
+    name: "gemini",
+    isPick: false,
+    isDone: false,
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <TbZodiacGemini />,
+    name: "gemini",
+    isPick: false,
+    isDone: false,
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
@@ -255,7 +277,7 @@ function HardPlay() {
   } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(50);
+  const [playMoves, setPlayMoves] = useState<number>(55);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
   //For shuffling the cards when the component first to mount
@@ -306,7 +328,7 @@ function HardPlay() {
             });
           });
         }
-      }, 400);
+      }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, starPoints]);
@@ -359,7 +381,7 @@ function HardPlay() {
     }
   }
   return (
-    <main className="medium-bg h-full w-full flex flex-col py-5">
+    <main className="hard-bg h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
         <div className="pl-10 sm:pl-[6rem]">
           <button
@@ -421,9 +443,9 @@ function HardPlay() {
       </header>
       <div className="h-full w-full flex items-center justify-center flex-grow">
         <div
-          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%] backdrop-blur-sm`}
+          className={`items-center flex-col flex sm:rounded-md sm:w-[450px] w-[95%] backdrop-blur-sm`}
         >
-          <div className="grid grid-cols-5 items-center justify-center py-3 px-2 gap-2 w-full ">
+          <div className="grid grid-cols-6 items-center justify-center py-3 px-2 gap-2 w-full ">
             {cards.map((card) => (
               <motion.div
                 layout
@@ -452,17 +474,13 @@ function HardPlay() {
                 <button
                   onClick={() => setPlayMoves((prev) => prev - 1)}
                   disabled={playMoves <= 0}
-                  className="back-medium"
+                  className="back-hard"
                 >
-                  <span className="text-[#fce878] text-[1.46rem]">
+                  {/* <span className="text-[#fce878] text-[1.46rem]">
                     <FaStar />
-                  </span>
+                  </span> */}
                 </button>
-                <button
-                  disabled={card.isDone}
-                  style={{ color: card.color }}
-                  className="front-medium"
-                >
+                <button disabled={card.isDone} className="front-medium">
                   <span className="text-4xl">{card.sticker}</span>
                 </button>
                 <AnimatePresence mode="wait">

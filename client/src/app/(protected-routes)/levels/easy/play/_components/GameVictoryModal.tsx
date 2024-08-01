@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { GamePlaySchema } from "./GameOverModal";
+import { GamePlaySchema } from "@/types/game.types";
 
 type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
 function GameVictoryModal({ totalPoints }: GameVictorySchema) {
