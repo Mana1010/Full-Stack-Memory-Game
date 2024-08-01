@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import mediumTitle from "../../../../../components/images/titles/medium.png";
+import hardTitle from "../../../../../components/images/titles/hard.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
 interface ScoreData {
   allTimeBest: number;
-  personalMediumScore: {
+  personalHardScore: {
     totalScore: number;
     highScore: number;
   };
@@ -28,10 +28,10 @@ function Hard() {
     ScoreData,
     AxiosError<{ message: string }>
   > = useQuery({
-    queryKey: ["medium-level-score"],
+    queryKey: ["hard-level-score"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(
-        `${baseUrl}/feature/medium-score`,
+        `${baseUrl}/feature/hard-score`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -52,7 +52,7 @@ function Hard() {
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">
         <SideDesignNoFM size={270} />
         <header className="pl-5">
-          <Image src={mediumTitle} alt="title-image" priority />
+          <Image src={hardTitle} alt="hard-image" priority />
         </header>
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col pt-5">
@@ -63,7 +63,7 @@ function Hard() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalMediumScore.highScore}
+              {getScore.data?.personalHardScore.highScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -74,7 +74,7 @@ function Hard() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalMediumScore.totalScore}
+              {getScore.data?.personalHardScore.totalScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -114,7 +114,7 @@ function Hard() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/levels/medium/play");
+              router.push("/levels/hard/play");
               playClickSound();
             }}
             whileHover={{

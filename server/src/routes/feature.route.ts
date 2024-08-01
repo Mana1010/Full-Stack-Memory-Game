@@ -5,6 +5,7 @@ import {
   createFeedback,
   getEasyScore,
   getMediumScore,
+  getHardScore,
   claimEasyPoints,
   claimMediumPoints,
 } from "../controller/feature.controller";
@@ -17,5 +18,6 @@ router.get("/levels", protectedRoutes, getLevels);
 router.post("/feedback", protectedRoutes, createFeedback);
 router.get("/easy-score", protectedRoutes, getEasyScore);
 router.get("/medium-score", protectedRoutes, getMediumScore);
+router.get("/hard-score", protectedRoutes, getHardScore);
 router.patch("/easy/claim-prize/:id", protectedRoutes, claimEasyPoints);
 router.patch("/medium/claim-prize/:id", protectedRoutes, claimMediumPoints);

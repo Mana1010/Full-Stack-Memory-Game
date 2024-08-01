@@ -150,6 +150,17 @@ function Levels() {
                   </span>
                 </div>
               </button>
+              <button
+                style={{ boxShadow: "0 0 15px #FFE30A" }}
+                className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
+              >
+                PERIODIC TABLE
+                <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
+                  <span className=" text-primary/50 font-semibold">
+                    <FaShuffle />
+                  </span>
+                </div>
+              </button>
             </div>
           </div>
         </div>

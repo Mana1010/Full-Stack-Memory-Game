@@ -125,9 +125,10 @@ export const getHardScore = asyncHandler(
       "levels.totalScore",
       "-_id",
     ]);
+    console.log(getAllTimeBest[0].levels[0].totalScore);
     res.status(200).json({
       message: {
-        allTimeBest: getAllTimeBest[0].levels[2].totalScore,
+        allTimeBest: getAllTimeBest[0].levels[0].totalScore,
         personalHardScore: getPersonalScore?.levels[2],
       },
     });
