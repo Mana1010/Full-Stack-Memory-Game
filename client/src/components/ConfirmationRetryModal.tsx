@@ -7,6 +7,7 @@ import { GamePlaySchema } from "@/types/game.types";
 import { Cards } from "@/types/game.types";
 type GameConfirmationModalSchema = Omit<GamePlaySchema, "totalPoints"> & {
   hiddenCards: Cards[];
+  playMoves: number;
 };
 function ConfirmationRetryModal({
   setPlayMoves,
@@ -14,11 +15,12 @@ function ConfirmationRetryModal({
   setCards,
   setIsMount,
   hiddenCards,
+  playMoves,
 }: GameConfirmationModalSchema) {
   const { setOpenConfirmationRetryModal } = useModalStore();
   function resetGame() {
     setIsMount(true);
-    setPlayMoves(50);
+    setPlayMoves(playMoves);
     setStarPoints(0);
     setCards(hiddenCards);
     setOpenConfirmationRetryModal(false);

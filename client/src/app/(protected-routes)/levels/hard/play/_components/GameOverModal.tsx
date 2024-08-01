@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
+import { hiddenCard } from "./HardPlay";
 import { Cards } from "@/types/game.types";
 import { GamePlaySchema } from "@/types/game.types";
 
@@ -35,10 +35,9 @@ function GameOverModalHard({
     mutationFn: async () => {
       const payload = {
         points: totalPoints,
-        isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/easy/claim-prize/${userId}`,
+        `${baseUrl}/feature/hard/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -52,11 +51,11 @@ function GameOverModalHard({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/easy");
+      router.push("/levels/hard");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      console.log(err.response?.data);
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {
@@ -65,7 +64,7 @@ function GameOverModalHard({
 
   function resetGame() {
     setIsMount(true);
-    setPlayMoves(50);
+    setPlayMoves(55);
     setStarPoints(0);
     setCards(hiddenCard);
   }

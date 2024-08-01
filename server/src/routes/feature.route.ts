@@ -8,6 +8,7 @@ import {
   getHardScore,
   claimEasyPoints,
   claimMediumPoints,
+  claimHardPoints,
 } from "../controller/feature.controller";
 import express from "express";
 
@@ -21,3 +22,4 @@ router.get("/medium-score", protectedRoutes, getMediumScore);
 router.get("/hard-score", protectedRoutes, getHardScore);
 router.patch("/easy/claim-prize/:id", protectedRoutes, claimEasyPoints);
 router.patch("/medium/claim-prize/:id", protectedRoutes, claimMediumPoints);
+router.patch("/hard/claim-prize/:id", protectedRoutes, claimHardPoints);

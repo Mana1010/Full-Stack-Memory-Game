@@ -31,7 +31,7 @@ function GameVictoryModalHard({ totalPoints }: GameVictorySchema) {
         isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/medium/claim-prize/${userId}`,
+        `${baseUrl}/feature/hard/claim-prize/${userId}`,
         payload,
         {
           headers: {

@@ -135,7 +135,7 @@ function Levels() {
                 </div>
               </motion.button>
             ))}
-            <div className="flex flex-col pt-5 space-y-2">
+            <div className="flex flex-col pt-5 space-y-3">
               <small className="text-secondary text-sm font-bold">
                 Challenges
               </small>
@@ -151,15 +151,15 @@ function Levels() {
                 </div>
               </button>
               <button
-                style={{ boxShadow: "0 0 15px #FFE30A" }}
+                disabled
                 className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
               >
-                PERIODIC TABLE
-                <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
+                COMING SOON
+                {/* <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
                   <span className=" text-primary/50 font-semibold">
                     <FaShuffle />
                   </span>
-                </div>
+                </div> */}
               </button>
             </div>
           </div>

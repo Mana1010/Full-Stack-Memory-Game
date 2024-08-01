@@ -468,6 +468,7 @@ function EasyPlay() {
           setCards={setCards}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
+          playMoves={40}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}

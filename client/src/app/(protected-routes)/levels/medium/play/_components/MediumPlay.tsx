@@ -500,6 +500,7 @@ function MediumPlay() {
           setCards={setCards}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
+          playMoves={50}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}

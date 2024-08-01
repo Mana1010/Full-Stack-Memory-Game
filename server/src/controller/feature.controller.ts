@@ -192,3 +192,28 @@ export const claimMediumPoints = asyncHandler(
     res.status(200).json({ message: "Successfully claimed your prize" });
   }
 );
+
+export const claimHardPoints = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { points } = req.body;
+    const { id } = req.params;
+    const getUserLeaderboard = await Leaderboard.findOne({
+      userId: id,
+    });
+    const getUser = await User.findById(req.user?._id); //Checking if the hard level is already unlock
+    if (!getUser || !getUserLeaderboard) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    if (getUser) {
+      getUser.levels[2].totalScore += points;
+    }
+    if (points > getUser.levels[2].highScore) {
+      getUser.levels[2].highScore = points;
+    }
+    getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
+    await getUser.save();
+    await getUserLeaderboard?.save();
+    res.status(200).json({ message: "Successfully claimed your prize" });
+  }
+);

@@ -277,7 +277,7 @@ function HardPlay() {
   } = useModalStore();
   const { playCardSound, playClickSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(55);
+  const [playMoves, setPlayMoves] = useState<number>(60);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
   //For shuffling the cards when the component first to mount
@@ -305,7 +305,7 @@ function HardPlay() {
                 slicedFilteredCard[0].id === card.id ||
                 slicedFilteredCard[1].id === card.id
               ) {
-                setStarPoints(starPoints + 100);
+                setStarPoints(starPoints + 200);
                 return {
                   ...card,
                   isDone: true,
@@ -475,11 +475,7 @@ function HardPlay() {
                   onClick={() => setPlayMoves((prev) => prev - 1)}
                   disabled={playMoves <= 0}
                   className="back-hard"
-                >
-                  {/* <span className="text-[#fce878] text-[1.46rem]">
-                    <FaStar />
-                  </span> */}
-                </button>
+                ></button>
                 <button disabled={card.isDone} className="front-medium">
                   <span className="text-4xl">{card.sticker}</span>
                 </button>
@@ -493,7 +489,7 @@ function HardPlay() {
                       exit={{ opacity: 0 }}
                       className="absolute text-secondary top-0 z-[99]"
                     >
-                      +50
+                      +100
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -506,7 +502,7 @@ function HardPlay() {
       {openVictoryModal && (
         <GameVictoryModalHard
           totalPoints={
-            playMoves === 0 ? starPoints : starPoints + playMoves * 50
+            playMoves === 0 ? starPoints : starPoints + playMoves * 100
           }
         />
       )}
@@ -526,6 +522,7 @@ function HardPlay() {
           setCards={setCards}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
+          playMoves={60}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}
