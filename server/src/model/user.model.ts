@@ -7,6 +7,12 @@ const LevelSchema = new Schema({
   highScore: { type: Number, default: 0 },
   totalScore: { type: Number, default: 0 },
 });
+const ChallengeSchema = new Schema({
+  challengeName: { type: String, required: true },
+  isUnlock: { type: Boolean, required: true },
+  highScore: { type: Number, default: 0 },
+  totalScore: { type: Number, default: 0 },
+});
 const schema = new mongoose.Schema(
   {
     username: {
@@ -23,6 +29,7 @@ const schema = new mongoose.Schema(
       default: false,
     },
     levels: [LevelSchema],
+    challenges: [ChallengeSchema],
   },
   {
     timestamps: true,

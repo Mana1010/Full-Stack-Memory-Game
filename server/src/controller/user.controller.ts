@@ -61,6 +61,20 @@ export const profileUpload = asyncHandler(
         { level: "MEDIUM", isUnlock: false },
         { level: "HARD", isUnlock: false },
       ] as any;
+      getUser.challenges = [
+        {
+          challengeName: "RESHUFFLE",
+          isUnlock: false,
+        },
+        {
+          challengeName: "3-CARDS",
+          isUnlock: false,
+        },
+        {
+          challengeName: "PERIODIC TABLE",
+          isUnlock: false,
+        },
+      ] as any;
       getUser.isOldUser = !req.user?.isOldUser;
       createProfile.userId = req.user?._id;
       await createProfile.save();

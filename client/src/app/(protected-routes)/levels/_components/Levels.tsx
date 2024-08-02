@@ -114,8 +114,10 @@ function Levels() {
             {getLevel.data?.levels.map((level: Levels, index: number) => (
               <motion.button
                 onClick={() => {
-                  playClickSound();
-                  router.push(`/levels/${level.level.toLowerCase()}`);
+                  if (level.isUnlock) {
+                    playClickSound();
+                    router.push(`/levels/${level.level.toLowerCase()}`);
+                  }
                 }}
                 key={level._id}
                 disabled={!level.isUnlock}
@@ -139,17 +141,19 @@ function Levels() {
               <small className="text-secondary text-sm font-bold">
                 Challenges
               </small>
-              <button
-                style={{ boxShadow: "0 0 15px #FFE30A" }}
-                className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
-              >
-                RESHUFFLE
-                <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
-                  <span className=" text-primary/50 font-semibold">
-                    <FaShuffle />
-                  </span>
-                </div>
-              </button>
+              <div>
+                <button
+                  style={{ boxShadow: "0 0 15px #FFE30A" }}
+                  className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
+                >
+                  RESHUFFLE
+                  <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
+                    <span className=" text-primary/50 font-semibold">
+                      <FaShuffle />
+                    </span>
+                  </div>
+                </button>
+              </div>
               <button
                 disabled
                 className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}

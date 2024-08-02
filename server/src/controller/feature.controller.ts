@@ -173,6 +173,7 @@ export const claimMediumPoints = asyncHandler(
     });
     const getUser = await User.findById(req.user?._id);
     const isAlreadyUnlockHard = getUser?.levels[2].isUnlock; //Checking if the hard level is already unlock
+    const isAlreadyUnlockReshuffle = getUser?.challenges[0].isUnlock;
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -184,7 +185,7 @@ export const claimMediumPoints = asyncHandler(
       getUser.levels[1].highScore = points;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
-    if (isGameComplete && !isAlreadyUnlockHard) {
+    if (isGameComplete && !isAlreadyUnlockHard && !isAlreadyUnlockReshuffle) {
       getUser.levels[2].isUnlock = true; // Will unlock the hard page
     }
     await getUser.save();
