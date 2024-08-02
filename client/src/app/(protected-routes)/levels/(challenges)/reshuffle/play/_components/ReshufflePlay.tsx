@@ -3,237 +3,202 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaHippo } from "react-icons/fa6";
+import { FaAppleAlt } from "react-icons/fa";
 import {
-  GiLion,
-  GiTigerHead,
-  GiBearFace,
-  GiEagleHead,
-  GiMonkey,
-  GiParrotHead,
-  GiElephant,
-  GiSandSnake,
+  GiOrange,
+  GiGrapes,
+  GiBanana,
+  GiCoconuts,
+  GiWatermelon,
 } from "react-icons/gi";
-import { LiaKiwiBirdSolid } from "react-icons/lia";
+import { FaLemon } from "react-icons/fa";
+import { TbMelon } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
-import timeMoves from "../../../../../../components/images/time-moves.png";
-import points from "../../../../../../components/images/trophies/total-score-star.png";
-import cardDone from "../../../../../../components/images/cards-done.png";
+import timeMoves from "../../../../../../../components/images/time-moves.png";
+import points from "../../../../../../../components/images/trophies/total-score-star.png";
+import cardDone from "../../../../../../../components/images/cards-done.png";
 import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
-import GameVictoryModalMedium from "../GameVictoryModal";
-import GameOverModalMedium from "./GameOverModal";
+import GameOverModalReshuffle from "./GameOverModal";
+import GameVictoryModalReshuffle from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
-import { Cards } from "@/types/game.types";
-
+export interface Cards {
+  id: string;
+  sticker: React.JSX.Element;
+  name: string;
+  isPick: boolean;
+  isDone: boolean;
+  color?: string;
+  isShowAddPoints: boolean;
+  cardModified: number;
+}
 export const hiddenCard = [
   {
     id: nanoid(),
-    sticker: <GiBearFace />,
-    name: "bear",
+    sticker: <FaAppleAlt />,
+    name: "apple",
     isPick: false,
     isDone: false,
-    color: "#070707",
+    color: "#ED483B",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiLion />,
-    name: "lion",
+    sticker: <FaLemon />,
+    name: "lemon",
     isPick: false,
     isDone: false,
-    color: "#725A34",
+    color: "#F7D931",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiLion />,
-    name: "lion",
+    sticker: <FaLemon />,
+    name: "lemon",
     isPick: false,
     isDone: false,
-    color: "#725A34",
+    color: "#F7D931",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiTigerHead />,
-    name: "tiger",
+    sticker: <GiOrange />,
+    name: "orange",
     isPick: false,
     isDone: false,
-    color: "#DB9F4F",
+    color: "#FF8508",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <FaHippo />,
-    name: "hippo",
+    sticker: <GiGrapes />,
+    name: "grapes",
     isPick: false,
     isDone: false,
-    color: "#4D3636",
+    color: "#392A63",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <FaHippo />,
-    name: "hippo",
+    sticker: <GiBanana />,
+    name: "banana",
     isPick: false,
     isDone: false,
-    color: "#4D3636",
+    color: "#FED602",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <LiaKiwiBirdSolid />,
-    name: "kiwi",
+    sticker: <GiBanana />,
+    name: "banana",
     isPick: false,
     isDone: false,
-    color: "#874D12",
+    color: "#FED602",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <LiaKiwiBirdSolid />,
-    name: "kiwi",
+    sticker: <GiOrange />,
+    name: "orange",
     isPick: false,
     isDone: false,
-    color: "#874D12",
+    color: "#FF8508",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiTigerHead />,
-    name: "tiger",
+    sticker: <FaAppleAlt />,
+    name: "apple",
     isPick: false,
     isDone: false,
-    color: "#DB9F4F",
+    color: "#ED483B",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiBearFace />,
-    name: "bear",
+    sticker: <GiGrapes />,
+    name: "grapes",
     isPick: false,
     isDone: false,
-    color: "#070707",
+    color: "#392A63",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiEagleHead />,
-    name: "eagle",
+    sticker: <GiCoconuts />,
+    name: "coconut",
     isPick: false,
     isDone: false,
-    color: "#DEAC54",
+    color: "#719A26",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiEagleHead />,
-    name: "eagle",
+    sticker: <GiCoconuts />,
+    name: "coconut",
     isPick: false,
     isDone: false,
-    color: "#DEAC54",
+    color: "#719A26",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiMonkey />,
-    name: "monkey",
+    sticker: <GiWatermelon />,
+    name: "watermelon",
     isPick: false,
     isDone: false,
-    color: "#6A5344",
+    color: "#F55454",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiMonkey />,
-    name: "monkey",
+    sticker: <GiWatermelon />,
+    name: "watermelon",
     isPick: false,
     isDone: false,
-    color: "#6A5344",
+    color: "#F55454",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiParrotHead />,
-    name: "parrot",
+    sticker: <TbMelon />,
+    name: "melon",
     isPick: false,
     isDone: false,
-    color: "#F01C2F",
+    color: "#E3E54D",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiParrotHead />,
-    name: "parrot",
+    sticker: <TbMelon />,
+    name: "melon",
     isPick: false,
     isDone: false,
-    color: "#F01C2F",
-    isShowAddPoints: false,
-    cardModified: Date.now(),
-  },
-  {
-    id: nanoid(),
-    sticker: <GiElephant />,
-    name: "elephant",
-    isPick: false,
-    isDone: false,
-    color: "#7F5942",
-    isShowAddPoints: false,
-    cardModified: Date.now(),
-  },
-  {
-    id: nanoid(),
-    sticker: <GiElephant />,
-    name: "elephant",
-    isPick: false,
-    isDone: false,
-    color: "#7F5942",
-    isShowAddPoints: false,
-    cardModified: Date.now(),
-  },
-  {
-    id: nanoid(),
-    sticker: <GiSandSnake />,
-    name: "snake",
-    isPick: false,
-    isDone: false,
-    color: "#6DB51F",
-    isShowAddPoints: false,
-    cardModified: Date.now(),
-  },
-  {
-    id: nanoid(),
-    sticker: <GiSandSnake />,
-    name: "snake",
-    isPick: false,
-    isDone: false,
-    color: "#6DB51F",
+    color: "#E3E54D",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
 ];
-
-function MediumPlay() {
+function ReshufflePlay() {
   const pathname = usePathname();
   const {
     openGameMenu,
@@ -245,21 +210,25 @@ function MediumPlay() {
     openVictoryModal,
     openConfirmationQuitModal,
   } = useModalStore();
-  const { playCardSound, playClickSound } = useAudioStore();
+  const { playCardSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(50);
+  const [playMoves, setPlayMoves] = useState<number>(40);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
+  // const [gameOver, setGameOver] = useState(false);
+  // const [gameComplete, setGameComplete] = useState(false);
   //For shuffling the cards when the component first to mount
+  function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const random = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[random]] = [cards[random], cards[i]];
+    }
+  }
   useEffect(() => {
     if (isMount) {
-      for (let i = cards.length - 1; i > 0; i--) {
-        const random = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[random]] = [cards[random], cards[i]];
-      }
+      shuffleCards();
       setIsMount(false);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, openGameOverModal, openConfirmationRetryModal]);
   useEffect(() => {
@@ -275,7 +244,7 @@ function MediumPlay() {
                 slicedFilteredCard[0].id === card.id ||
                 slicedFilteredCard[1].id === card.id
               ) {
-                setStarPoints(starPoints + 100);
+                setStarPoints(starPoints + 50);
                 return {
                   ...card,
                   isDone: true,
@@ -298,7 +267,7 @@ function MediumPlay() {
             });
           });
         }
-      }, 400);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, starPoints]);
@@ -332,6 +301,7 @@ function MediumPlay() {
           }
         });
       });
+      shuffleCards();
       setTimeout(() => {
         setCards((prev) => {
           return prev.map((card) => {
@@ -344,14 +314,15 @@ function MediumPlay() {
         });
       }, 800);
     }
-  }, [cards]);
+  }, [cards, shuffleCards]);
   function playCardSoundFunc(card: boolean) {
     if (!card) {
       playCardSound();
     }
   }
+
   return (
-    <main className="medium-bg h-full w-full flex flex-col py-5">
+    <main className="challenge-bg h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
         <div className="pl-10 sm:pl-[6rem]">
           <button
@@ -413,9 +384,9 @@ function MediumPlay() {
       </header>
       <div className="h-full w-full flex items-center justify-center flex-grow">
         <div
-          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%] backdrop-blur-sm`}
+          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%]`}
         >
-          <div className="grid grid-cols-5 items-center justify-center py-3 px-2 gap-2 w-full ">
+          <div className="grid grid-cols-4 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
               <motion.div
                 layout
@@ -444,7 +415,7 @@ function MediumPlay() {
                 <button
                   onClick={() => setPlayMoves((prev) => prev - 1)}
                   disabled={playMoves <= 0}
-                  className="back-medium"
+                  className="back-reshuffle"
                 >
                   <span className="text-[#fce878] text-[1.46rem]">
                     <FaStar />
@@ -467,7 +438,7 @@ function MediumPlay() {
                       exit={{ opacity: 0 }}
                       className="absolute text-secondary top-0 z-[99]"
                     >
-                      +50
+                      +25
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -478,14 +449,14 @@ function MediumPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModalMedium
+        <GameVictoryModalReshuffle
           totalPoints={
-            playMoves === 0 ? starPoints : starPoints + playMoves * 50
+            playMoves === 0 ? starPoints : starPoints + playMoves * 25
           }
         />
       )}
       {openGameOverModal && (
-        <GameOverModalMedium
+        <GameOverModalReshuffle
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
@@ -500,7 +471,7 @@ function MediumPlay() {
           setCards={setCards}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
-          playMoves={50}
+          playMoves={40}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}
@@ -508,4 +479,4 @@ function MediumPlay() {
   );
 }
 
-export default MediumPlay;
+export default ReshufflePlay;

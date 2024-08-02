@@ -40,7 +40,10 @@ export const getLeaderboard = asyncHandler(
 );
 
 export const getLevels = asyncHandler(async (req: Request, res: Response) => {
-  const getLevels = await User.findById(req.user?._id).select("levels");
+  const getLevels = await User.findById(req.user?._id).select([
+    "levels",
+    "challenges",
+  ]);
   if (!getLevels) {
     res.status(404);
     throw new Error("User not found");
@@ -134,6 +137,28 @@ export const getHardScore = asyncHandler(
     });
   }
 );
+export const getReshuffleChallengeScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .select({
+        challenges: { $slice: [1, 1] }, //Filtering only the hard mode object
+      })
+      .sort({ "challenges.totalScore": -1 })
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
+      "challenges.highScore",
+      "challenges.totalScore",
+      "-_id",
+    ]);
+    console.log(getAllTimeBest[0].challenges[0].totalScore);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].challenges[0].totalScore,
+        personalReshuffleScore: getPersonalScore?.challenges[2],
+      },
+    });
+  }
+);
 
 export const claimEasyPoints = asyncHandler(
   async (req: Request, res: Response) => {
@@ -156,7 +181,7 @@ export const claimEasyPoints = asyncHandler(
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockMedium) {
-      getUser.levels[1].isUnlock = true;
+      getUser.levels[1].isUnlock = true; // Will unlock the medium level
     }
     await getUser.save();
     await getUserLeaderboard?.save();
@@ -173,7 +198,7 @@ export const claimMediumPoints = asyncHandler(
     });
     const getUser = await User.findById(req.user?._id);
     const isAlreadyUnlockHard = getUser?.levels[2].isUnlock; //Checking if the hard level is already unlock
-    const isAlreadyUnlockReshuffle = getUser?.challenges[0].isUnlock;
+    const isAlreadyUnlockReshuffle = getUser?.challenges[0].isUnlock; //Checking if the reshuffle level is already unlock
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -186,7 +211,8 @@ export const claimMediumPoints = asyncHandler(
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockHard && !isAlreadyUnlockReshuffle) {
-      getUser.levels[2].isUnlock = true; // Will unlock the hard page
+      getUser.levels[2].isUnlock = true; // Will unlock the hard level
+      getUser.challenges[0].isUnlock = true; //Will unlock the reshuffle challenge mode
     }
     await getUser.save();
     await getUserLeaderboard?.save();

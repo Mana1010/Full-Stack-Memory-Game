@@ -71,7 +71,7 @@ export const profileUpload = asyncHandler(
           isUnlock: false,
         },
         {
-          challengeName: "PERIODIC TABLE",
+          challengeName: "ELEMENTS",
           isUnlock: false,
         },
       ] as any;

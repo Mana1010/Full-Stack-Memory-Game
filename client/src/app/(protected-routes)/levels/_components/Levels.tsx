@@ -5,31 +5,53 @@ import { useRouter } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import levelsTitle from "../../../../components/images/titles/levels.png";
 import { FaShuffle } from "react-icons/fa6";
-import { useQuery } from "react-query";
-import axios from "axios";
+import { useQuery, UseQueryResult } from "react-query";
+import axios, { AxiosError } from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { MdLeaderboard, MdOutlineSettings } from "react-icons/md";
 import { GoCommentDiscussion } from "react-icons/go";
+import { GiPokerHand } from "react-icons/gi";
+import { GiDna2 } from "react-icons/gi";
+import { TbCardsFilled } from "react-icons/tb";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { IconType } from "react-icons/lib";
 
 interface Levels {
   level: string;
   isUnlock: boolean;
   highScore: number;
+  totalScore: number;
+  _id: string;
+}
+interface Challenges {
+  challengeName: string;
+  isUnlock: boolean;
+  highScore: number;
+  totalScore: number;
+  _id: string;
+  icons?: React.JSX.Element;
+}
+interface LevelsSchema {
+  levels: Levels[];
+  challenges: Challenges[];
   _id: string;
 }
 function Levels() {
   const { stopSound, playSound, playClickSound, bgSoundSetting } =
     useAudioStore();
   const router = useRouter();
-  const getLevel = useQuery({
+  const getLevel: UseQueryResult<
+    LevelsSchema,
+    AxiosError<{ message: string }>
+  > = useQuery({
     queryKey: ["level"],
     queryFn: async () => {
       const response = await axios.get(`${baseUrl}/feature/levels`, {
@@ -46,6 +68,16 @@ function Levels() {
     playSound();
     return () => stopSound();
   }, [playSound, stopSound, bgSoundSetting]);
+  const icons = [
+    <FaShuffle key={0} />,
+    <TbCardsFilled key={1} />,
+    <GiDna2 key={2} />,
+  ];
+  const updatedChallengesBtn = getLevel.data?.challenges.map(
+    (challenge, index) => {
+      return { ...challenge, icons: icons[index] };
+    }
+  );
   return (
     <main className="h-full w-full md:pl-[5rem] px-5 flex flex-col py-3">
       <header className="flex justify-between items-center">
@@ -141,29 +173,40 @@ function Levels() {
               <small className="text-secondary text-sm font-bold">
                 Challenges
               </small>
-              <div>
-                <button
-                  style={{ boxShadow: "0 0 15px #FFE30A" }}
-                  className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
-                >
-                  RESHUFFLE
-                  <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
-                    <span className=" text-primary/50 font-semibold">
-                      <FaShuffle />
-                    </span>
-                  </div>
-                </button>
+              <div className="flex flex-col space-y-3">
+                {updatedChallengesBtn?.map((challenge: Challenges) => (
+                  <button
+                    onClick={() => {
+                      if (challenge.isUnlock) {
+                        playClickSound();
+                        router.push(
+                          `/levels/${challenge.challengeName.toLowerCase()}`
+                        );
+                      }
+                    }}
+                    key={challenge._id}
+                    disabled={!challenge.isUnlock}
+                    style={{
+                      boxShadow: challenge.isUnlock
+                        ? "0 0 15px #FFE30A"
+                        : "none",
+                    }}
+                    className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
+                  >
+                    {challenge.challengeName}
+                    <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
+                      <span className=" text-primary/50 font-semibold">
+                        {challenge.icons}
+                      </span>
+                    </div>
+                  </button>
+                ))}
               </div>
               <button
                 disabled
                 className={`bg-secondary text-primary w-[300px] py-3 text-lg font-bold rounded-md relative overflow-hidden disabled:bg-primary/40`}
               >
-                COMING SOON
-                {/* <div className="absolute text-[2.5rem] right-[20px] bottom-[5px] flex">
-                  <span className=" text-primary/50 font-semibold">
-                    <FaShuffle />
-                  </span>
-                </div> */}
+                COMING SOON...
               </button>
             </div>
           </div>

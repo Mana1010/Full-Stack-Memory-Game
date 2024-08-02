@@ -48,16 +48,6 @@
   transform: rotateY(180deg);
   border-radius: 4px;
 }
-.card .front-medium {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  backface-visibility: hidden;
-  border-radius: 4px;
-}
 .card .back-hard {
   background: url("../components/images/constellation-card.png");
   background-position: center;
@@ -71,6 +61,20 @@
   transform: rotateY(180deg);
   border-radius: 4px;
 }
+.card .back-reshuffle {
+  background: url("../components/images/circus-card.png");
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  border-radius: 4px;
+}
+
 .leaderboard-bg {
   background: linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     url("../components/images/bg.png");
@@ -98,6 +102,14 @@
 .hard-bg {
   background: linear-gradient(to left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     url("../components/images/night-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.challenge-bg {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url("../components/images/carnival-bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
