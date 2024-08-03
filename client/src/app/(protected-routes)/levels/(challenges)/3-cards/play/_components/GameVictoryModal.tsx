@@ -1,10 +1,10 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
-import skullImg from "../../../../../../components/images/skull.png";
-import star from "../../../../../../components/images/trophies/total-score-star.png";
+import victoryImg from "../../../../../../../components/images/victory.png";
+import star from "../../../../../../../components/images/trophies/total-score-star.png";
 import { MdInfoOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
@@ -14,20 +14,14 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { hiddenCard } from "./HardPlay";
-import { Cards } from "@/types/game.types";
 import { GamePlaySchema } from "@/types/game.types";
+import { TbCardsFilled } from "react-icons/tb";
 
-function GameOverModalHard({
-  totalPoints,
-  setPlayMoves,
-  setStarPoints,
-  setCards,
-  setIsMount,
-}: GamePlaySchema) {
+type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
+function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
   const axiosInterceptor = useAxiosInterceptor();
-  const { playGameOverSound, playClaimingSound } = useAudioStore();
-  const { setOpenGameOverModal } = useModalStore();
+  const { playGameVictorySound, playClaimingSound } = useAudioStore();
+  const { setOpenVictoryModal } = useModalStore();
   const { userId } = useUserStore();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -35,9 +29,10 @@ function GameOverModalHard({
     mutationFn: async () => {
       const payload = {
         points: totalPoints,
+        isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/hard/claim-prize/${userId}`,
+        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -50,24 +45,18 @@ function GameOverModalHard({
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
+      setOpenVictoryModal(false);
       playClaimingSound();
-      router.push("/levels/hard");
+      router.push("/levels");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      toast.error(err.response?.data.message);
+      console.log(err.response?.data);
     },
   });
   useEffect(() => {
-    playGameOverSound();
-  }, [playGameOverSound]);
-
-  function resetGame() {
-    setIsMount(true);
-    setPlayMoves(60);
-    setStarPoints(0);
-    setCards(hiddenCard);
-  }
+    playGameVictorySound();
+  }, [playGameVictorySound]);
   return (
     <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center w-full h-screen px-5">
       <div className="bg-primary p-4 w-[95%] sm:w-[400px] rounded-sm flex flex-col space-y-3 min-h-[500px] relative">
@@ -76,22 +65,24 @@ function GameOverModalHard({
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary"> HARD LEVEL</span>
-            <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
-              <span className="h-[35px] w-2 bg-primary/50"></span>
-              <span className="h-[35px] w-2 bg-primary/50"></span>
-              <span className="h-[35px] w-2 bg-primary/50"></span>
+            <span className="text-primary">3-CARDS</span>
+            <div className="absolute right-[10px] bottom-[8px] flex">
+              <span className="text-primary/50 font-semibold text-[2rem]">
+                <TbCardsFilled />
+              </span>
             </div>
           </div>
         </div>
         <div className="flex items-center justify-center w-full">
-          <Image src={skullImg} alt="skull-image" width={200} priority />
+          <Image src={victoryImg} alt="victory-image" width={200} priority />
         </div>
         <div className="flex justify-center items-center flex-col">
           <h1 className="font-semibold text-secondary text-2xl font-mono">
-            GAME OVER
+            GAME COMPLETE
           </h1>
-          <p className=" text-secondary text-[0.67rem]">No moves left</p>
+          <p className=" text-secondary text-[0.67rem]">
+            You matched all cards!
+          </p>
         </div>
         <div className="pt-3 flex flex-col justify-center items-center w-full space-y-2">
           <h1 className="text-secondary text-xl">YOU GOT</h1>
@@ -102,19 +93,18 @@ function GameOverModalHard({
             }}
             className="w-1/2 py-2 rounded-sm flex justify-center items-center text-white space-x-1"
           >
-            <span className="pt-0.5">{totalPoints} </span>
+            <span className="pt-0.5">{totalPoints}</span>
             <Image src={star} alt="star-image" width={15} priority />
           </div>
+          <small className="text-center text-[0.6rem] text-secondary">
+            You got 2000 extra points for completing this mode.
+          </small>
         </div>
-        <div
-          className={`pt-5 justify-center items-center flex-col ${
-            totalPoints === 0 ? "hidden" : "flex"
-          }`}
-        >
+        <div className={`pt-5 justify-center items-center flex-col flex`}>
           <button
             onClick={() => {
               claimPrize.mutate();
-              setOpenGameOverModal(false);
+              setOpenVictoryModal(false);
             }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
@@ -130,25 +120,9 @@ function GameOverModalHard({
             </p>
           </div>
         </div>
-        <div
-          className={`pt-5 justify-center items-center flex-col ${
-            totalPoints === 0 ? "flex" : "hidden"
-          }`}
-        >
-          <button
-            onClick={() => {
-              resetGame();
-              setOpenGameOverModal(false);
-            }}
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
-          >
-            TRY AGAIN
-          </button>
-        </div>
       </div>
     </div>
   );
 }
 
-export default GameOverModalHard;
+export default GameVictoryModalThreeCards;

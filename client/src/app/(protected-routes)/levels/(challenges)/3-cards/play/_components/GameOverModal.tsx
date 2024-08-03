@@ -3,8 +3,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
-import skullImg from "../../../../../../components/images/skull.png";
-import star from "../../../../../../components/images/trophies/total-score-star.png";
+import skullImg from "../../../../../../../components/images/skull.png";
+import star from "../../../../../../../components/images/trophies/total-score-star.png";
 import { MdInfoOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
@@ -14,11 +14,11 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { hiddenCard } from "./HardPlay";
-import { Cards } from "@/types/game.types";
+import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
 import { GamePlaySchema } from "@/types/game.types";
+import { FaShuffle } from "react-icons/fa6";
 
-function GameOverModalHard({
+function GameOverModalThreeCards({
   totalPoints,
   setPlayMoves,
   setStarPoints,
@@ -35,9 +35,10 @@ function GameOverModalHard({
     mutationFn: async () => {
       const payload = {
         points: totalPoints,
+        isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/hard/claim-prize/${userId}`,
+        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -51,11 +52,11 @@ function GameOverModalHard({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/hard");
+      router.push("/levels/reshuffle");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      toast.error(err.response?.data.message);
+      console.log(err.response?.data);
     },
   });
   useEffect(() => {
@@ -64,7 +65,7 @@ function GameOverModalHard({
 
   function resetGame() {
     setIsMount(true);
-    setPlayMoves(60);
+    setPlayMoves(40);
     setStarPoints(0);
     setCards(hiddenCard);
   }
@@ -76,11 +77,11 @@ function GameOverModalHard({
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary"> HARD LEVEL</span>
-            <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
-              <span className="h-[35px] w-2 bg-primary/50"></span>
-              <span className="h-[35px] w-2 bg-primary/50"></span>
-              <span className="h-[35px] w-2 bg-primary/50"></span>
+            <span className="text-primary">RESHUFFLE</span>
+            <div className="absolute right-[10px] bottom-[8px] flex">
+              <span className="text-primary/50 font-semibold text-[2rem]">
+                <FaShuffle />
+              </span>
             </div>
           </div>
         </div>
@@ -113,8 +114,8 @@ function GameOverModalHard({
         >
           <button
             onClick={() => {
-              claimPrize.mutate();
               setOpenGameOverModal(false);
+              claimPrize.mutate();
             }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
@@ -151,4 +152,4 @@ function GameOverModalHard({
   );
 }
 
-export default GameOverModalHard;
+export default GameOverModalThreeCards;

@@ -128,7 +128,6 @@ export const getHardScore = asyncHandler(
       "levels.totalScore",
       "-_id",
     ]);
-    console.log(getAllTimeBest[0].levels[0].totalScore);
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[0].totalScore,
@@ -150,11 +149,31 @@ export const getReshuffleChallengeScore = asyncHandler(
       "challenges.totalScore",
       "-_id",
     ]);
-    console.log(getPersonalScore?.challenges[0]);
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].challenges[0].totalScore,
         personalReshuffleScore: getPersonalScore?.challenges[0], //Will retrieve the reshuffle properties
+      },
+    });
+  }
+);
+export const getThreeCardsChallengeScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .select({
+        challenges: { $slice: [1, 1] }, //Filtering only the 3-cards challenge mode object
+      })
+      .sort({ "challenges.totalScore": -1 })
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
+      "challenges.highScore",
+      "challenges.totalScore",
+      "-_id",
+    ]);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].challenges[0].totalScore,
+        personalThreeCardsScore: getPersonalScore?.challenges[1], //Will retrieve the 3-cards properties
       },
     });
   }
@@ -224,12 +243,14 @@ export const claimMediumPoints = asyncHandler(
 
 export const claimHardPoints = asyncHandler(
   async (req: Request, res: Response) => {
-    const { points } = req.body;
+    const { points, isGameComplete } = req.body;
     const { id } = req.params;
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    const isAlreadyUnlock3cards = getUser?.challenges[1].isUnlock; //Checking if the 3-cards mode is already unlock
+    const isAlreadyUnlockElements = getUser?.challenges[2].isUnlock; //Checking if the elements mode is already unlock
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -240,6 +261,10 @@ export const claimHardPoints = asyncHandler(
     }
     if (points > getLevelHard.highScore) {
       getLevelHard.highScore = points;
+    }
+    if (isGameComplete && !isAlreadyUnlock3cards && !isAlreadyUnlockElements) {
+      getUser.challenges[1].isUnlock = true; // Will unlock the 3-cards mode
+      getUser.challenges[2].isUnlock = true; // Will unlock the elements mode
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();
@@ -255,7 +280,6 @@ export const claimReshufflePoints = asyncHandler(
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
-    console.log("Running asf");
     const getUser = await User.findById(req.user?._id);
     if (!getUser || !getUserLeaderboard) {
       res.status(404);

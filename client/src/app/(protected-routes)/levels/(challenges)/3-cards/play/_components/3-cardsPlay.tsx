@@ -1,269 +1,280 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { FaStar } from "react-icons/fa6";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaHippo } from "react-icons/fa6";
-import {
-  GiLion,
-  GiTigerHead,
-  GiBearFace,
-  GiEagleHead,
-  GiMonkey,
-  GiParrotHead,
-  GiElephant,
-  GiSandSnake,
-} from "react-icons/gi";
-import {
-  TbZodiacAries,
-  TbZodiacCancer,
-  TbZodiacLibra,
-  TbZodiacCapricorn,
-  TbZodiacTaurus,
-  TbZodiacLeo,
-  TbZodiacScorpio,
-  TbZodiacAquarius,
-  TbZodiacGemini,
-  TbZodiacVirgo,
-  TbZodiacSagittarius,
-  TbZodiacPisces,
-} from "react-icons/tb";
-import { LiaKiwiBirdSolid } from "react-icons/lia";
+import { GiCorn, GiPotato } from "react-icons/gi";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
-import timeMoves from "../../../../../../components/images/time-moves.png";
-import points from "../../../../../../components/images/trophies/total-score-star.png";
-import cardDone from "../../../../../../components/images/cards-done.png";
+import { IoTriangleSharp } from "react-icons/io5";
+import { FaCircle } from "react-icons/fa";
+import { FaDiamond, FaSquare, FaStar } from "react-icons/fa6";
+import { RiRectangleFill } from "react-icons/ri";
+import { TbOvalFilled } from "react-icons/tb";
+import { BsOctagonFill } from "react-icons/bs";
+import timeMoves from "../../../../../../../components/images/time-moves.png";
+import points from "../../../../../../../components/images/trophies/total-score-star.png";
+import cardDone from "../../../../../../../components/images/cards-done.png";
 import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import GameMenuModal from "@/components/GameMenuModal";
-import GameOverModalHard from "./GameOverModal";
+import GameOverModalThreeCards from "./GameOverModal";
+import GameVictoryModalThreeCards from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
-import GameVictoryModalHard from "./GameVictoryModal";
-import { Cards } from "@/types/game.types";
-
+export interface Cards {
+  id: string;
+  sticker: React.JSX.Element;
+  name: string;
+  isPick: boolean;
+  isDone: boolean;
+  color?: string;
+  isShowAddPoints: boolean;
+  cardModified: number;
+}
 export const hiddenCard = [
   {
     id: nanoid(),
-    sticker: <TbZodiacSagittarius />,
-    name: "sagittarius",
+    sticker: <IoTriangleSharp />,
+    name: "triangle",
     isPick: false,
     isDone: false,
+    color: "#F68A21",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacSagittarius />,
-    name: "sagittarius",
+    sticker: <IoTriangleSharp />,
+    name: "triangle",
     isPick: false,
     isDone: false,
+    color: "#F68A21",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacPisces />,
-    name: "pisces",
+    sticker: <IoTriangleSharp />,
+    name: "triangle",
     isPick: false,
     isDone: false,
+    color: "#F68A21",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacPisces />,
-    name: "pisces",
+    sticker: <FaCircle />,
+    name: "circle",
     isPick: false,
     isDone: false,
+    color: "#EE342F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacAries />,
-    name: "aries",
+    sticker: <FaCircle />,
+    name: "circle",
     isPick: false,
     isDone: false,
+    color: "#EE342F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacAries />,
-    name: "aries",
+    sticker: <FaCircle />,
+    name: "circle",
     isPick: false,
     isDone: false,
+    color: "#EE342F",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacCancer />,
-    name: "cancer",
+    sticker: <FaDiamond />,
+    name: "diamond",
     isPick: false,
     isDone: false,
+    color: "#B734A7",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacCancer />,
-    name: "cancer",
+    sticker: <FaDiamond />,
+    name: "diamond",
     isPick: false,
     isDone: false,
+    color: "#B734A7",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacCapricorn />,
-    name: "capricorn",
+    sticker: <FaDiamond />,
+    name: "diamond",
     isPick: false,
     isDone: false,
+    color: "#B734A7",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacCapricorn />,
-    name: "capricorn",
+    sticker: <FaSquare />,
+    name: "square",
     isPick: false,
     isDone: false,
+    color: "#00647C",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacLibra />,
-    name: "libra",
+    sticker: <FaSquare />,
+    name: "square",
     isPick: false,
     isDone: false,
+    color: "#00647C",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacLibra />,
-    name: "libra",
+    sticker: <FaSquare />,
+    name: "square",
     isPick: false,
     isDone: false,
+    color: "#00647C",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacTaurus />,
-    name: "taurus",
+    sticker: <RiRectangleFill />,
+    name: "rectangle",
     isPick: false,
     isDone: false,
+    color: "#00C458",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacTaurus />,
-    name: "taurus",
+    sticker: <RiRectangleFill />,
+    name: "rectangle",
     isPick: false,
     isDone: false,
+    color: "#00C458",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacLeo />,
-    name: "leo",
+    sticker: <RiRectangleFill />,
+    name: "rectangle",
     isPick: false,
     isDone: false,
+    color: "#00C458",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacLeo />,
-    name: "leo",
+    sticker: <TbOvalFilled />,
+    name: "oval",
     isPick: false,
     isDone: false,
+    color: "#F6C41E",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacScorpio />,
-    name: "scorpio",
+    sticker: <TbOvalFilled />,
+    name: "oval",
     isPick: false,
     isDone: false,
+    color: "#F6C41E",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacScorpio />,
-    name: "scorpio",
+    sticker: <TbOvalFilled />,
+    name: "oval",
     isPick: false,
     isDone: false,
+    color: "#F6C41E",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacVirgo />,
-    name: "virgo",
+    sticker: <BsOctagonFill />,
+    name: "octagon",
     isPick: false,
     isDone: false,
+    color: "#9F7452",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacVirgo />,
-    name: "virgo",
+    sticker: <BsOctagonFill />,
+    name: "octagon",
     isPick: false,
     isDone: false,
+    color: "#9F7452",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacAquarius />,
-    name: "aquarius",
+    sticker: <BsOctagonFill />,
+    name: "octagon",
     isPick: false,
     isDone: false,
+    color: "#9F7452",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacAquarius />,
-    name: "aquarius",
+    sticker: <FaStar />,
+    name: "star",
     isPick: false,
     isDone: false,
+    color: "#FFE30A",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacGemini />,
-    name: "gemini",
+    sticker: <FaStar />,
+    name: "star",
     isPick: false,
     isDone: false,
+    color: "#FFE30A",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbZodiacGemini />,
-    name: "gemini",
+    sticker: <FaStar />,
+    name: "star",
     isPick: false,
     isDone: false,
+    color: "#FFE30A",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
 ];
-
-function HardPlay() {
+function ThreeCardsPlay() {
   const pathname = usePathname();
   const {
     openGameMenu,
@@ -275,37 +286,46 @@ function HardPlay() {
     openVictoryModal,
     openConfirmationQuitModal,
   } = useModalStore();
-  const { playCardSound, playClickSound } = useAudioStore();
+  const { playCardSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
   const [playMoves, setPlayMoves] = useState<number>(60);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
+
   //For shuffling the cards when the component first to mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const random = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[random]] = [cards[random], cards[i]];
+    }
+  }
+
   useEffect(() => {
     if (isMount) {
-      for (let i = cards.length - 1; i > 0; i--) {
-        const random = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[random]] = [cards[random], cards[i]];
-      }
+      shuffleCards();
       setIsMount(false);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, openGameOverModal, openConfirmationRetryModal]);
   useEffect(() => {
     const slicedFilteredCard = cards.filter(
       (card) => card.isPick && !card.isDone
     );
-    if (slicedFilteredCard.length === 2) {
+    if (slicedFilteredCard.length === 3) {
+      const checkTripleCards = slicedFilteredCard.every(
+        (card) => card.name === slicedFilteredCard[0].name
+      );
       setTimeout(() => {
-        if (slicedFilteredCard[0].name === slicedFilteredCard[1].name) {
+        if (checkTripleCards) {
           setCards((prev) => {
             return prev.map((card) => {
               if (
                 slicedFilteredCard[0].id === card.id ||
-                slicedFilteredCard[1].id === card.id
+                slicedFilteredCard[1].id === card.id ||
+                slicedFilteredCard[2].id === card.id
               ) {
-                setStarPoints(starPoints + 200);
+                setStarPoints(starPoints + 150 * 3);
                 return {
                   ...card,
                   isDone: true,
@@ -328,7 +348,7 @@ function HardPlay() {
             });
           });
         }
-      }, 300);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, starPoints]);
@@ -348,14 +368,18 @@ function HardPlay() {
   useEffect(() => {
     const sortedArr = cards
       .toSorted((a, b) => b.cardModified - a.cardModified)
-      .slice(0, 2);
+      .slice(0, 3);
     const checkDoneCards = cards.some((card) => card.isDone);
     const threshold = 100; //Means the time limit.
     const dateTime = Date.now() - sortedArr[0].cardModified <= threshold; //Para icheck ang nabilin nga time by milliseconds from the current date to the time of when user matched the cards kay its because of how the execution and rendering time works, there is a slight delayed by milliseconds.
     if (checkDoneCards && dateTime) {
       setCards((prev) => {
         return prev.map((card) => {
-          if (sortedArr[0].id === card.id || sortedArr[1].id === card.id) {
+          if (
+            sortedArr[0].id === card.id ||
+            sortedArr[1].id === card.id ||
+            sortedArr[2].id === card.id
+          ) {
             return { ...card, isShowAddPoints: true };
           } else {
             return card;
@@ -380,8 +404,9 @@ function HardPlay() {
       playCardSound();
     }
   }
+
   return (
-    <main className="hard-bg h-full w-full flex flex-col py-5">
+    <main className="challenge-bg h-full w-full flex flex-col py-5">
       <header className="flex justify-between items-center">
         <div className="pl-10 sm:pl-[6rem]">
           <button
@@ -424,8 +449,8 @@ function HardPlay() {
               className="w-[100px] h-6 rounded-3xl bg-secondary flex justify-center items-center"
             >
               <small className="text-primary text-[0.7rem]">{`${
-                getMatchedCards.length / 2
-              }/${hiddenCard.length / 2}`}</small>
+                getMatchedCards.length / 3
+              }/${hiddenCard.length / 3}`}</small>
             </div>
           </div>
           <div className="relative">
@@ -443,9 +468,9 @@ function HardPlay() {
       </header>
       <div className="h-full w-full flex items-center justify-center flex-grow">
         <div
-          className={`items-center flex-col flex sm:rounded-md sm:w-[450px] w-[95%] backdrop-blur-sm`}
+          className={`items-center flex-col flex sm:rounded-md sm:w-[420px] w-[92%]`}
         >
-          <div className="grid grid-cols-6 items-center justify-center py-3 px-2 gap-2 w-full ">
+          <div className="grid grid-cols-6 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
               <motion.div
                 layout
@@ -474,22 +499,29 @@ function HardPlay() {
                 <button
                   onClick={() => setPlayMoves((prev) => prev - 1)}
                   disabled={playMoves <= 0}
-                  className="back-hard"
-                ></button>
-                <button disabled={card.isDone} className="front">
+                  className="back-reshuffle"
+                >
+                  {/* <span className="text-[#fce878] text-[1.46rem]">
+                    <FaStar />
+                  </span> */}
+                </button>
+                <button
+                  disabled={card.isDone}
+                  style={{ color: card.color }}
+                  className="front"
+                >
                   <span className="text-4xl">{card.sticker}</span>
                 </button>
                 <AnimatePresence mode="wait">
                   {card.isShowAddPoints && (
                     <motion.span
-                      style={{ textShadow: "0 0 15px #FFE30A" }}
                       initial={{ opacity: 0, y: 0 }}
                       animate={{ opacity: 1, y: -30 }}
                       transition={{ duration: 0.5, ease: "easeIn" }}
                       exit={{ opacity: 0 }}
-                      className="absolute text-secondary top-0 z-[99]"
+                      className="absolute text-primary top-0 z-[99]"
                     >
-                      +100
+                      +150
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -500,14 +532,10 @@ function HardPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModalHard
-          totalPoints={
-            playMoves === 0 ? starPoints : starPoints + playMoves * 100
-          }
-        />
+        <GameVictoryModalThreeCards totalPoints={starPoints + 2000} />
       )}
       {openGameOverModal && (
-        <GameOverModalHard
+        <GameOverModalThreeCards
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
@@ -530,4 +558,4 @@ function HardPlay() {
   );
 }
 
-export default HardPlay;
+export default ThreeCardsPlay;

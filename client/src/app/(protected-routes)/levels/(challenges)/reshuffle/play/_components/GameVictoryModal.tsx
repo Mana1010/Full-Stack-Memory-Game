@@ -97,7 +97,7 @@ function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
             <Image src={star} alt="star-image" width={15} priority />
           </div>
           <small className="text-center text-[0.6rem] text-secondary">
-            Remaining moves converted to extra points.
+            You got 2000 extra points for completing this mode.
           </small>
         </div>
         <div className={`pt-5 justify-center items-center flex-col flex`}>
@@ -109,7 +109,7 @@ function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
           >
-            CLAIM & NEXT
+            CLAIM
           </button>
           <div className="flex items-center space-x-2 pt-2">
             <span className="text-[0.7rem] text-secondary">

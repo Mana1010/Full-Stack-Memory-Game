@@ -471,7 +471,7 @@ function ReshufflePlay() {
       </header>
       <div className="h-full w-full flex items-center justify-center flex-grow">
         <div
-          className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%]`}
+          className={`items-center flex-col flex sm:rounded-md sm:w-[420px] w-[92%]`}
         >
           <div className="grid grid-cols-6 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
@@ -504,9 +504,9 @@ function ReshufflePlay() {
                   disabled={playMoves <= 0}
                   className="back-reshuffle"
                 >
-                  <span className="text-[#fce878] text-[1.46rem]">
+                  {/* <span className="text-[#fce878] text-[1.46rem]">
                     <FaStar />
-                  </span>
+                  </span> */}
                 </button>
                 <button
                   disabled={card.isDone}
@@ -535,7 +535,7 @@ function ReshufflePlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModalReshuffle totalPoints={starPoints} />
+        <GameVictoryModalReshuffle totalPoints={starPoints + 2000} />
       )}
       {openGameOverModal && (
         <GameOverModalReshuffle
