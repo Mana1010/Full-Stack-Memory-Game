@@ -15,8 +15,8 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
-import { Cards } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
 import { GamePlaySchema } from "@/types/game.types";
+import { FaShuffle } from "react-icons/fa6";
 
 function GameOverModalReshuffle({
   totalPoints,
@@ -38,7 +38,7 @@ function GameOverModalReshuffle({
         isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/easy/claim-prize/${userId}`,
+        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -52,7 +52,7 @@ function GameOverModalReshuffle({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/easy");
+      router.push("/levels/reshuffle");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
@@ -78,8 +78,10 @@ function GameOverModalReshuffle({
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
             <span className="text-primary">RESHUFFLE</span>
-            <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
-              <span className="h-[35px] w-2 bg-primary/50"></span>
+            <div className="absolute right-[10px] bottom-[8px] flex">
+              <span className="text-primary/50 font-semibold text-[2rem]">
+                <FaShuffle />
+              </span>
             </div>
           </div>
         </div>
@@ -112,8 +114,8 @@ function GameOverModalReshuffle({
         >
           <button
             onClick={() => {
-              claimPrize.mutate();
               setOpenGameOverModal(false);
+              claimPrize.mutate();
             }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"

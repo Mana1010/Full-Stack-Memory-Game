@@ -12,7 +12,6 @@ import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { MdLeaderboard, MdOutlineSettings } from "react-icons/md";
 import { GoCommentDiscussion } from "react-icons/go";
-import { GiPokerHand } from "react-icons/gi";
 import { GiDna2 } from "react-icons/gi";
 import { TbCardsFilled } from "react-icons/tb";
 

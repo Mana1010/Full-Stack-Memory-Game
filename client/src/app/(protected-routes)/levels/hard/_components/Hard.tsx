@@ -13,6 +13,7 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { baseUrl } from "@/utils/baseUrl";
 import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
+import { useModalStore } from "@/utils/store/modal.store";
 interface ScoreData {
   allTimeBest: number;
   personalHardScore: {
@@ -22,6 +23,7 @@ interface ScoreData {
 }
 function Hard() {
   const axiosInterceptor = useAxiosInterceptor();
+  const { setOpenGameOverModal } = useModalStore();
   const router = useRouter();
   const { playClickSound } = useAudioStore();
   const getScore: UseQueryResult<
@@ -116,6 +118,7 @@ function Hard() {
             onClick={() => {
               router.push("/levels/hard/play");
               playClickSound();
+              setOpenGameOverModal(false);
             }}
             whileHover={{
               backgroundColor: "#FFE30A",

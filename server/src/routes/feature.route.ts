@@ -10,6 +10,7 @@ import {
   claimMediumPoints,
   claimHardPoints,
   getReshuffleChallengeScore,
+  claimReshufflePoints,
 } from "../controller/feature.controller";
 import express from "express";
 
@@ -25,3 +26,8 @@ router.get("/reshuffle-score", protectedRoutes, getReshuffleChallengeScore);
 router.patch("/easy/claim-prize/:id", protectedRoutes, claimEasyPoints);
 router.patch("/medium/claim-prize/:id", protectedRoutes, claimMediumPoints);
 router.patch("/hard/claim-prize/:id", protectedRoutes, claimHardPoints);
+router.patch(
+  "/reshuffle/claim-prize/:id",
+  protectedRoutes,
+  claimReshufflePoints
+);

@@ -15,6 +15,7 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { GamePlaySchema } from "@/types/game.types";
+import { FaShuffle } from "react-icons/fa6";
 
 type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
 function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
@@ -31,7 +32,7 @@ function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
         isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/medium/claim-prize/${userId}`,
+        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -65,9 +66,10 @@ function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
             <span className="text-primary">RESHUFFLE</span>
-            <div className="absolute right-[10px] bottom-[5px] flex space-x-1">
-              <span className="h-[35px] w-2 bg-primary/50"></span>
-              <span className="h-[35px] w-2 bg-primary/50"></span>
+            <div className="absolute right-[10px] bottom-[8px] flex">
+              <span className="text-primary/50 font-semibold text-[2rem]">
+                <FaShuffle />
+              </span>
             </div>
           </div>
         </div>
@@ -102,6 +104,7 @@ function GameVictoryModalReshuffle({ totalPoints }: GameVictorySchema) {
           <button
             onClick={() => {
               claimPrize.mutate();
+              setOpenVictoryModal(false);
             }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"

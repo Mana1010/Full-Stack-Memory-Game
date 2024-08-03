@@ -13,6 +13,7 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { baseUrl } from "@/utils/baseUrl";
 import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
+import { useModalStore } from "@/utils/store/modal.store";
 interface ScoreData {
   allTimeBest: number;
   personalEasyScore: {
@@ -24,6 +25,7 @@ function Easy() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const { playClickSound } = useAudioStore();
+  const { setOpenGameOverModal } = useModalStore();
   const getScore: UseQueryResult<
     ScoreData,
     AxiosError<{ message: string }>
@@ -115,6 +117,7 @@ function Easy() {
             onClick={() => {
               router.push("/levels/easy/play");
               playClickSound();
+              setOpenGameOverModal(false);
             }}
             whileHover={{
               backgroundColor: "#FFE30A",

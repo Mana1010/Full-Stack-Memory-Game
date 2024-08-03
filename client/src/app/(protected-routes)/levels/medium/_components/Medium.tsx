@@ -13,6 +13,7 @@ import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { baseUrl } from "@/utils/baseUrl";
 import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
+import { useModalStore } from "@/utils/store/modal.store";
 interface ScoreData {
   allTimeBest: number;
   personalMediumScore: {
@@ -24,6 +25,7 @@ function Medium() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const { playClickSound } = useAudioStore();
+  const { setOpenGameOverModal } = useModalStore();
   const getScore: UseQueryResult<
     ScoreData,
     AxiosError<{ message: string }>
@@ -116,6 +118,7 @@ function Medium() {
             onClick={() => {
               router.push("/levels/medium/play");
               playClickSound();
+              setOpenGameOverModal(false);
             }}
             whileHover={{
               backgroundColor: "#FFE30A",

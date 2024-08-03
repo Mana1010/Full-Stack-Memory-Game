@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,11 +8,15 @@ import {
   GiOrange,
   GiGrapes,
   GiBanana,
-  GiCoconuts,
   GiWatermelon,
+  GiStrawberry,
+  GiCherry,
+  GiCabbage,
+  GiTomato,
+  GiCorn,
+  GiPotato,
 } from "react-icons/gi";
 import { FaLemon } from "react-icons/fa";
-import { TbMelon } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import timeMoves from "../../../../../../../components/images/time-moves.png";
@@ -69,6 +73,46 @@ export const hiddenCard = [
   },
   {
     id: nanoid(),
+    sticker: <GiStrawberry />,
+    name: "strawberry",
+    isPick: false,
+    isDone: false,
+    color: "#D41414",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiStrawberry />,
+    name: "strawberry",
+    isPick: false,
+    isDone: false,
+    color: "#D41414",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiCherry />,
+    name: "cherry",
+    isPick: false,
+    isDone: false,
+    color: "#CF052C",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiCherry />,
+    name: "cherry",
+    isPick: false,
+    isDone: false,
+    color: "#CF052C",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
     sticker: <GiOrange />,
     name: "orange",
     isPick: false,
@@ -139,31 +183,21 @@ export const hiddenCard = [
   },
   {
     id: nanoid(),
-    sticker: <GiCoconuts />,
-    name: "coconut",
+    sticker: <GiCabbage />,
+    name: "cabbage",
     isPick: false,
     isDone: false,
-    color: "#719A26",
+    color: "#5D8B3D",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <GiCoconuts />,
-    name: "coconut",
+    sticker: <GiCabbage />,
+    name: "cabbage",
     isPick: false,
     isDone: false,
-    color: "#719A26",
-    isShowAddPoints: false,
-    cardModified: Date.now(),
-  },
-  {
-    id: nanoid(),
-    sticker: <GiWatermelon />,
-    name: "watermelon",
-    isPick: false,
-    isDone: false,
-    color: "#F55454",
+    color: "#5D8B3D",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
@@ -179,21 +213,71 @@ export const hiddenCard = [
   },
   {
     id: nanoid(),
-    sticker: <TbMelon />,
-    name: "melon",
+    sticker: <GiWatermelon />,
+    name: "watermelon",
     isPick: false,
     isDone: false,
-    color: "#E3E54D",
+    color: "#F55454",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
   {
     id: nanoid(),
-    sticker: <TbMelon />,
-    name: "melon",
+    sticker: <GiTomato />,
+    name: "tomato",
     isPick: false,
     isDone: false,
-    color: "#E3E54D",
+    color: "#F64421",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiTomato />,
+    name: "tomato",
+    isPick: false,
+    isDone: false,
+    color: "#F64421",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiCorn />,
+    name: "corn",
+    isPick: false,
+    isDone: false,
+    color: "#F9DF44",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiCorn />,
+    name: "corn",
+    isPick: false,
+    isDone: false,
+    color: "#F9DF44",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiPotato />,
+    name: "potato",
+    isPick: false,
+    isDone: false,
+    color: "#C8965B",
+    isShowAddPoints: false,
+    cardModified: Date.now(),
+  },
+  {
+    id: nanoid(),
+    sticker: <GiPotato />,
+    name: "potato",
+    isPick: false,
+    isDone: false,
+    color: "#C8965B",
     isShowAddPoints: false,
     cardModified: Date.now(),
   },
@@ -212,18 +296,20 @@ function ReshufflePlay() {
   } = useModalStore();
   const { playCardSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
-  const [playMoves, setPlayMoves] = useState<number>(40);
+  const [playMoves, setPlayMoves] = useState<number>(60);
   const [isMount, setIsMount] = useState(true);
   const [starPoints, setStarPoints] = useState<number>(0);
-  // const [gameOver, setGameOver] = useState(false);
-  // const [gameComplete, setGameComplete] = useState(false);
+  const [pointsPerCard, setPointsPerCard] = useState(25);
+
   //For shuffling the cards when the component first to mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function shuffleCards() {
     for (let i = cards.length - 1; i > 0; i--) {
       const random = Math.floor(Math.random() * (i + 1));
       [cards[i], cards[random]] = [cards[random], cards[i]];
     }
   }
+
   useEffect(() => {
     if (isMount) {
       shuffleCards();
@@ -244,7 +330,8 @@ function ReshufflePlay() {
                 slicedFilteredCard[0].id === card.id ||
                 slicedFilteredCard[1].id === card.id
               ) {
-                setStarPoints(starPoints + 50);
+                setPointsPerCard(pointsPerCard + 25);
+                setStarPoints(starPoints + pointsPerCard * 2);
                 return {
                   ...card,
                   isDone: true,
@@ -386,7 +473,7 @@ function ReshufflePlay() {
         <div
           className={`items-center flex-col flex sm:rounded-md sm:w-[400px] w-[90%]`}
         >
-          <div className="grid grid-cols-4 items-center justify-center py-3 px-2 gap-2 w-full">
+          <div className="grid grid-cols-6 items-center justify-center py-3 px-2 gap-2 w-full">
             {cards.map((card) => (
               <motion.div
                 layout
@@ -431,14 +518,13 @@ function ReshufflePlay() {
                 <AnimatePresence mode="wait">
                   {card.isShowAddPoints && (
                     <motion.span
-                      style={{ textShadow: "0 0 15px #FFE30A" }}
                       initial={{ opacity: 0, y: 0 }}
                       animate={{ opacity: 1, y: -30 }}
                       transition={{ duration: 0.5, ease: "easeIn" }}
                       exit={{ opacity: 0 }}
-                      className="absolute text-secondary top-0 z-[99]"
+                      className="absolute text-primary top-0 z-[99]"
                     >
-                      +25
+                      +{pointsPerCard - 25}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -449,11 +535,7 @@ function ReshufflePlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModalReshuffle
-          totalPoints={
-            playMoves === 0 ? starPoints : starPoints + playMoves * 25
-          }
-        />
+        <GameVictoryModalReshuffle totalPoints={starPoints} />
       )}
       {openGameOverModal && (
         <GameOverModalReshuffle
@@ -471,7 +553,7 @@ function ReshufflePlay() {
           setCards={setCards}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
-          playMoves={40}
+          playMoves={60}
         />
       )}
       {openConfirmationQuitModal && <ConfirmationQuitModal />}

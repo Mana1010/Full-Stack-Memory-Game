@@ -87,7 +87,7 @@ export const getEasyScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[0].totalScore,
-        personalEasyScore: getPersonalScore?.levels[0],
+        personalEasyScore: getPersonalScore?.levels[0], //Will retrieve the easy level properties
       },
     });
   }
@@ -109,7 +109,7 @@ export const getMediumScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[0].totalScore,
-        personalMediumScore: getPersonalScore?.levels[1],
+        personalMediumScore: getPersonalScore?.levels[1], //Will retrieve the medium level properties
       },
     });
   }
@@ -132,7 +132,7 @@ export const getHardScore = asyncHandler(
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].levels[0].totalScore,
-        personalHardScore: getPersonalScore?.levels[2],
+        personalHardScore: getPersonalScore?.levels[2], //Will retrieve the hard level properties
       },
     });
   }
@@ -141,7 +141,7 @@ export const getReshuffleChallengeScore = asyncHandler(
   async (req: Request, res: Response) => {
     const getAllTimeBest = await User.find()
       .select({
-        challenges: { $slice: [1, 1] }, //Filtering only the hard mode object
+        challenges: { $slice: [0, 1] }, //Filtering only the reshuffle challenge mode object
       })
       .sort({ "challenges.totalScore": -1 })
       .limit(1);
@@ -150,11 +150,11 @@ export const getReshuffleChallengeScore = asyncHandler(
       "challenges.totalScore",
       "-_id",
     ]);
-    console.log(getAllTimeBest[0].challenges[0].totalScore);
+    console.log(getPersonalScore?.challenges[0]);
     res.status(200).json({
       message: {
         allTimeBest: getAllTimeBest[0].challenges[0].totalScore,
-        personalReshuffleScore: getPersonalScore?.challenges[2],
+        personalReshuffleScore: getPersonalScore?.challenges[0], //Will retrieve the reshuffle properties
       },
     });
   }
@@ -173,11 +173,12 @@ export const claimEasyPoints = asyncHandler(
       res.status(404);
       throw new Error("User not found");
     }
+    const getLevelEasy = getUser.levels[0];
     if (getUser) {
-      getUser.levels[0].totalScore += points;
+      getLevelEasy.totalScore += points;
     }
-    if (points > getUser.levels[0].highScore) {
-      getUser.levels[0].highScore = points;
+    if (points > getLevelEasy.highScore) {
+      getLevelEasy.highScore = points;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockMedium) {
@@ -203,11 +204,12 @@ export const claimMediumPoints = asyncHandler(
       res.status(404);
       throw new Error("User not found");
     }
+    const getLevelMedium = getUser.levels[1];
     if (getUser) {
-      getUser.levels[1].totalScore += points;
+      getLevelMedium.totalScore += points;
     }
-    if (points > getUser.levels[1].highScore) {
-      getUser.levels[1].highScore = points;
+    if (points > getLevelMedium.highScore) {
+      getLevelMedium.highScore = points;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockHard && !isAlreadyUnlockReshuffle) {
@@ -227,16 +229,44 @@ export const claimHardPoints = asyncHandler(
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
-    const getUser = await User.findById(req.user?._id); //Checking if the hard level is already unlock
+    const getUser = await User.findById(req.user?._id);
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
     }
+    const getLevelHard = getUser.levels[2];
     if (getUser) {
-      getUser.levels[2].totalScore += points;
+      getLevelHard.totalScore += points;
     }
-    if (points > getUser.levels[2].highScore) {
-      getUser.levels[2].highScore = points;
+    if (points > getLevelHard.highScore) {
+      getLevelHard.highScore = points;
+    }
+    getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
+    await getUser.save();
+    await getUserLeaderboard?.save();
+    res.status(200).json({ message: "Successfully claimed your prize" });
+  }
+);
+
+export const claimReshufflePoints = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { points } = req.body;
+    const { id } = req.params;
+    const getUserLeaderboard = await Leaderboard.findOne({
+      userId: id,
+    });
+    console.log("Running asf");
+    const getUser = await User.findById(req.user?._id);
+    if (!getUser || !getUserLeaderboard) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    const getReshuffle = getUser.challenges[0]; //Retrieving the reshuffle obj from the challenges array
+    if (getUser) {
+      getReshuffle.totalScore += points;
+    }
+    if (points > getReshuffle.highScore) {
+      getReshuffle.highScore = points;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();
