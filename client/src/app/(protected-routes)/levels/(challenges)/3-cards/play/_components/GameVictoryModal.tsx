@@ -32,7 +32,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
         isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
+        `${baseUrl}/feature/three-cards/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -51,7 +51,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      console.log(err.response?.data);
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {

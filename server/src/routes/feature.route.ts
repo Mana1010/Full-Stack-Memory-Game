@@ -12,6 +12,7 @@ import {
   getReshuffleChallengeScore,
   claimReshufflePoints,
   getThreeCardsChallengeScore,
+  claimThreeCardsPoints,
 } from "../controller/feature.controller";
 import express from "express";
 
@@ -36,5 +37,5 @@ router.patch(
 router.patch(
   "/three-cards/claim-prize/:id",
   protectedRoutes,
-  claimReshufflePoints
+  claimThreeCardsPoints
 );

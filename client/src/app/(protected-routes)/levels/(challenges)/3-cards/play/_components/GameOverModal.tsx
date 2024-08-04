@@ -16,8 +16,7 @@ import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
 import { GamePlaySchema } from "@/types/game.types";
-import { FaShuffle } from "react-icons/fa6";
-
+import { TbCardsFilled } from "react-icons/tb";
 function GameOverModalThreeCards({
   totalPoints,
   setPlayMoves,
@@ -38,7 +37,7 @@ function GameOverModalThreeCards({
         isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/reshuffle/claim-prize/${userId}`,
+        `${baseUrl}/feature/three-cards/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -52,11 +51,11 @@ function GameOverModalThreeCards({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/reshuffle");
+      router.push("/levels/3-cards");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      console.log(err.response?.data);
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {
@@ -65,7 +64,7 @@ function GameOverModalThreeCards({
 
   function resetGame() {
     setIsMount(true);
-    setPlayMoves(40);
+    setPlayMoves(60);
     setStarPoints(0);
     setCards(hiddenCard);
   }
@@ -77,10 +76,10 @@ function GameOverModalThreeCards({
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary">RESHUFFLE</span>
+            <span className="text-primary">3-CARDS</span>
             <div className="absolute right-[10px] bottom-[8px] flex">
               <span className="text-primary/50 font-semibold text-[2rem]">
-                <FaShuffle />
+                <TbCardsFilled />
               </span>
             </div>
           </div>
@@ -103,7 +102,7 @@ function GameOverModalThreeCards({
             }}
             className="w-1/2 py-2 rounded-sm flex justify-center items-center text-white space-x-1"
           >
-            <span className="pt-0.5">{totalPoints} </span>
+            <span className="pt-0.5">{totalPoints}</span>
             <Image src={star} alt="star-image" width={15} priority />
           </div>
         </div>

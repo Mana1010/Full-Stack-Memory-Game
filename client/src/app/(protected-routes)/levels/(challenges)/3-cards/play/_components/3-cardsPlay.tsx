@@ -13,7 +13,6 @@ import { TbOvalFilled } from "react-icons/tb";
 import { BsOctagonFill } from "react-icons/bs";
 import timeMoves from "../../../../../../../components/images/time-moves.png";
 import points from "../../../../../../../components/images/trophies/total-score-star.png";
-import cardDone from "../../../../../../../components/images/cards-done.png";
 import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
@@ -22,6 +21,7 @@ import GameOverModalThreeCards from "./GameOverModal";
 import GameVictoryModalThreeCards from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
+import threeCardsImg from "../../../../../../../components/images/threeCards.png";
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -442,7 +442,7 @@ function ThreeCardsPlay() {
           </div>
           <div className="relative">
             <div className="w-9 h-9 rounded-full bg-primary absolute left-[-20px] top-[-6px] flex justify-center items-center">
-              <Image src={cardDone} alt="card-icon" priority width={25} />
+              <Image src={threeCardsImg} alt="card-icon" priority width={25} />
             </div>
             <div
               style={{ boxShadow: "0 0 10px #FFE30A" }}
