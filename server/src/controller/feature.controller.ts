@@ -178,6 +178,27 @@ export const getThreeCardsChallengeScore = asyncHandler(
     });
   }
 );
+export const getElementsChallengeScore = asyncHandler(
+  async (req: Request, res: Response) => {
+    const getAllTimeBest = await User.find()
+      .select({
+        challenges: { $slice: [2, 2] }, //Filtering only the elements challenge mode object
+      })
+      .sort({ "challenges.totalScore": -1 })
+      .limit(1);
+    const getPersonalScore = await User.findById(req.user?._id).select([
+      "challenges.highScore",
+      "challenges.totalScore",
+      "-_id",
+    ]);
+    res.status(200).json({
+      message: {
+        allTimeBest: getAllTimeBest[0].challenges[0].totalScore,
+        personalElementsScore: getPersonalScore?.challenges[2], //Will retrieve the elements properties
+      },
+    });
+  }
+);
 
 export const claimEasyPoints = asyncHandler(
   async (req: Request, res: Response) => {

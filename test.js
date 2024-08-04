@@ -1,9 +1,3 @@
-import { nanoid } from "nanoid";
-import { Cards } from "@/types/game.types";
-
-type CardsFunctionSchema = Omit<Cards, "sticker" | "color"> & {
-  codeName: string;
-};
 const elements = [
   { name: "Hydrogen", symbol: "H" },
   { name: "Helium", symbol: "He" },
@@ -125,7 +119,10 @@ const elements = [
   { name: "Oganesson", symbol: "Og" },
 ];
 
-export function shuffleElements(): CardsFunctionSchema[] {
+const firstObj = [];
+const secondObj = [];
+
+export function shuffleArr() {
   for (let i = elements.length - 1; i > 0; i--) {
     const randomElements = Math.floor(Math.random() * (i + 1));
     [elements[i], elements[randomElements]] = [
@@ -133,29 +130,17 @@ export function shuffleElements(): CardsFunctionSchema[] {
       elements[i],
     ];
   }
-  const firstObj = [];
-  const secondObj = [];
   const mapVal = elements
     .map((element) => Object.entries(element))
     .slice(0, 12);
-  for (let [firstValue, secondValue] of mapVal) {
+  for ([firstValue, secondValue] of mapVal) {
     firstObj.push({
-      name: firstValue[1],
+      [firstValue[0]]: firstValue[1],
       codeName: firstValue[1],
-      id: nanoid(),
-      isPick: false,
-      isDone: false,
-      isShowAddPoints: false,
-      cardModified: Date.now(),
     });
     secondObj.push({
-      name: secondValue[1],
+      [secondValue[0]]: secondValue[1],
       codeName: firstValue[1],
-      id: nanoid(),
-      isPick: false,
-      isDone: false,
-      isShowAddPoints: false,
-      cardModified: Date.now(),
     });
   }
   return [...firstObj, ...secondObj];

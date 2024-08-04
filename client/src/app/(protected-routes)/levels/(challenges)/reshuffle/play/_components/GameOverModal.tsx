@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
-import { hiddenCard } from "@/app/(protected-routes)/levels/easy/play/_components/EasyPlay";
+import { hiddenCard } from "./ReshufflePlay";
 import { GamePlaySchema } from "@/types/game.types";
 import { FaShuffle } from "react-icons/fa6";
 

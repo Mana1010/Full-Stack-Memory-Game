@@ -14,10 +14,11 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
+import { hiddenCard } from "../../../3-cards/play/_components/3-cardsPlay";
 import { GamePlaySchema } from "@/types/game.types";
-import { TbCardsFilled } from "react-icons/tb";
-import { hiddenCard } from "./3-cardsPlay";
-function GameOverModalThreeCards({
+import { GiDna2 } from "react-icons/gi";
+
+function GameOverModalElements({
   totalPoints,
   setPlayMoves,
   setStarPoints,
@@ -37,7 +38,7 @@ function GameOverModalThreeCards({
         isGameComplete: false,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/three-cards/claim-prize/${userId}`,
+        `${baseUrl}/feature/elements/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -51,11 +52,11 @@ function GameOverModalThreeCards({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/3-cards");
+      router.push("/levels/element");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      toast.error(err.response?.data.message);
+      console.log(err.response?.data);
     },
   });
   useEffect(() => {
@@ -76,10 +77,10 @@ function GameOverModalThreeCards({
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary">3-CARDS</span>
+            <span className="text-primary">ELEMENTS</span>
             <div className="absolute right-[10px] bottom-[8px] flex">
               <span className="text-primary/50 font-semibold text-[2rem]">
-                <TbCardsFilled />
+                <GiDna2 />
               </span>
             </div>
           </div>
@@ -151,4 +152,4 @@ function GameOverModalThreeCards({
   );
 }
 
-export default GameOverModalThreeCards;
+export default GameOverModalElements;

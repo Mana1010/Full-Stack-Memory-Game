@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
-import skullImg from "../../../../../../../components/images/skull.png";
+import victoryImg from "../../../../../../../components/images/victory.png";
 import star from "../../../../../../../components/images/trophies/total-score-star.png";
 import { MdInfoOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
@@ -15,18 +15,14 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { GamePlaySchema } from "@/types/game.types";
-import { TbCardsFilled } from "react-icons/tb";
-import { hiddenCard } from "./3-cardsPlay";
-function GameOverModalThreeCards({
-  totalPoints,
-  setPlayMoves,
-  setStarPoints,
-  setCards,
-  setIsMount,
-}: GamePlaySchema) {
+import { FaShuffle } from "react-icons/fa6";
+import { GiDna2 } from "react-icons/gi";
+
+type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
+function GameVictoryModalElements({ totalPoints }: GameVictorySchema) {
   const axiosInterceptor = useAxiosInterceptor();
-  const { playGameOverSound, playClaimingSound } = useAudioStore();
-  const { setOpenGameOverModal } = useModalStore();
+  const { playGameVictorySound, playClaimingSound } = useAudioStore();
+  const { setOpenVictoryModal } = useModalStore();
   const { userId } = useUserStore();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -34,10 +30,10 @@ function GameOverModalThreeCards({
     mutationFn: async () => {
       const payload = {
         points: totalPoints,
-        isGameComplete: false,
+        isGameComplete: true,
       };
       const response = await axiosInterceptor.patch(
-        `${baseUrl}/feature/three-cards/claim-prize/${userId}`,
+        `${baseUrl}/feature/elements/claim-prize/${userId}`,
         payload,
         {
           headers: {
@@ -50,24 +46,18 @@ function GameOverModalThreeCards({
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
+      setOpenVictoryModal(false);
       playClaimingSound();
-      router.push("/levels/3-cards");
+      router.push("/levels");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      toast.error(err.response?.data.message);
+      console.log(err.response?.data);
     },
   });
   useEffect(() => {
-    playGameOverSound();
-  }, [playGameOverSound]);
-
-  function resetGame() {
-    setIsMount(true);
-    setPlayMoves(60);
-    setStarPoints(0);
-    setCards(hiddenCard);
-  }
+    playGameVictorySound();
+  }, [playGameVictorySound]);
   return (
     <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center w-full h-screen px-5">
       <div className="bg-primary p-4 w-[95%] sm:w-[400px] rounded-sm flex flex-col space-y-3 min-h-[500px] relative">
@@ -76,22 +66,24 @@ function GameOverModalThreeCards({
             style={{ boxShadow: "0 0 20px #FFE30A" }}
             className="bg-secondary py-3 w-1/2 rounded-md flex justify-center items-center relative"
           >
-            <span className="text-primary">3-CARDS</span>
+            <span className="text-primary">ELEMENTS</span>
             <div className="absolute right-[10px] bottom-[8px] flex">
               <span className="text-primary/50 font-semibold text-[2rem]">
-                <TbCardsFilled />
+                <GiDna2 />
               </span>
             </div>
           </div>
         </div>
         <div className="flex items-center justify-center w-full">
-          <Image src={skullImg} alt="skull-image" width={200} priority />
+          <Image src={victoryImg} alt="victory-image" width={200} priority />
         </div>
         <div className="flex justify-center items-center flex-col">
           <h1 className="font-semibold text-secondary text-2xl font-mono">
-            GAME OVER
+            GAME COMPLETE
           </h1>
-          <p className=" text-secondary text-[0.67rem]">No moves left</p>
+          <p className=" text-secondary text-[0.67rem]">
+            You matched all cards!
+          </p>
         </div>
         <div className="pt-3 flex flex-col justify-center items-center w-full space-y-2">
           <h1 className="text-secondary text-xl">YOU GOT</h1>
@@ -105,16 +97,15 @@ function GameOverModalThreeCards({
             <span className="pt-0.5">{totalPoints}</span>
             <Image src={star} alt="star-image" width={15} priority />
           </div>
+          <small className="text-center text-[0.6rem] text-secondary">
+            You got 3000 extra points for completing this mode.
+          </small>
         </div>
-        <div
-          className={`pt-5 justify-center items-center flex-col ${
-            totalPoints === 0 ? "hidden" : "flex"
-          }`}
-        >
+        <div className={`pt-5 justify-center items-center flex-col flex`}>
           <button
             onClick={() => {
-              setOpenGameOverModal(false);
               claimPrize.mutate();
+              setOpenVictoryModal(false);
             }}
             style={{ boxShadow: "0 0 15px #FFE30A" }}
             className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
@@ -130,25 +121,9 @@ function GameOverModalThreeCards({
             </p>
           </div>
         </div>
-        <div
-          className={`pt-5 justify-center items-center flex-col ${
-            totalPoints === 0 ? "flex" : "hidden"
-          }`}
-        >
-          <button
-            onClick={() => {
-              resetGame();
-              setOpenGameOverModal(false);
-            }}
-            style={{ boxShadow: "0 0 15px #FFE30A" }}
-            className="mx-auto py-2.5 w-[70%] bg-secondary text-primary"
-          >
-            TRY AGAIN
-          </button>
-        </div>
       </div>
     </div>
   );
 }
 
-export default GameOverModalThreeCards;
+export default GameVictoryModalElements;

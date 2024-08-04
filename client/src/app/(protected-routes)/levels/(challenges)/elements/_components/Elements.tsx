@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import threeCardsTitle from "../../../../../../components/images/titles/3-cards.png";
+import reshuffleTitle from "../../../../../../components/images/titles/reshuffle.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -16,12 +16,12 @@ import { UseQueryResult } from "react-query";
 import { useModalStore } from "@/utils/store/modal.store";
 interface ScoreData {
   allTimeBest: number;
-  personalThreeCardsScore: {
+  personalElementsScore: {
     totalScore: number;
     highScore: number;
   };
 }
-function ThreeCards() {
+function Elements() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
   const { playClickSound } = useAudioStore();
@@ -30,10 +30,10 @@ function ThreeCards() {
     ScoreData,
     AxiosError<{ message: string }>
   > = useQuery({
-    queryKey: ["three-cards-score"],
+    queryKey: ["elementss-score"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(
-        `${baseUrl}/feature/three-cards-score`,
+        `${baseUrl}/feature/elements-score`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,14 +54,15 @@ function ThreeCards() {
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">
         <SideDesignNoFM size={270} />
         <header className="pl-5">
-          <Image src={threeCardsTitle} alt="three-cards-image" priority />
+          <Image src={reshuffleTitle} alt="reshuffle-image" priority />
         </header>
         <div>
           <p
             style={{ textShadow: "0 0 10px white" }}
             className="text-white text-sm text-center"
           >
-            You should match 3 same cards.
+            Match the two cards based on the acronym or the word of each element
+            from periodic table.
           </p>
         </div>
         <div className="flex flex-col space-y-4">
@@ -73,7 +74,7 @@ function ThreeCards() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalThreeCardsScore?.highScore}
+              {getScore.data?.personalElementsScore?.highScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -84,7 +85,7 @@ function ThreeCards() {
               style={{ textShadow: "0 0 15px white" }}
               className="text-white text-center"
             >
-              {getScore.data?.personalThreeCardsScore?.totalScore}
+              {getScore.data?.personalElementsScore?.totalScore}
             </small>
           </div>
           <div className="flex flex-col">
@@ -124,7 +125,7 @@ function ThreeCards() {
           </motion.button>
           <motion.button
             onClick={() => {
-              router.push("/levels/3-cards/play");
+              router.push("/levels/elements/play");
               playClickSound();
               setOpenGameOverModal(false);
             }}
@@ -151,4 +152,4 @@ function ThreeCards() {
   );
 }
 
-export default ThreeCards;
+export default Elements;

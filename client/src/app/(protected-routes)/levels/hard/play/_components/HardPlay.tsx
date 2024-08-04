@@ -1,19 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaHippo } from "react-icons/fa6";
-import {
-  GiLion,
-  GiTigerHead,
-  GiBearFace,
-  GiEagleHead,
-  GiMonkey,
-  GiParrotHead,
-  GiElephant,
-  GiSandSnake,
-} from "react-icons/gi";
 import {
   TbZodiacAries,
   TbZodiacCancer,
@@ -28,7 +16,6 @@ import {
   TbZodiacSagittarius,
   TbZodiacPisces,
 } from "react-icons/tb";
-import { LiaKiwiBirdSolid } from "react-icons/lia";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import timeMoves from "../../../../../../components/images/time-moves.png";
