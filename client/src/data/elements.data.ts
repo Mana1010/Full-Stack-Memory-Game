@@ -1,9 +1,6 @@
 import { nanoid } from "nanoid";
 import { Cards } from "@/types/game.types";
-
-type CardsFunctionSchema = Omit<Cards, "sticker" | "color"> & {
-  codeName: string;
-};
+import { CardsFunctionSchema } from "@/types/game.types";
 const elements = [
   { name: "Hydrogen", symbol: "H" },
   { name: "Helium", symbol: "He" },

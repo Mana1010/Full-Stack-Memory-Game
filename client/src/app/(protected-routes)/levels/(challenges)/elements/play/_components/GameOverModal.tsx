@@ -52,7 +52,7 @@ function GameOverModalElements({
     onSuccess: (data) => {
       queryClient.invalidateQueries(["user-profile"]);
       playClaimingSound();
-      router.push("/levels/element");
+      router.push("/levels/elements");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {

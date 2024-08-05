@@ -5,8 +5,9 @@ import cards from "../components/images/cards.png";
 import Image from "next/image";
 import { GamePlaySchema } from "@/types/game.types";
 import { Cards } from "@/types/game.types";
+import { CardsFunctionSchema } from "@/types/game.types";
 type GameConfirmationModalSchema = Omit<GamePlaySchema, "totalPoints"> & {
-  hiddenCards: Cards[];
+  hiddenCards: Cards[] | CardsFunctionSchema[];
   playMoves: number;
 };
 function ConfirmationRetryModal({

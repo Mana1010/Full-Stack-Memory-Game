@@ -14,6 +14,7 @@ import {
   getThreeCardsChallengeScore,
   getElementsChallengeScore,
   claimThreeCardsPoints,
+  claimElementsPoints,
 } from "../controller/feature.controller";
 import express from "express";
 
@@ -41,3 +42,4 @@ router.patch(
   protectedRoutes,
   claimThreeCardsPoints
 );
+router.patch("/elements/claim-prize/:id", protectedRoutes, claimElementsPoints);

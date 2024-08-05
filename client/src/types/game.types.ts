@@ -1,6 +1,9 @@
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 
+export type CardsFunctionSchema = Omit<Cards, "sticker" | "color"> & {
+  codeName?: string;
+};
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -15,6 +18,6 @@ export interface GamePlaySchema {
   totalPoints: number;
   setPlayMoves: Dispatch<SetStateAction<number>>;
   setStarPoints: Dispatch<SetStateAction<number>>;
-  setCards: Dispatch<SetStateAction<Cards[]>>;
+  setCards: Dispatch<SetStateAction<Cards[] | CardsFunctionSchema[]>>;
   setIsMount: Dispatch<SetStateAction<boolean>>;
 }

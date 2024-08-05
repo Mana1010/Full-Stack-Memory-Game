@@ -345,3 +345,29 @@ export const claimThreeCardsPoints = asyncHandler(
     res.status(200).json({ message: "Successfully claimed your prize" });
   }
 );
+
+export const claimElementsPoints = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { points } = req.body;
+    const { id } = req.params;
+    const getUserLeaderboard = await Leaderboard.findOne({
+      userId: id,
+    });
+    const getUser = await User.findById(req.user?._id);
+    if (!getUser || !getUserLeaderboard) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    const getReshuffle = getUser.challenges[2]; //Retrieving the elements obj from the challenges array
+    if (getUser) {
+      getReshuffle.totalScore += points;
+    }
+    if (points > getReshuffle.highScore) {
+      getReshuffle.highScore = points;
+    }
+    getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
+    await getUser.save();
+    await getUserLeaderboard?.save();
+    res.status(200).json({ message: "Successfully claimed your prize" });
+  }
+);
