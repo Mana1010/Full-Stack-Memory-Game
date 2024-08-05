@@ -102,8 +102,6 @@ export const getMediumScore = asyncHandler(
       .sort({ "levels.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
-      "levels.highScore",
-      "levels.totalScore",
       "-_id",
     ]);
     res.status(200).json({
@@ -124,8 +122,6 @@ export const getHardScore = asyncHandler(
       .sort({ "levels.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
-      "levels.highScore",
-      "levels.totalScore",
       "-_id",
     ]);
     res.status(200).json({
@@ -145,8 +141,6 @@ export const getReshuffleChallengeScore = asyncHandler(
       .sort({ "challenges.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
-      "challenges.highScore",
-      "challenges.totalScore",
       "-_id",
     ]);
     res.status(200).json({
@@ -166,8 +160,6 @@ export const getThreeCardsChallengeScore = asyncHandler(
       .sort({ "challenges.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
-      "challenges.highScore",
-      "challenges.totalScore",
       "-_id",
     ]);
     res.status(200).json({
@@ -187,8 +179,6 @@ export const getElementsChallengeScore = asyncHandler(
       .sort({ "challenges.totalScore": -1 })
       .limit(1);
     const getPersonalScore = await User.findById(req.user?._id).select([
-      "challenges.highScore",
-      "challenges.totalScore",
       "-_id",
     ]);
     res.status(200).json({

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import mediumTitle from "../../../../../components/images/titles/medium.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
@@ -14,11 +14,13 @@ import { baseUrl } from "@/utils/baseUrl";
 import { AxiosError } from "axios";
 import { UseQueryResult } from "react-query";
 import { useModalStore } from "@/utils/store/modal.store";
+import { toast } from "sonner";
 interface ScoreData {
   allTimeBest: number;
   personalMediumScore: {
     totalScore: number;
     highScore: number;
+    isUnlock: boolean;
   };
 }
 function Medium() {
@@ -48,6 +50,9 @@ function Medium() {
   if (getScore.isError) {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
+  }
+  if (!getScore.data?.personalMediumScore.isUnlock) {
+    router.push("/levels");
   }
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">

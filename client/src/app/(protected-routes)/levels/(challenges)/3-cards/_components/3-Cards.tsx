@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import threeCardsTitle from "../../../../../../components/images/titles/3-cards.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
@@ -19,6 +19,7 @@ interface ScoreData {
   personalThreeCardsScore: {
     totalScore: number;
     highScore: number;
+    isUnlock: boolean;
   };
 }
 function ThreeCards() {
@@ -49,6 +50,11 @@ function ThreeCards() {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
   }
+  useEffect(() => {
+    if (!getScore.data?.personalThreeCardsScore.isUnlock) {
+      router.push("/levels");
+    }
+  }, [getScore.data?.personalThreeCardsScore.isUnlock, router]);
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">

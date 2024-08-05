@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import { useMutation } from "react-query";
+import { useMutation, UseQueryResult } from "react-query";
 import { baseUrl } from "@/utils/baseUrl";
 import { toast } from "sonner";
 import TubeDesign from "@/components/TubeDesign";
@@ -17,13 +17,18 @@ import { QueryClient } from "react-query";
 import loading from "../../../../components/images/loading.gif";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store/user.store";
-import { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 import { useAudioStore } from "@/utils/store/audio.store";
 interface Profile {
   age: number;
   gender: string | null;
   ign: string | null;
   profilePic: string | null;
+}
+interface User {
+  username: string;
+  isOldUser: boolean;
+  _id: string;
 }
 function ProfileSetup() {
   const axiosInterceptor = useAxiosInterceptor();
@@ -45,7 +50,11 @@ function ProfileSetup() {
   } = useProfileStore();
   const router = useRouter();
   const queryClient = new QueryClient();
-  const { isError, error } = useQuery({
+  const {
+    isError,
+    error,
+    data,
+  }: UseQueryResult<User, AxiosError<{ message: string }>> = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(`${baseUrl}/auth/verify`, {
@@ -55,7 +64,7 @@ function ProfileSetup() {
         withCredentials: true,
       });
       setIgn(response.data.message.username);
-      return;
+      return response.data.message;
     },
     refetchOnWindowFocus: false,
   });
@@ -96,11 +105,16 @@ function ProfileSetup() {
     window.addEventListener("beforeunload", load);
     return () => window.removeEventListener("beforeunload", load);
   }, []);
-
+  useEffect(() => {
+    if (data?.isOldUser) {
+      router.push("/levels");
+    }
+  }, [data?.isOldUser, router]);
   if (isError) {
     const err = error as AxiosError<{ message: string }>;
     throw new Error(err.response?.data.message);
   }
+  console.log(data);
   //For icons
   return (
     <main className="h-full w-full flex items-center justify-center flex-col relative">

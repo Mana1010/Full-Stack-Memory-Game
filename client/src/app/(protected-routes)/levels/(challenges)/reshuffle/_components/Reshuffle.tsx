@@ -19,6 +19,7 @@ interface ScoreData {
   personalReshuffleScore: {
     totalScore: number;
     highScore: number;
+    isUnlock: boolean;
   };
 }
 function Reshuffle() {
@@ -48,6 +49,9 @@ function Reshuffle() {
   if (getScore.isError) {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
+  }
+  if (!getScore.data?.personalReshuffleScore.isUnlock) {
+    router.push("/levels");
   }
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">

@@ -296,7 +296,7 @@ function Sidebar() {
                           onClick={setOpenAuthMenu}
                           aria-label="Authentication"
                           style={{ boxShadow: "-1px -1px 5px black" }}
-                          className="flex items-center text-white justify-between w-full py-2 px-1 relative overflow-hidden hover:bg-secondary hover:shadow-none"
+                          className="flex items-center text-white justify-between w-full py-2 px-1 relative overflow-hidden"
                         >
                           <div className={`flex space-x-1 items-center w-full`}>
                             <span className="text-xl">
@@ -309,9 +309,6 @@ function Sidebar() {
                                 }`}
                               >
                                 AUTHENTICATION
-                                <span className="text-[#191F23]/75 absolute right-[40px] bottom-2 text-6xl h-full flex">
-                                  <BiCheckShield />
-                                </span>
                               </span>
                             )}
                           </div>
@@ -358,67 +355,6 @@ function Sidebar() {
                         </ul>
                       </div>
                     )}
-                    <div>
-                      <button
-                        onClick={setOpenDevSocial}
-                        aria-label="Dev Social"
-                        style={{ boxShadow: "-1px -1px 5px black" }}
-                        className={`flex items-center text-white justify-between w-full py-2 px-1 overflow-hidden`}
-                      >
-                        <div className="flex space-x-1 items-center">
-                          <span className="text-xl">
-                            <IoShareSocialOutline />
-                          </span>
-                          <div
-                            className={`text-[0.8rem] ${
-                              openSidebar ? "flex" : "hidden"
-                            } space-x-1`}
-                          >
-                            <span>DEV</span>
-                            <span>SOCIAL</span>
-                          </div>
-                        </div>
-                        <span
-                          style={{
-                            transform: `rotate(${
-                              openDevSocial ? "180deg" : "0"
-                            })`,
-                          }}
-                          className="text-3xl transition-transform duration-200 ease-in"
-                        >
-                          <RiArrowDropDownLine />
-                        </span>
-                      </button>
-
-                      <ul
-                        className={`${
-                          openDevSocial ? "flex" : "hidden"
-                        } transition-all duration-200 flex-col`}
-                      >
-                        {devSocials.map((dev) => (
-                          <Link
-                            aria-label={dev.name}
-                            href={dev.link}
-                            key={dev.name}
-                            target="_blank"
-                          >
-                            <li
-                              style={{ boxShadow: "-1px -1px 3px black" }}
-                              className={`flex space-x-2 text-[#EBD30C] text-[0.79rem] items-center p-2 m-1 ${
-                                !openSidebar && "justify-center"
-                              }`}
-                            >
-                              <span>{dev.icon}</span>
-                              <span
-                                className={`${openSidebar ? "flex" : "hidden"}`}
-                              >
-                                {dev.name}
-                              </span>
-                            </li>
-                          </Link>
-                        ))}
-                      </ul>
-                    </div>
                   </div>
                 </div>
               </div>

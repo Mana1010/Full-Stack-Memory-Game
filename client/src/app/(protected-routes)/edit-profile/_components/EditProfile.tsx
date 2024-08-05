@@ -55,7 +55,10 @@ function EditProfile() {
   } = useEditProfileStore();
   const [payload, setPayload] = useState<EditProfileType | any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const getProfile: UseQueryResult<EditProfileSchema | null> = useQuery({
+  const getProfile: UseQueryResult<
+    EditProfileSchema,
+    AxiosError<{ message: string }>
+  > = useQuery({
     queryKey: ["edit-profile"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(

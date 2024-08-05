@@ -14,7 +14,7 @@ import thirdPlace from "../../../../components/images/trophies/3rd-place.png";
 import { IoReturnDownBack } from "react-icons/io5";
 import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import { AxiosError } from "axios";
-import { useUserStore } from "@/utils/store/user.store";
+import { Profile, UserDetails } from "@/types/user.types";
 function Leaderboard() {
   const axiosInterceptor = useAxiosInterceptor();
   const router = useRouter();
@@ -23,16 +23,21 @@ function Leaderboard() {
   const getAllPlayers = useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
-      const response: UseQueryResult<any> = await axiosInterceptor.get(
-        `${baseUrl}/feature/leaderboard`,
+      const response: UseQueryResult<
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
-      return response.data.message;
+          message: {
+            players: UserDetails<Profile, { _id: string }>[];
+            userId: string;
+          };
+        },
+        AxiosError<{ message: string }>
+      > = await axiosInterceptor.get(`${baseUrl}/feature/leaderboard`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+      return response.data?.message;
     },
     refetchOnWindowFocus: false,
   });

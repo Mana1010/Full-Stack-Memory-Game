@@ -16,38 +16,18 @@ import { useModalStore } from "@/utils/store/modal.store";
 import { IoReturnDownBack } from "react-icons/io5";
 import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
+import { UserDetails } from "@/types/user.types";
+import { User, Profile } from "@/types/user.types";
 
-export interface Profile {
-  _id: string;
-  age: number;
-  gender: string;
-  ign: string;
-  profilePic: {
-    secure_url: string;
-    public_id: string;
-  };
-  updatedAt: Date;
-  createdAt: string;
-}
-export interface User {
-  _id: string;
-  username: string;
-  updatedAt: Date;
-  createdAt: string;
-}
-interface AccountDetails {
-  bestScore: number;
-  _id: string;
-  profileId: Profile;
-  userId: User;
-  rank: number;
-}
 function AccountDetails({ username }: { username: string }) {
   const axiosInterceptor = useAxiosInterceptor();
   const { isAuthenticated } = useUserStore();
   const { openImagePreview, setOpenImagePreview } = useModalStore();
   const router = useRouter();
-  const getAccountDetails: UseQueryResult<AccountDetails | null> = useQuery({
+  const getAccountDetails: UseQueryResult<
+    UserDetails<Profile, User>,
+    AxiosError<{ message: string }>
+  > = useQuery({
     queryKey: ["account-details"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(

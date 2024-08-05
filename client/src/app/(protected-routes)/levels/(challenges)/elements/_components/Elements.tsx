@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import reshuffleTitle from "../../../../../../components/images/titles/reshuffle.png";
+import elementsTitle from "../../../../../../components/images/titles/elements.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -19,6 +19,7 @@ interface ScoreData {
   personalElementsScore: {
     totalScore: number;
     highScore: number;
+    isUnlock: boolean;
   };
 }
 function Elements() {
@@ -49,12 +50,15 @@ function Elements() {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
   }
+  if (!getScore.data?.personalElementsScore.isUnlock) {
+    router.push("/levels");
+  }
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">
         <SideDesignNoFM size={270} />
         <header className="pl-5">
-          <Image src={reshuffleTitle} alt="reshuffle-image" priority />
+          <Image src={elementsTitle} alt="elements-image" priority />
         </header>
         <div>
           <p
