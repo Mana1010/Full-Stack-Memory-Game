@@ -1,10 +1,12 @@
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+
 export interface Profile {
   _id: string;
   age: number;
   gender: string;
   ign: string;
   profilePic: {
-    secure_url: string;
+    secure_url: any;
     public_id: string;
   };
   updatedAt: Date;
@@ -23,3 +25,14 @@ export interface UserDetails<P = any, U = any> {
   userId: U;
   rank: number;
 }
+
+interface ScoreSchema {
+  _id: string;
+  isUnlock: boolean;
+  isDone: boolean;
+  highScore: number;
+  totalScore: number;
+}
+
+export type LevelsSchema = ScoreSchema & { level: string };
+export type ChallengesSchema = ScoreSchema & { challengeName: string };

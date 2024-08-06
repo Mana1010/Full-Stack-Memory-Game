@@ -4,12 +4,14 @@ import { Schema } from "mongoose";
 const LevelSchema = new Schema({
   level: { type: String, required: true },
   isUnlock: { type: Boolean, required: true },
+  isDone: { type: Boolean, default: false },
   highScore: { type: Number, default: 0 },
   totalScore: { type: Number, default: 0 },
 });
 const ChallengeSchema = new Schema({
   challengeName: { type: String, required: true },
   isUnlock: { type: Boolean, required: true },
+  isDone: { type: Boolean, default: false },
   highScore: { type: Number, default: 0 },
   totalScore: { type: Number, default: 0 },
 });

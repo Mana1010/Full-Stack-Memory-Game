@@ -11,6 +11,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { MdLeaderboard, MdOutlineSettings } from "react-icons/md";
+import { FaHome } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
 import { GiDna2 } from "react-icons/gi";
 import { TbCardsFilled } from "react-icons/tb";
@@ -132,6 +133,23 @@ function Levels() {
               </TooltipTrigger>
               <TooltipContent className="bg-zinc-300/40 border-none text-white">
                 <small>Leaderboard</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                aria-label="home button"
+                onClick={() => router.push("/")}
+                style={{ boxShadow: " 0 0 10px #FFE30A" }}
+                className="text-primary text-md w-[35px] h-[35px] md:text-xl bg-secondary md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center"
+              >
+                <span>
+                  <FaHome />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-zinc-300/40 border-none text-white">
+                <small>Home</small>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

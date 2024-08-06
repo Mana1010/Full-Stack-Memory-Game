@@ -102,7 +102,7 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
     })
     .populate({
       path: "userId",
-      select: ["username"],
+      select: ["username", "levels", "challenges"],
     })
     .select(["-__v", "-updatedAt"])
     .lean();

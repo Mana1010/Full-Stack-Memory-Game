@@ -14,7 +14,13 @@ import { MdLogin } from "react-icons/md";
 import { PiUserPlus } from "react-icons/pi";
 import card from "../components/images/cards.png";
 import SideDesign from "./SideDesign";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import checkMark from "../components/images/checkmark.png";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "react-query";
 import { baseUrl } from "@/utils/baseUrl";
 import { usePathname } from "next/navigation";
 import { useUserStore } from "@/utils/store/user.store";
@@ -26,6 +32,16 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import trophyTopPlace from "../components/images/trophies/top-star-trophy.png";
 import totalScoreStar from "../components/images/trophies/total-score-star.png";
+import { GiDna2 } from "react-icons/gi";
+import { TbCardsFilled } from "react-icons/tb";
+import { FaShuffle } from "react-icons/fa6";
+import { AxiosError } from "axios";
+import {
+  LevelsSchema,
+  ChallengesSchema,
+  UserDetails,
+  Profile,
+} from "@/types/user.types";
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -36,14 +52,8 @@ function Sidebar() {
   //   return storedValue !== null ? JSON.parse(storedValue) : false;
   // });
 
-  const {
-    openAuthMenu,
-    openDevSocial,
-    openSidebar,
-    setOpenAuthMenu,
-    setOpenDevSocial,
-    setOpenSidebar,
-  } = useModalStore();
+  const { openAuthMenu, openSidebar, setOpenAuthMenu, setOpenSidebar } =
+    useModalStore();
   const { setUserId } = useUserStore();
   const navAuth = [
     {
@@ -57,33 +67,45 @@ function Sidebar() {
       icon: <MdLogin />,
     },
   ];
-  const devSocials = [
-    {
-      name: "FACEBOOK",
-      link: "https://www.facebook.com/tanvic.clarito?mibextid=ZbWKwL",
-      icon: <FaFacebook />,
-      index: 1,
-    },
-    {
-      name: "TIKTOK",
-      link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
-      icon: <FaTiktok />,
-      index: 2,
-    },
-    {
-      name: "GITHUB",
-      link: "https://github.com/Mana1010",
-      icon: <FaGithub />,
-      index: 3,
-    },
-    {
-      name: "LINKEDIN",
-      link: "https://www.linkedin.com/in/tristan-vic-clarito-a256322a0/",
-      icon: <FaLinkedin />,
-      index: 4,
-    },
-  ];
-  const getUser = useQuery({
+  // const devSocials = [
+  //   {
+  //     name: "FACEBOOK",
+  //     link: "https://www.facebook.com/tanvic.clarito?mibextid=ZbWKwL",
+  //     icon: <FaFacebook />,
+  //     index: 1,
+  //   },
+  //   {
+  //     name: "TIKTOK",
+  //     link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
+  //     icon: <FaTiktok />,
+  //     index: 2,
+  //   },
+  //   {
+  //     name: "GITHUB",
+  //     link: "https://github.com/Mana1010",
+  //     icon: <FaGithub />,
+  //     index: 3,
+  //   },
+  //   {
+  //     name: "LINKEDIN",
+  //     link: "https://www.linkedin.com/in/tristan-vic-clarito-a256322a0/",
+  //     icon: <FaLinkedin />,
+  //     index: 4,
+  //   },
+  // ];
+
+  const getUser: UseQueryResult<
+    UserDetails<
+      Profile,
+      {
+        challenges: ChallengesSchema[];
+        levels: LevelsSchema[];
+        _id: string;
+        username: string;
+      }
+    >,
+    AxiosError<{ message: string }>
+  > = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(`${baseUrl}/user/profile`, {
@@ -97,7 +119,6 @@ function Sidebar() {
       return data;
     },
     enabled: isAuthenticated && pathname !== "/profile-setup",
-    refetchOnWindowFocus: false,
   });
   const queryClient = useQueryClient();
   const logoutMutation = useMutation({
@@ -152,6 +173,17 @@ function Sidebar() {
       },
     },
   };
+  const icons = [
+    <FaShuffle key={0} />,
+    <TbCardsFilled key={1} />,
+    <GiDna2 key={2} />,
+  ];
+
+  const updatedChallengesData = getUser.data?.userId.challenges.map(
+    (challenge, index) => {
+      return { ...challenge, icon: icons[index] };
+    }
+  );
   if (pathname === "/profile-setup") return;
   return (
     <div
@@ -159,7 +191,7 @@ function Sidebar() {
         openSidebar ? "w-[260px]" : "sm:w-[70px] w-[10px]"
       } transition-all duration-200 ease-linear`}
     >
-      <div className="h-full relative">
+      <div className="h-full relative flex flex-col">
         {/* For Sidebar's Header */}
         <motion.button
           variants={arrowRightVariant}
@@ -189,7 +221,7 @@ function Sidebar() {
               <div>
                 {/* For Profile */}
                 {isAuthenticated && (
-                  <div className="space-y-2 py-5 px-2">
+                  <div className="space-y-2 py-5 px-2 flex-grow flex flex-col">
                     <div
                       className={`flex ${
                         openSidebar
@@ -210,7 +242,7 @@ function Sidebar() {
                           <Image
                             src={
                               getUser.data?.profileId?.profilePic?.secure_url &&
-                              getUser.data?.profileId?.profilePic.secure_url
+                              getUser.data?.profileId?.profilePic?.secure_url
                             }
                             fill
                             sizes="100%"
@@ -253,7 +285,7 @@ function Sidebar() {
                             style={{ textShadow: "0 0 15px #FFE30A" }}
                             className="text-secondary"
                           >
-                            {getUser.data.rank}
+                            {getUser.data?.rank}
                           </small>
                         </div>
                         <div className="flex space-x-2 items-center">
@@ -267,7 +299,7 @@ function Sidebar() {
                             style={{ textShadow: "0 0 15px #FFE30A" }}
                             className="text-secondary"
                           >
-                            {getUser.data.bestScore}
+                            {getUser.data?.bestScore}
                           </small>
                         </div>
                       </div>
@@ -285,10 +317,97 @@ function Sidebar() {
                         {getUser.data?.profileId?.ign}
                       </h5>
                     </div>
+                    <div className="w-full flex flex-col pt-5 space-y-2">
+                      {openSidebar && (
+                        <small className="text-secondary font-semibold">
+                          Levels
+                        </small>
+                      )}
+                      <div
+                        className={` w-full grid gap-3 flex-grow ${
+                          openSidebar ? "grid-cols-3" : "grid-cols-1"
+                        }`}
+                      >
+                        {getUser.data?.userId.levels.map((level, index) => (
+                          <div
+                            key={level._id}
+                            style={{
+                              boxShadow: "-1px -1px 3px black",
+                              transition: "all 0.3s ease-in-out",
+                            }}
+                            className="py-1 h-[40px] text-white rounded-sm text-[0.89rem] flex justify-center items-center gap-2 relative"
+                          >
+                            {new Array(index + 1).fill(0).map((_, index) => (
+                              <span
+                                key={index}
+                                className={`h-[20px] w-1.5 ${
+                                  level.isDone && "hidden"
+                                } ${
+                                  level.isUnlock ? "bg-secondary" : "bg-primary"
+                                }`}
+                              ></span>
+                            ))}
+                            {level.isDone && level.isUnlock && (
+                              <div className="flex justify-center items-center w-full">
+                                <Image
+                                  src={checkMark}
+                                  width={25}
+                                  alt="check-done-image"
+                                  priority
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pt-2 flex flex-col space-y-2">
+                      {openSidebar && (
+                        <small className="text-secondary font-semibold">
+                          Challenges
+                        </small>
+                      )}
+                      <div
+                        className={` w-full grid gap-3 flex-grow ${
+                          openSidebar ? "grid-cols-3" : "grid-cols-1"
+                        }`}
+                      >
+                        {updatedChallengesData?.map((challenge) => (
+                          <div
+                            key={challenge._id}
+                            style={{
+                              boxShadow: "-1px -1px 3px black",
+                              transition: "all 0.3s ease-in-out",
+                            }}
+                            className="py-1 h-[40px] rounded-sm flex justify-center items-center overflow-hidden relative"
+                          >
+                            <span
+                              className={`${challenge.isDone && "hidden"} ${
+                                challenge.isUnlock
+                                  ? "text-secondary"
+                                  : "text-primary"
+                              } text-xl`}
+                            >
+                              {challenge.icon}
+                            </span>
+                            {challenge.isDone && challenge.isUnlock && (
+                              <div className="absolute inset-0 flex justify-center items-center">
+                                <Image
+                                  src={checkMark}
+                                  width={30}
+                                  alt="check-done-image"
+                                  priority
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
                 {/* end of Profile*/}
-                <div className={`px-2 pt-2 space-y-2 `}>
+                <div className={`px-2 pt-2 space-y-2`}>
                   <div className="space-y-2 w-full">
                     {!isAuthenticated && (
                       <div className="space-y-1">

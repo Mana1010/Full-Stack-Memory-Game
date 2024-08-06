@@ -1,12 +1,9 @@
 import { Dispatch } from "react";
 import { SetStateAction } from "react";
 
-export type CardsFunctionSchema = Omit<Cards, "sticker" | "color"> & {
-  codeName?: string;
-};
 export interface Cards {
   id: string;
-  sticker: React.JSX.Element;
+  sticker?: React.JSX.Element;
   name: string;
   isPick: boolean;
   isDone: boolean;
@@ -14,6 +11,9 @@ export interface Cards {
   isShowAddPoints: boolean;
   cardModified: number;
 }
+export type CardsFunctionSchema = Omit<Cards, "sticker" | "color"> & {
+  codeName?: string;
+};
 export interface GamePlaySchema {
   totalPoints: number;
   setPlayMoves: Dispatch<SetStateAction<number>>;

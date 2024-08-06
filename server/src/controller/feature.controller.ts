@@ -212,6 +212,7 @@ export const claimEasyPoints = asyncHandler(
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockMedium) {
+      getUser.levels[0].isDone = true;
       getUser.levels[1].isUnlock = true; // Will unlock the medium level
     }
     await getUser.save();
@@ -243,6 +244,7 @@ export const claimMediumPoints = asyncHandler(
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     if (isGameComplete && !isAlreadyUnlockHard && !isAlreadyUnlockReshuffle) {
+      getUser.levels[1].isDone = true;
       getUser.levels[2].isUnlock = true; // Will unlock the hard level
       getUser.challenges[0].isUnlock = true; //Will unlock the reshuffle challenge mode
     }
@@ -274,6 +276,7 @@ export const claimHardPoints = asyncHandler(
       getLevelHard.highScore = points;
     }
     if (isGameComplete && !isAlreadyUnlock3cards && !isAlreadyUnlockElements) {
+      getUser.levels[2].isDone = true;
       getUser.challenges[1].isUnlock = true; // Will unlock the 3-cards mode
       getUser.challenges[2].isUnlock = true; // Will unlock the elements mode
     }
@@ -292,6 +295,7 @@ export const claimReshufflePoints = asyncHandler(
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    const isAlreadyDoneReshuffle = getUser?.challenges[0].isDone; //Checking if the reshuffle mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -302,6 +306,9 @@ export const claimReshufflePoints = asyncHandler(
     }
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
+    }
+    if (!isAlreadyDoneReshuffle) {
+      getUser.challenges[0].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();
@@ -318,6 +325,7 @@ export const claimThreeCardsPoints = asyncHandler(
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    const isAlreadyDoneThreeCards = getUser?.challenges[1].isDone; //Checking if the 3-cards mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -328,6 +336,9 @@ export const claimThreeCardsPoints = asyncHandler(
     }
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
+    }
+    if (!isAlreadyDoneThreeCards) {
+      getUser.challenges[1].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();
@@ -344,6 +355,7 @@ export const claimElementsPoints = asyncHandler(
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    const isAlreadyDoneElements = getUser?.challenges[2].isDone; //Checking if the elements mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
       throw new Error("User not found");
@@ -354,6 +366,9 @@ export const claimElementsPoints = asyncHandler(
     }
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
+    }
+    if (!isAlreadyDoneElements) {
+      getUser.challenges[2].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
     await getUser.save();

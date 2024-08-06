@@ -43,7 +43,11 @@ function GameVictoryModalHard({ totalPoints }: GameVictorySchema) {
       return response.data.message;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["user-profile"]);
+      queryClient.invalidateQueries([
+        "user-profile",
+        "three-cards-score",
+        "elements-cards-score",
+      ]);
       setOpenVictoryModal(false);
       playClaimingSound();
       router.push("/levels");

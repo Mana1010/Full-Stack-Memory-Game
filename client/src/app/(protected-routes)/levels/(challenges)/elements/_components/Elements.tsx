@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import elementsTitle from "../../../../../../components/images/titles/elements.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";
@@ -31,7 +31,7 @@ function Elements() {
     ScoreData,
     AxiosError<{ message: string }>
   > = useQuery({
-    queryKey: ["elementss-score"],
+    queryKey: ["elements-score"],
     queryFn: async () => {
       const response = await axiosInterceptor.get(
         `${baseUrl}/feature/elements-score`,
@@ -42,16 +42,12 @@ function Elements() {
           withCredentials: true,
         }
       );
-      console.log(response.data.message);
       return response.data.message;
     },
   });
   if (getScore.isError) {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
-  }
-  if (!getScore.data?.personalElementsScore.isUnlock) {
-    router.push("/levels");
   }
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">

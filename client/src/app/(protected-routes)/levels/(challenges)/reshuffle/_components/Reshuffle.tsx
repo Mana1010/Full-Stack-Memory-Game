@@ -50,9 +50,6 @@ function Reshuffle() {
     const errorMsg = getScore.error;
     throw new Error(errorMsg.response?.data.message);
   }
-  if (!getScore.data?.personalReshuffleScore.isUnlock) {
-    router.push("/levels");
-  }
   return (
     <div className="w-full h-full flex flex-col py-5 justify-center items-center  px-5">
       <div className="w-full sm:w-[500px] min-h-[400px] flex flex-col p-2.5 space-y-5 relative items-center">
