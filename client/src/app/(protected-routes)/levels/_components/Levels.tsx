@@ -22,7 +22,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { IconType } from "react-icons/lib";
 
 interface Levels {
   level: string;

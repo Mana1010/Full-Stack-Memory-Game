@@ -43,18 +43,14 @@ function GameVictoryModalHard({ totalPoints }: GameVictorySchema) {
       return response.data.message;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries([
-        "user-profile",
-        "three-cards-score",
-        "elements-cards-score",
-      ]);
+      queryClient.invalidateQueries(["user-profile"]);
       setOpenVictoryModal(false);
       playClaimingSound();
       router.push("/levels");
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      console.log(err.response?.data);
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {

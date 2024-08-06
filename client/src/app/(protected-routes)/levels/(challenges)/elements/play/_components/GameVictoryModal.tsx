@@ -52,7 +52,7 @@ function GameVictoryModalElements({ totalPoints }: GameVictorySchema) {
       toast.success(data);
     },
     onError: (err: AxiosError<{ message: string }>) => {
-      console.log(err.response?.data);
+      toast.error(err.response?.data.message);
     },
   });
   useEffect(() => {

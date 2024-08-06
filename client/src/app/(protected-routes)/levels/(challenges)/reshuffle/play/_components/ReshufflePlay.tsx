@@ -1,5 +1,12 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
@@ -30,6 +37,7 @@ import GameOverModalReshuffle from "./GameOverModal";
 import GameVictoryModalReshuffle from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
+import { CardsFunctionSchema } from "@/types/game.types";
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -542,7 +550,11 @@ function ReshufflePlay() {
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
         />
       )}
@@ -550,7 +562,11 @@ function ReshufflePlay() {
         <ConfirmationRetryModal
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
           playMoves={60}

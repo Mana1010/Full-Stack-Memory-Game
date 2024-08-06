@@ -67,6 +67,10 @@ function Signup() {
     },
     onSuccess: async (data) => {
       toast.success(data.message);
+      localStorage.setItem(
+        "setting",
+        JSON.stringify({ playMusic: true, playSound: true })
+      );
       localStorage.setItem("token", data.token);
       reset();
       router.push("/profile-setup");

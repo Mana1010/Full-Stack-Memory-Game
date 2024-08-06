@@ -229,6 +229,11 @@ export const claimMediumPoints = asyncHandler(
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    //This is to ensure that the user cannot claim the prize unless it is not cheated.
+    if (!getUser?.levels[1].isUnlock) {
+      res.status(403);
+      throw new Error("You have not unlock this level yet!");
+    }
     const isAlreadyUnlockHard = getUser?.levels[2].isUnlock; //Checking if the hard level is already unlock
     const isAlreadyUnlockReshuffle = getUser?.challenges[0].isUnlock; //Checking if the reshuffle level is already unlock
     if (!getUser || !getUserLeaderboard) {
@@ -262,6 +267,10 @@ export const claimHardPoints = asyncHandler(
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    if (!getUser?.levels[2].isUnlock) {
+      res.status(403);
+      throw new Error("You have not unlock this level yet!");
+    }
     const isAlreadyUnlock3cards = getUser?.challenges[1].isUnlock; //Checking if the 3-cards mode is already unlock
     const isAlreadyUnlockElements = getUser?.challenges[2].isUnlock; //Checking if the elements mode is already unlock
     if (!getUser || !getUserLeaderboard) {
@@ -289,12 +298,16 @@ export const claimHardPoints = asyncHandler(
 
 export const claimReshufflePoints = asyncHandler(
   async (req: Request, res: Response) => {
-    const { points } = req.body;
+    const { points, isGameComplete } = req.body;
     const { id } = req.params;
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    if (!getUser?.challenges[0].isUnlock) {
+      res.status(403);
+      throw new Error("You have not unlock this challenge yet!");
+    }
     const isAlreadyDoneReshuffle = getUser?.challenges[0].isDone; //Checking if the reshuffle mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
@@ -307,7 +320,7 @@ export const claimReshufflePoints = asyncHandler(
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
     }
-    if (!isAlreadyDoneReshuffle) {
+    if (!isAlreadyDoneReshuffle && isGameComplete) {
       getUser.challenges[0].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
@@ -319,12 +332,16 @@ export const claimReshufflePoints = asyncHandler(
 
 export const claimThreeCardsPoints = asyncHandler(
   async (req: Request, res: Response) => {
-    const { points } = req.body;
+    const { points, isGameComplete } = req.body;
     const { id } = req.params;
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    if (!getUser?.challenges[1].isUnlock) {
+      res.status(403);
+      throw new Error("You have not unlock this challenge yet!");
+    }
     const isAlreadyDoneThreeCards = getUser?.challenges[1].isDone; //Checking if the 3-cards mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
@@ -337,7 +354,7 @@ export const claimThreeCardsPoints = asyncHandler(
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
     }
-    if (!isAlreadyDoneThreeCards) {
+    if (!isAlreadyDoneThreeCards && isGameComplete) {
       getUser.challenges[1].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;
@@ -349,12 +366,16 @@ export const claimThreeCardsPoints = asyncHandler(
 
 export const claimElementsPoints = asyncHandler(
   async (req: Request, res: Response) => {
-    const { points } = req.body;
+    const { points, isGameComplete } = req.body;
     const { id } = req.params;
     const getUserLeaderboard = await Leaderboard.findOne({
       userId: id,
     });
     const getUser = await User.findById(req.user?._id);
+    if (!getUser?.challenges[2].isUnlock) {
+      res.status(403);
+      throw new Error("You have not unlock this challenge yet!");
+    }
     const isAlreadyDoneElements = getUser?.challenges[2].isDone; //Checking if the elements mode is already done
     if (!getUser || !getUserLeaderboard) {
       res.status(404);
@@ -367,7 +388,7 @@ export const claimElementsPoints = asyncHandler(
     if (points > getReshuffle.highScore) {
       getReshuffle.highScore = points;
     }
-    if (!isAlreadyDoneElements) {
+    if (!isAlreadyDoneElements && isGameComplete) {
       getUser.challenges[2].isDone = true;
     }
     getUserLeaderboard.bestScore = (getUserLeaderboard.bestScore ?? 0) + points;

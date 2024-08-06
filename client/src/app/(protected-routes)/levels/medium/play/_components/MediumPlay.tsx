@@ -245,7 +245,7 @@ function MediumPlay() {
     openVictoryModal,
     openConfirmationQuitModal,
   } = useModalStore();
-  const { playCardSound, playClickSound } = useAudioStore();
+  const { playCardSound } = useAudioStore();
   const [cards, setCards] = useState<Cards[]>(hiddenCard);
   const [playMoves, setPlayMoves] = useState<number>(50);
   const [isMount, setIsMount] = useState(true);

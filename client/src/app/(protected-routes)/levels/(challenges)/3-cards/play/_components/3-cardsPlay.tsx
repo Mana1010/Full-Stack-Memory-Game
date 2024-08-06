@@ -1,5 +1,12 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
 import { GiCorn, GiPotato } from "react-icons/gi";
@@ -22,6 +29,7 @@ import GameVictoryModalThreeCards from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
 import threeCardsImg from "../../../../../../../components/images/threeCards.png";
+import { CardsFunctionSchema } from "@/types/game.types";
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -539,7 +547,11 @@ function ThreeCardsPlay() {
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
         />
       )}
@@ -547,7 +559,9 @@ function ThreeCardsPlay() {
         <ConfirmationRetryModal
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={setCards as Dispatch<
+            SetStateAction<Cards[] | CardsFunctionSchema[]>
+          >}
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
           playMoves={60}

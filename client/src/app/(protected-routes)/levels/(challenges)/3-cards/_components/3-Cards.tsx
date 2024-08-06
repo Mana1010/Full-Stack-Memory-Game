@@ -42,7 +42,6 @@ function ThreeCards() {
           withCredentials: true,
         }
       );
-      console.log(response.data.message);
       return response.data.message;
     },
   });

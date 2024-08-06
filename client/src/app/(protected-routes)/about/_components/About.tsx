@@ -6,6 +6,41 @@ import { useRouter } from "next/navigation";
 import { IoReturnDownBack } from "react-icons/io5";
 import Link from "next/link";
 import buyMeCoffee from "../../../../components/images/buy-me-coffee.png";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
+
+const devSocials = [
+  {
+    name: "FACEBOOK",
+    link: "https://www.facebook.com/tanvic.clarito?mibextid=ZbWKwL",
+    icon: <FaFacebook />,
+    index: 1,
+  },
+  {
+    name: "TIKTOK",
+    link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
+    icon: <FaTiktok />,
+    index: 2,
+  },
+  {
+    name: "GITHUB",
+    link: "https://github.com/Mana1010",
+    icon: <FaGithub />,
+    index: 3,
+  },
+  {
+    name: "LINKEDIN",
+    link: "https://www.linkedin.com/in/tristan-vic-clarito-a256322a0/",
+    icon: <FaLinkedin />,
+    index: 4,
+  },
+];
 function About() {
   const router = useRouter();
   return (
@@ -49,9 +84,10 @@ function About() {
               Features include:
             </h5>
             <ul className="text-secondary list-disc space-y-2 pl-5 text-sm flex justify-center md:justify-start items-center md:items-start flex-col">
-              <li>Three difficulty modes</li>{" "}
+              <li>Three difficulty modes</li>
+              <li>Three challenges mode</li>
               <li>Token-based authentication</li>
-              <li> Competitive leaderboards</li>{" "}
+              <li> Competitive leaderboards</li>
               <li>Customizable user profiles</li>
               <li>Account management</li> <li> Adjustable settings</li>
             </ul>
@@ -78,12 +114,33 @@ function About() {
               T. Clarito
             </p>
           </div>
-          <div className="flex space-y-2 items-center pt-4">
+
+          <div className="flex justify-center items-center md:justify-start md:items-start space-x-2 pt-5">
+            {devSocials.map((social) => (
+              <TooltipProvider key={social.index}>
+                <Tooltip>
+                  <Link href={social.link} target="_blank">
+                    <TooltipTrigger
+                      aria-label={`${social.name}-button`}
+                      style={{ boxShadow: " 0 0 10px #FFE30A" }}
+                      className="bg-secondary py-2.5 px-5 text-primary rounded-md"
+                    >
+                      <span className="text-lg">{social.icon}</span>
+                    </TooltipTrigger>
+                  </Link>
+                  <TooltipContent className="bg-primary border-none text-white">
+                    <small>{social.name}</small>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+          <div className="pt-3 flex justify-center items-center md:justify-start md:items-start">
             <Link
               href={"https://www.buymeacoffee.com/tristanvic9"}
               target="_blank"
             >
-              <div className="px-2 py-1.5 flex items-center space-x-2 bg-zinc-500 rounded-xl">
+              <div className="px-2 py-1.5 flex items-center space-x-2 bg-primary rounded-md">
                 <Image
                   src={buyMeCoffee}
                   alt="buy-me-coffee-icon"
@@ -95,6 +152,11 @@ function About() {
             </Link>
           </div>
           <div className="flex-grow flex w-full justify-center items-center flex-col space-y-2 pt-10">
+            <em className="text-[0.7rem] text-white text-center">
+              All background music and sound effects used in this project are
+              not original creations. They have been sourced from various online
+              platforms. Rights belong to their respective owners.
+            </em>
             <h4 className="text-white">ALL RIGHT RESERVED</h4>
             <h5
               style={{ textShadow: "0 0 15px #FFE30A" }}

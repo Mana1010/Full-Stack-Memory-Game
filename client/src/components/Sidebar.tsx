@@ -1,14 +1,12 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { FaFacebook, FaTiktok, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useModalStore } from "@/utils/store/modal.store";
 import Image from "next/image";
 import icon from "../../src//components//images//small-logo.png";
 import { BiCheckShield } from "react-icons/bi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
-import { IoShareSocialOutline } from "react-icons/io5";
 import Link from "next/link";
 import { MdLogin } from "react-icons/md";
 import { PiUserPlus } from "react-icons/pi";
@@ -67,32 +65,6 @@ function Sidebar() {
       icon: <MdLogin />,
     },
   ];
-  // const devSocials = [
-  //   {
-  //     name: "FACEBOOK",
-  //     link: "https://www.facebook.com/tanvic.clarito?mibextid=ZbWKwL",
-  //     icon: <FaFacebook />,
-  //     index: 1,
-  //   },
-  //   {
-  //     name: "TIKTOK",
-  //     link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
-  //     icon: <FaTiktok />,
-  //     index: 2,
-  //   },
-  //   {
-  //     name: "GITHUB",
-  //     link: "https://github.com/Mana1010",
-  //     icon: <FaGithub />,
-  //     index: 3,
-  //   },
-  //   {
-  //     name: "LINKEDIN",
-  //     link: "https://www.linkedin.com/in/tristan-vic-clarito-a256322a0/",
-  //     icon: <FaLinkedin />,
-  //     index: 4,
-  //   },
-  // ];
 
   const getUser: UseQueryResult<
     UserDetails<
@@ -209,10 +181,7 @@ function Sidebar() {
           }`}
         >
           <header className={`pr-3`}>
-            <Link href={"/"}>
-              {" "}
-              <Image src={icon} alt="icon" width={130} priority />
-            </Link>
+            <Image src={icon} alt="icon" width={130} priority />
           </header>
           <div>
             {getUser.isLoading ? (
@@ -391,10 +360,10 @@ function Sidebar() {
                               {challenge.icon}
                             </span>
                             {challenge.isDone && challenge.isUnlock && (
-                              <div className="absolute inset-0 flex justify-center items-center">
+                              <div className="flex justify-center items-center w-full">
                                 <Image
                                   src={checkMark}
-                                  width={30}
+                                  width={25}
                                   alt="check-done-image"
                                   priority
                                 />
