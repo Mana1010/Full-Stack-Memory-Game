@@ -106,7 +106,6 @@ export const newAccessToken = asyncHandler(
     const refreshToken = req.cookies["refresh_token"];
 
     if (!refreshToken) {
-      console.log(refreshToken);
       res.status(403);
       throw new Error("Forbidden");
     }

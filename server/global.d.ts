@@ -1,4 +1,3 @@
-import { Request, Express } from "express";
 import { Types } from "mongoose";
 
 interface User {
