@@ -23,7 +23,10 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://full-stack-memory-game.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://full-stack-memory-game.vercel.app",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );
