@@ -61,8 +61,8 @@ function Elements() {
             style={{ textShadow: "0 0 10px white" }}
             className="text-white text-sm text-center"
           >
-            Match the two cards based on the acronym or the word of each element
-            from periodic table.
+            Match pairs of cards by connecting chemical element symbols with
+            their corresponding names from the periodic table.
           </p>
         </div>
         <div className="flex flex-col space-y-4">
