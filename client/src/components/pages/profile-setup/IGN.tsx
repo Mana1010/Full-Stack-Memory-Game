@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useProfileStore } from "@/utils/store/profile.store";
 import SideDesign from "@/components/SideDesign";
 import { z } from "zod";
-import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 export const ignSchema = z.object({
   ign: z
     .string()

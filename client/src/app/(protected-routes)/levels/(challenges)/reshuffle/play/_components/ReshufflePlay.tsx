@@ -2,12 +2,10 @@
 import React, {
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaAppleAlt } from "react-icons/fa";

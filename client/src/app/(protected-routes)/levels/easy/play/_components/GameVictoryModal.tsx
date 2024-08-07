@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { useState } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
@@ -15,6 +15,7 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { GamePlaySchema } from "@/types/game.types";
+import Confetti from "react-confetti";
 
 type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
 function GameVictoryModal({ totalPoints }: GameVictorySchema) {
@@ -22,6 +23,7 @@ function GameVictoryModal({ totalPoints }: GameVictorySchema) {
   const { playGameVictorySound, playClaimingSound } = useAudioStore();
   const { setOpenVictoryModal } = useModalStore();
   const { userId } = useUserStore();
+  const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
   const claimPrize = useMutation({
@@ -54,6 +56,7 @@ function GameVictoryModal({ totalPoints }: GameVictorySchema) {
     },
   });
   useEffect(() => {
+    setShowConfetti(true);
     playGameVictorySound();
   }, [playGameVictorySound]);
   return (
@@ -117,6 +120,7 @@ function GameVictoryModal({ totalPoints }: GameVictorySchema) {
           </div>
         </div>
       </div>
+      {showConfetti && <Confetti style={{ width: "100%", height: "100%" }} />}
     </div>
   );
 }

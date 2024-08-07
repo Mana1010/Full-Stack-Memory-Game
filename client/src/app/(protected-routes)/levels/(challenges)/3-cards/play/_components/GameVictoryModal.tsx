@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import victoryImg from "../../../../../../../components/images/victory.png";
 import star from "../../../../../../../components/images/trophies/total-score-star.png";
@@ -16,6 +16,7 @@ import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { GamePlaySchema } from "@/types/game.types";
 import { TbCardsFilled } from "react-icons/tb";
+import Confetti from "react-confetti";
 
 type GameVictorySchema = Pick<GamePlaySchema, "totalPoints">;
 function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
@@ -23,6 +24,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
   const { playGameVictorySound, playClaimingSound } = useAudioStore();
   const { setOpenVictoryModal } = useModalStore();
   const { userId } = useUserStore();
+  const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
   const claimPrize = useMutation({
@@ -55,6 +57,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
     },
   });
   useEffect(() => {
+    setShowConfetti(true);
     playGameVictorySound();
   }, [playGameVictorySound]);
   return (
@@ -97,7 +100,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
             <Image src={star} alt="star-image" width={15} priority />
           </div>
           <small className="text-center text-[0.6rem] text-secondary">
-            You got 2000 extra points for completing this mode.
+            You got 3000 extra points for completing this mode.
           </small>
         </div>
         <div className={`pt-5 justify-center items-center flex-col flex`}>
@@ -121,6 +124,7 @@ function GameVictoryModalThreeCards({ totalPoints }: GameVictorySchema) {
           </div>
         </div>
       </div>
+      {showConfetti && <Confetti style={{ width: "100%", height: "100%" }} />}
     </div>
   );
 }

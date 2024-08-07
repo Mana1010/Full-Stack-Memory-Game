@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { useEffect } from "react";
 import Image from "next/image";
@@ -15,7 +15,6 @@ import { useUserStore } from "@/utils/store/user.store";
 import { AxiosError } from "axios";
 import { useModalStore } from "@/utils/store/modal.store";
 import { hiddenCard } from "./HardPlay";
-import { Cards } from "@/types/game.types";
 import { GamePlaySchema } from "@/types/game.types";
 
 function GameOverModalHard({

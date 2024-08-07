@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
-import useAxiosInterceptor from "@/api/useAxiosInterceptor";
 import settingBg from "../../../../components/images/titles/setting.png";
 import { useRouter } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
@@ -10,8 +9,6 @@ import { IoReturnDownBack } from "react-icons/io5";
 function Setting() {
   const { clickSoundSetting, playClickSound, bgSoundSetting } = useAudioStore();
   const router = useRouter();
-  const axiosInterceptor = useAxiosInterceptor();
-  const [buley, bulit] = useState("");
   const [setting, setSetting] = useState({ playMusic: true, playSound: true });
   useEffect(() => {
     // Initialize setting from localStorage or use default values

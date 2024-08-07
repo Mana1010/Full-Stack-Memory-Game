@@ -2,14 +2,12 @@
 import React, {
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
-import { GiCorn, GiPotato } from "react-icons/gi";
 import { usePathname } from "next/navigation";
 import { useAudioStore } from "@/utils/store/audio.store";
 import { IoTriangleSharp } from "react-icons/io5";
@@ -559,9 +557,11 @@ function ThreeCardsPlay() {
         <ConfirmationRetryModal
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards as Dispatch<
-            SetStateAction<Cards[] | CardsFunctionSchema[]>
-          >}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
           playMoves={60}

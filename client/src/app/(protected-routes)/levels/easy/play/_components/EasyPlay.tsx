@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";
@@ -26,6 +26,7 @@ import GameOverModal from "./GameOverModal";
 import GameVictoryModal from "./GameVictoryModal";
 import ConfirmationRetryModal from "@/components/ConfirmationRetryModal";
 import ConfirmationQuitModal from "@/components/ConfirmationQuitModal";
+import { CardsFunctionSchema } from "@/types/game.types";
 export interface Cards {
   id: string;
   sticker: React.JSX.Element;
@@ -457,7 +458,11 @@ function EasyPlay() {
           totalPoints={starPoints}
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
         />
       )}
@@ -465,7 +470,11 @@ function EasyPlay() {
         <ConfirmationRetryModal
           setPlayMoves={setPlayMoves}
           setStarPoints={setStarPoints}
-          setCards={setCards}
+          setCards={
+            setCards as Dispatch<
+              SetStateAction<Cards[] | CardsFunctionSchema[]>
+            >
+          }
           setIsMount={setIsMount}
           hiddenCards={hiddenCard}
           playMoves={40}

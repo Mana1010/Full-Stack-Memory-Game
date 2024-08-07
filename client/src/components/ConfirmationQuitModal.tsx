@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React from "react";
 import { useModalStore } from "@/utils/store/modal.store";
 import cards from "../components/images/cards.png";
 import Image from "next/image";

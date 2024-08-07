@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import mediumTitle from "../../../../../components/images/titles/medium.png";
 import SideDesignNoFM from "@/components/SideDesignNoFM";

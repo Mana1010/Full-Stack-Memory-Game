@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { Suspense } from "react";
 import { useAudioStore } from "@/utils/store/audio.store";
+import Loading from "./loading";
 function Provider({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
   const { clickSoundSetting } = useAudioStore();
@@ -12,7 +13,7 @@ function Provider({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<h1>Loading...</h1>}>{children}</Suspense>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
       </QueryClientProvider>
     </div>
   );

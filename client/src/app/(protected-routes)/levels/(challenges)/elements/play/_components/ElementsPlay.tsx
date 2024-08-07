@@ -261,7 +261,7 @@ function ElementsPlay() {
       </div>
       {openGameMenu && <GameMenuModal />}
       {openVictoryModal && (
-        <GameVictoryModalElements totalPoints={starPoints + 2000} />
+        <GameVictoryModalElements totalPoints={starPoints + 3000} />
       )}
       {openGameOverModal && (
         <GameOverModalElements

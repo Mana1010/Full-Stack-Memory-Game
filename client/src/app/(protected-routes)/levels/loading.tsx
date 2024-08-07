@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React from "react";
 import loading from "../../../components/images/loading-yellow.gif";
 import Image from "next/image";
 import backCard from "../../../components/images/BACK.png";

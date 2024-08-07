@@ -28,7 +28,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
     },
     {
-      url: `${BASE_URL}/account-details`,
+      url: `${BASE_URL}/:id`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${BASE_URL}/about`,
       lastModified: new Date(),
     },
   ];

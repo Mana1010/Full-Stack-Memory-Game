@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid";
-import { Cards } from "@/types/game.types";
 import { CardsFunctionSchema } from "@/types/game.types";
 const elements = [
   { name: "Hydrogen", symbol: "H" },

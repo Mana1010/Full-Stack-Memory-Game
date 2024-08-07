@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { AnimatePresence, motion } from "framer-motion";

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Poppins, Open_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Provider from "./Provider";
 import { Toaster } from "sonner";
-import React, { lazy } from "react";
+import React from "react";
 import Sidebar from "@/components/Sidebar";
 const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
@@ -23,6 +23,11 @@ export const metadata: Metadata = {
     "play",
     "cards",
     "profile",
+    "challenges",
+    "levels",
+    "profile",
+    "exciting",
+    "leaderboards",
   ],
 };
 
