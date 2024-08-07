@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://full-stack-memory-game.vercel.app";
   return [
     {
       url: BASE_URL,

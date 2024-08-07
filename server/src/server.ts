@@ -8,7 +8,6 @@ import { router as authRouter } from "./routes/auth.route";
 import { router as userRouter } from "./routes/user.route";
 import { router as featureRouter } from "./routes/feature.route";
 import { errorHandle } from "./middleware/error.handling";
-import { newAccessToken } from "./controller/auth.controller";
 import { v2 as cloudinary } from "cloudinary";
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -24,7 +23,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [process.env.CLIENT_URL!, "http://localhost:3000"],
     credentials: true,
   })
 );
