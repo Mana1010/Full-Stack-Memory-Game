@@ -31,7 +31,7 @@ export const profileUpload = asyncHandler(
     //     ? "/opt/render/project/src"
     //     : path.join(__dirname, "..");
     const randomIcon = path.join(
-      process.cwd(),
+      "src",
       "public",
       "images",
       `${profilePic}.png`
@@ -186,12 +186,7 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
       //   process.env.NODE_ENV === "production"
       //     ? "/opt/render/project/src"
       //     : path.join(__dirname, "..");
-      const randomIcon = path.join(
-        process.cwd(),
-        "public",
-        "images",
-        `${file}.png`
-      );
+      const randomIcon = path.join("src", "public", "images", `${file}.png`);
       upload = await uploadFileCloudinary(randomIcon);
     }
     if (getProfile.profilePic.public_id) {
