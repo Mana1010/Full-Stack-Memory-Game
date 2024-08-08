@@ -33,12 +33,12 @@ export const profileUpload = asyncHandler(
       "images",
       `${profilePic}.png`
     );
+    console.log(randomIcon);
     try {
       const uploadResponse = await cloudinary.uploader.upload(randomIcon, {
         folder: "memory-game/profile-picture",
         upload_preset: "yxnopucd",
       });
-      console.log(`Cloundinary: ${uploadFileCloudinary}`);
       const createProfile = await Profile.create({
         age,
         gender,
@@ -48,7 +48,6 @@ export const profileUpload = asyncHandler(
           public_id: uploadResponse.public_id,
         },
       });
-      console.log(randomIcon);
       await Leaderboard.create({
         bestScore: 0,
         userId: req.user?._id,
@@ -88,6 +87,7 @@ export const profileUpload = asyncHandler(
       }
       res.status(201).json({ message: "Success" });
     } catch (err: any) {
+      console.log(err);
       res.status(400).json({
         message: err.code === 11000 ? "IGN already exist" : err.message,
       });
