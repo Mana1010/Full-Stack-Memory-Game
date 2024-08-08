@@ -9,14 +9,14 @@ import {
   showEditProfile,
 } from "../controller/user.controller";
 export const router = express.Router();
-const fileFilter = (req: Express.Request, file: any, cb: any) => {
-  // Reject files with a mimetype other than 'image/png' or 'image/jpeg'
-  if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+// const fileFilter = (req: Express.Request, file: any, cb: any) => {
+//   // Reject files with a mimetype other than 'image/png' or 'image/jpeg'
+//   if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./src/uploads/profilepic");
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({ storage });
 router.patch(
   "/profile/:id",
   upload.single("file"),

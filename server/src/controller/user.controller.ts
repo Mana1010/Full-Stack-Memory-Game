@@ -177,7 +177,6 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
     res.status(404);
     throw new Error("User not found");
   }
-  console.log(req.file);
   if (getProfile.profilePic && (req.file || file !== "null")) {
     let upload;
     if (req.file) {
