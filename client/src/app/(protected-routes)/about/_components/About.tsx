@@ -22,12 +22,12 @@ const devSocials = [
     icon: <FaFacebook />,
     index: 1,
   },
-  {
-    name: "TIKTOK",
-    link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
-    icon: <FaTiktok />,
-    index: 2,
-  },
+  // {
+  //   name: "TIKTOK",
+  //   link: "https://www.tiktok.com/@arcane_mage?is_from_webapp=1&sender_device=pc",
+  //   icon: <FaTiktok />,
+  //   index: 2,
+  // },
   {
     name: "GITHUB",
     link: "https://github.com/Mana1010",
