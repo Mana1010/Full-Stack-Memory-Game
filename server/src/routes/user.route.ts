@@ -9,10 +9,6 @@ import {
   showEditProfile,
 } from "../controller/user.controller";
 export const router = express.Router();
-interface CB {
-  error: Error;
-  acceptFile: boolean;
-}
 const fileFilter = (
   req: Express.Request,
   file: Express.Multer.File,
