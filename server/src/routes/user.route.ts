@@ -9,11 +9,7 @@ import {
   showEditProfile,
 } from "../controller/user.controller";
 export const router = express.Router();
-const fileFilter = (
-  req: Express.Request,
-  file: Express.Multer.File,
-  cb: any
-) => {
+const fileFilter = (req: Express.Request, file: any, cb: any) => {
   // Reject files with a mimetype other than 'image/png' or 'image/jpeg'
   if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
     cb(null, true);
