@@ -55,7 +55,7 @@ function ProfilePicsModal() {
               <Image src={avatar.avatar} alt={avatar.name} priority />
             </button>
           ))}
-          <label
+          {/* <label
             htmlFor="file"
             className=" bg-white w-[3.5rem] h-[3.5rem] rounded-full flex items-center justify-center text-primary text-2xl cursor-pointer"
           >
@@ -67,7 +67,7 @@ function ProfilePicsModal() {
             id="file"
             type="file"
             accept="image/jpeg, image/png"
-          />
+          /> */}
         </div>
         <div className="flex space-x-2 justify-center items-center md:justify-end md:items-center pt-5">
           <button
