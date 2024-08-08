@@ -54,7 +54,7 @@ function Leaderboard() {
       </header>
       <div className="flex-grow grid items-center grid-cols-1 lg:grid-cols-2 w-full px-5">
         <div className="w-full justify-center items-center flex flex-col space-y-2">
-          <div className="leaderboard-bg w-[400px] rounded-md h-[470px] relative">
+          <div className="leaderboard-bg sm:w-[400px] w-[95%] rounded-md h-[470px] relative">
             <div
               style={{ backdropFilter: "blur(1.5px)" }}
               className="leaderboard-scroll-design absolute inset-0 h-full w-full px-3 py-2 overflow-y-auto"
