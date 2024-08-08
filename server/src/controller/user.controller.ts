@@ -10,6 +10,7 @@ import {
   uploadFileCloudinary,
   deleteFileCloudinary,
 } from "../utils/cloudinary.utils";
+import { Error } from "mongoose";
 const profileSchema = z.object({
   age: z.number().min(1).max(150),
   gender: z.string(),
@@ -37,6 +38,7 @@ export const profileUpload = asyncHandler(
         folder: "memory-game/profile-picture",
         upload_preset: "yxnopucd",
       });
+      console.log(`Cloundinary: ${uploadFileCloudinary}`);
       const createProfile = await Profile.create({
         age,
         gender,
@@ -46,6 +48,7 @@ export const profileUpload = asyncHandler(
           public_id: uploadResponse.public_id,
         },
       });
+      console.log(randomIcon);
       await Leaderboard.create({
         bestScore: 0,
         userId: req.user?._id,
@@ -86,7 +89,7 @@ export const profileUpload = asyncHandler(
       res.status(201).json({ message: "Success" });
     } catch (err: any) {
       res.status(400).json({
-        message: err.code === 11000 ? "IGN already exist" : err,
+        message: err.code === 11000 ? "IGN already exist" : err.message,
       });
     }
   }

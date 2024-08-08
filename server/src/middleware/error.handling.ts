@@ -1,4 +1,4 @@
-import { Request, Response, ErrorRequestHandler, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 
 export const errorHandle = (
   err: Error,
