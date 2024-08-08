@@ -84,7 +84,6 @@ function EditProfile() {
   const editProfile = useMutation({
     mutationFn: async (data: EditProfileSchema | File) => {
       const payload = new FormData();
-      console.log(data);
       for (const [key, value] of Object.entries(data)) {
         payload.append(key, value);
       }

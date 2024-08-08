@@ -32,7 +32,6 @@ interface User {
 }
 function ProfileSetup() {
   const axiosInterceptor = useAxiosInterceptor();
-  const { setIsAuthenticated } = useUserStore();
   const { playClickSound } = useAudioStore();
   const {
     setCurrentStep,

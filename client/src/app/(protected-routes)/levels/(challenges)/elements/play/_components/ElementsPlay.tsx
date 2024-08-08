@@ -98,8 +98,8 @@ function ElementsPlay() {
   }, [cards, playMoves, setOpenGameOverModal, setOpenVictoryModal]);
 
   useEffect(() => {
-    const sortedArr = cards
-      .toSorted((a, b) => b.cardModified - a.cardModified)
+    const sortedArr = [...cards]
+      .sort((a, b) => b.cardModified - a.cardModified)
       .slice(0, 2);
     const checkDoneCards = cards.some((card) => card.isDone);
     const threshold = 100; //Means the time limit.
