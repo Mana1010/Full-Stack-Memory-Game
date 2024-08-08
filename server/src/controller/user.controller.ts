@@ -36,7 +36,6 @@ export const profileUpload = asyncHandler(
       "images",
       `${profilePic}.png`
     );
-    console.log(`Random Icon: ${randomIcon}`);
     try {
       const uploadResponse = await cloudinary.uploader.upload(randomIcon, {
         folder: "memory-game/profile-picture",
@@ -90,7 +89,6 @@ export const profileUpload = asyncHandler(
       }
       res.status(201).json({ message: "Success" });
     } catch (err: any) {
-      console.log(err);
       res.status(400).json({
         message: err.code === 11000 ? "IGN already exist" : err.message,
       });
