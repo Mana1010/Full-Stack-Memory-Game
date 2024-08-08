@@ -169,14 +169,15 @@ export const showEditProfile = asyncHandler(
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { age, ign, file } = req.body;
-  const getProfile = (await Profile.findById(id).populate({
+  const getProfile = await Profile.findById(id).populate({
     path: "userId",
     select: "username",
-  })) as any;
+  });
   if (!getProfile) {
     res.status(404);
     throw new Error("User not found");
   }
+  console.log(req.file);
   if (getProfile.profilePic && (req.file || file !== "null")) {
     let upload;
     if (req.file) {
