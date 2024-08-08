@@ -26,14 +26,17 @@ export const profileUpload = asyncHandler(
       res.status(400);
       throw new Error("Invalid data, please try again");
     }
+    const basePath =
+      process.env.NODE_ENV === "production"
+        ? "/opt/render/project/src"
+        : path.join(__dirname, "..");
     const randomIcon = path.join(
-      __dirname,
-      "..",
+      basePath,
       "public",
       "images",
       `${profilePic}.png`
     );
-    console.log(randomIcon);
+    console.log(`Random Icon: ${randomIcon}`);
     try {
       const uploadResponse = await cloudinary.uploader.upload(randomIcon, {
         folder: "memory-game/profile-picture",
@@ -181,13 +184,11 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
     if (req.file) {
       upload = await uploadFileCloudinary(req.file.path);
     } else {
-      const randomIcon = path.join(
-        __dirname,
-        "..",
-        "public",
-        "images",
-        `${file}.png`
-      );
+      const basePath =
+        process.env.NODE_ENV === "production"
+          ? "/opt/render/project/src"
+          : path.join(__dirname, "..");
+      const randomIcon = path.join(basePath, "public", "images", `${file}.png`);
       upload = await uploadFileCloudinary(randomIcon);
     }
     if (getProfile.profilePic.public_id) {
