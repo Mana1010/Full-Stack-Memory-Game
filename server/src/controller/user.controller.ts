@@ -26,12 +26,12 @@ export const profileUpload = asyncHandler(
       res.status(400);
       throw new Error("Invalid data, please try again");
     }
-    const basePath =
-      process.env.NODE_ENV === "production"
-        ? "/opt/render/project/src"
-        : path.join(__dirname, "..");
+    // const basePath =
+    //   process.env.NODE_ENV === "production"
+    //     ? "/opt/render/project/src"
+    //     : path.join(__dirname, "..");
     const randomIcon = path.join(
-      basePath,
+      "/opt/render/project/src",
       "public",
       "images",
       `${profilePic}.png`
@@ -182,11 +182,16 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
     if (req.file) {
       upload = await uploadFileCloudinary(req.file.path);
     } else {
-      const basePath =
-        process.env.NODE_ENV === "production"
-          ? "/opt/render/project/src"
-          : path.join(__dirname, "..");
-      const randomIcon = path.join(basePath, "public", "images", `${file}.png`);
+      // const basePath =
+      //   process.env.NODE_ENV === "production"
+      //     ? "/opt/render/project/src"
+      //     : path.join(__dirname, "..");
+      const randomIcon = path.join(
+        "/opt/render/project/src",
+        "public",
+        "images",
+        `${file}.png`
+      );
       upload = await uploadFileCloudinary(randomIcon);
     }
     if (getProfile.profilePic.public_id) {
