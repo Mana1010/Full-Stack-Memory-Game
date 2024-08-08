@@ -31,7 +31,7 @@ export const profileUpload = asyncHandler(
     //     ? "/opt/render/project/src"
     //     : path.join(__dirname, "..");
     const randomIcon = path.join(
-      "/opt/render/project/src",
+      process.cwd(),
       "public",
       "images",
       `${profilePic}.png`
@@ -187,7 +187,7 @@ export const editProfile = asyncHandler(async (req: Request, res: Response) => {
       //     ? "/opt/render/project/src"
       //     : path.join(__dirname, "..");
       const randomIcon = path.join(
-        "/opt/render/project/src",
+        process.cwd(),
         "public",
         "images",
         `${file}.png`
