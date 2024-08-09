@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import refreshToken from "@/utils/refreshToken";
@@ -25,7 +25,6 @@ function useAxiosInterceptor() {
     "/setting",
     "/about",
   ];
-  const PROTECTED_ROUTES = ["/profile-setup"];
   useEffect(() => {
     const requestIntercept = axiosInterceptor.interceptors.request.use(
       async (config) => {

@@ -45,10 +45,6 @@ function Sidebar() {
   const pathname = usePathname();
   const { isAuthenticated } = useUserStore();
   const axiosInterceptor = useAxiosInterceptor();
-  // const [openSidebar, setOpenSidebar] = useState(() => {
-  //   const storedValue = localStorage.getItem("openSidebar");
-  //   return storedValue !== null ? JSON.parse(storedValue) : false;
-  // });
 
   const { openAuthMenu, openSidebar, setOpenAuthMenu, setOpenSidebar } =
     useModalStore();
@@ -113,8 +109,12 @@ function Sidebar() {
       localStorage.removeItem("token");
       router.push("/auth/login");
     },
-    onError: () => {
-      toast.success("Failed to logout");
+    onError: (err: AxiosError<{ message: string }>) => {
+      if (err.response?.status === 403) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Failed to logout");
+      }
     },
   });
   const arrowRightVariant = {

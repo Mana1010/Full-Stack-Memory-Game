@@ -79,6 +79,7 @@ export const profileUpload = asyncHandler(
           isUnlock: false,
         },
       ] as any;
+
       getUser.isOldUser = !req.user?.isOldUser;
       createProfile.userId = req.user?._id;
       await createProfile.save();
@@ -90,7 +91,8 @@ export const profileUpload = asyncHandler(
       res.status(201).json({ message: "Success" });
     } catch (err: any) {
       res.status(400).json({
-        message: err.code === 11000 ? "IGN already exist" : err.message,
+        message:
+          err.code === 11000 ? "IGN already exist" : "Something went wrong",
       });
     }
   }
@@ -169,40 +171,47 @@ export const showEditProfile = asyncHandler(
 export const editProfile = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { age, ign, file } = req.body;
-  const getProfile = await Profile.findById(id).populate({
-    path: "userId",
-    select: "username",
-  });
-  if (!getProfile) {
-    res.status(404);
-    throw new Error("User not found");
-  }
-  if (getProfile.profilePic && (req.file || file !== "null")) {
-    let upload;
-    if (req.file) {
-      upload = await uploadFileCloudinary(req.file.path);
-    } else {
-      // const basePath =
-      //   process.env.NODE_ENV === "production"
-      //     ? "/opt/render/project/src"
-      //     : path.join(__dirname, "..");
-      const randomIcon = path.join("src", "public", "images", `${file}.png`);
-      upload = await uploadFileCloudinary(randomIcon);
+  try {
+    const getProfile = await Profile.findById(id).populate({
+      path: "userId",
+      select: "username",
+    });
+    if (!getProfile) {
+      res.status(404);
+      throw new Error("User not found");
     }
-    if (getProfile.profilePic.public_id) {
-      await deleteFileCloudinary([getProfile.profilePic.public_id]);
+    if (getProfile.profilePic && (req.file || file !== "null")) {
+      let upload;
+      if (req.file) {
+        upload = await uploadFileCloudinary(req.file.path);
+      } else {
+        // const basePath =
+        //   process.env.NODE_ENV === "production"
+        //     ? "/opt/render/project/src"
+        //     : path.join(__dirname, "..");
+        const randomIcon = path.join("src", "public", "images", `${file}.png`);
+        upload = await uploadFileCloudinary(randomIcon);
+      }
+      if (getProfile.profilePic.public_id) {
+        await deleteFileCloudinary([getProfile.profilePic.public_id]);
+      }
+      getProfile.profilePic.public_id = upload.public_id;
+      getProfile.profilePic.secure_url = upload.secure_url;
     }
-    getProfile.profilePic.public_id = upload.public_id;
-    getProfile.profilePic.secure_url = upload.secure_url;
-  }
 
-  if (age && getProfile.age !== age) getProfile.age = age;
-  if (ign && getProfile.ign !== ign) getProfile.ign = ign;
-  await getProfile.save();
-  res.status(201).json({
-    message: {
-      content: "Profile updated successfully.",
-      username: getProfile?.userId,
-    },
-  });
+    if (age && getProfile.age !== age) getProfile.age = age;
+    if (ign && getProfile.ign !== ign) getProfile.ign = ign;
+    await getProfile.save();
+    res.status(201).json({
+      message: {
+        content: "Profile updated successfully.",
+        username: getProfile?.userId,
+      },
+    });
+  } catch (err: any) {
+    res.status(400).json({
+      message:
+        err.code === 11000 ? "IGN already exist" : "Something went wrong",
+    });
+  }
 });
